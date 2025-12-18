@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Header = () => {
   return (
-    <div className="bg-gray_90 fixed top-0 flex h-52 w-full max-w-1440 items-center justify-between px-24 py-10">
+    <header className="bg-gray_90 fixed top-0 z-50 flex h-52 w-full max-w-1440 items-center justify-between px-24 py-10">
       <Image alt="header logo" src="/icons/logo.svg" width={101} height={24} />
       <div className="group relative">
         <Input
@@ -17,7 +17,7 @@ const Header = () => {
 
         <SearchIcon className="stroke-gray_30 absolute top-1/2 right-12 -translate-y-1/2 transition ease-in group-focus-within:stroke-white" />
       </div>
-    </div>
+    </header>
   );
 };
 

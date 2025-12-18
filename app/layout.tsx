@@ -30,9 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${Pretendard.className} bg-white antialiased`}>
+      <body
+        className={`${Pretendard.className} flex flex-col items-center bg-white antialiased`}
+      >
         <Header />
-        {children}
+        <div className="mt-52 max-w-1080">{children}</div>
       </body>
     </html>
   );

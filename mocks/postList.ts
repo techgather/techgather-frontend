@@ -1,6 +1,6 @@
 import { DashboardResponse } from '@/types/post';
 
-const mockPostList: DashboardResponse = {
+export const mockPostList: DashboardResponse = {
   posts: [
     {
       postId: 255681079223033904,
@@ -8,7 +8,7 @@ const mockPostList: DashboardResponse = {
       pubDate: '2025-12-06T19:19:01',
       thumbnail: 'https://images.velog.io/velog.png',
       url: 'https://velog.io/@agvber/%EC%98%A4%EB%94%94%EC%98%A4-%EC%8B%A0%ED%98%B8%EC%9D%98-%EA%B0%80%EC%82%B0%EA%B3%BC-%EA%B0%90%EC%82%B0',
-      tags: [],
+      tags: ['ㄴㄷㄹㄴㄷㄹㄴㄷㄹㄴㄷㄹㄴㄷㄹ'],
     },
     {
       postId: 255681079223033903,
