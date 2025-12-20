@@ -1,11 +1,34 @@
-import { mockPostList } from '@/mocks/postList';
+import { DashboardResponse } from '@/types/post';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
 import PostList from './_components/PostList';
+import { getPosts } from './service/client';
 
-export default function Home() {
-  const data = mockPostList;
+export default async function Home() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery<
+    DashboardResponse,
+    Error,
+    DashboardResponse,
+    ['posts'],
+    number | undefined
+  >({
+    queryKey: ['posts'],
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) => getPosts({ nextPostId: pageParam, limit: 19 }),
+    getNextPageParam: (lastPage: DashboardResponse) =>
+      lastPage.hasNext ? lastPage.nextPostId : undefined,
+  });
+
   return (
-    <div className="flex flex-col items-center">
-      <PostList data={data.posts} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-col items-center">
+        <PostList />
+      </div>
+    </HydrationBoundary>
   );
 }

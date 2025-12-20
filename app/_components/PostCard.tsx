@@ -1,25 +1,37 @@
+'use client';
+
 import { Badge } from '@/components/ui/badge';
 import { Post } from '@/types/post';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface Props {
   post: Post;
 }
 
+const FALLBACK_IMAGE = '/images/thumbnail-default.png';
+
 const PostCard = ({ post }: Props) => {
+  const [imgSrc, setImgSrc] = useState(
+    post.thumbnail && post.thumbnail.length > 0
+      ? post.thumbnail
+      : FALLBACK_IMAGE
+  );
+
   return (
     <Link
       href={post.url}
       target="_blank"
       className="group hover:bg-gray_2 flex h-277 w-257 cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200"
     >
-      <div className="rounded-12 border-gray_5 relative aspect-video max-w-233">
+      <div className="rounded-12 border-gray_5 relative aspect-video max-w-233 border">
         <Image
-          src={post.thumbnail}
+          src={imgSrc}
           alt="thumbnail"
           fill
           className="rounded-12 object-cover object-center"
+          onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">

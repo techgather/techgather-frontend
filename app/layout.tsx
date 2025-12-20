@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import Header from './_components/Header';
+import Providers from './_components/Provider';
 
 const Pretendard = localFont({
   src: [
@@ -33,8 +34,10 @@ export default function RootLayout({
       <body
         className={`${Pretendard.className} flex flex-col items-center bg-white antialiased`}
       >
-        <Header />
-        <div className="mt-52 max-w-1080">{children}</div>
+        <Providers>
+          <Header />
+          <div className="mt-52 max-w-1080">{children}</div>
+        </Providers>
       </body>
     </html>
   );

@@ -1,21 +1,34 @@
 'use client';
 
-import { Post } from '@/types/post';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import usePostList from '../_hooks/usePostList';
 import { SelectOptionType } from '../constans/tab';
 import PostCard from './PostCard';
+import PostCardSkeleton from './PostCardSkeleton';
 import SelectOption from './SelectOption';
 
-interface Props {
-  data: Post[];
-}
+const PostList = () => {
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    usePostList({ limit: 19 });
 
-const PostList = ({ data }: Props) => {
   const [selectedOption, setSelectedOption] = useState<SelectOptionType>('all');
+  const { inView, ref } = useInView();
 
   const handleOptionChange = (option: SelectOptionType) => {
     setSelectedOption(option);
   };
+
+  const postList = useMemo(
+    () => data?.pages.flatMap((page) => page.posts) ?? [],
+    [data]
+  );
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage]);
 
   return (
     <div className="flex flex-col items-center">
@@ -26,10 +39,20 @@ const PostList = ({ data }: Props) => {
         />
       </div>
       <div className="grid grid-cols-4 gap-y-48 px-24">
-        {data.map((item, key) => (
-          <PostCard post={item} key={key} />
+        {postList.map((item, index) => (
+          <PostCard post={item} key={index} />
         ))}
+        {isFetching && (
+          <>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <PostCardSkeleton key={index} />
+            ))}
+          </>
+        )}
       </div>
+      {!isFetching && !isLoading && hasNextPage && (
+        <div ref={ref} className="h-1 min-h-1" />
+      )}
     </div>
   );
 };
