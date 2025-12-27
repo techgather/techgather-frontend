@@ -38,13 +38,13 @@ const PostList = () => {
           handleClick={handleOptionChange}
         />
       </div>
-      <div className="grid grid-cols-1 gap-y-48 px-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-y-48 px-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {postList.map((item, index) => (
           <PostCard post={item} key={index} />
         ))}
         {isFetching && (
           <>
-            {Array.from({ length: 8 }).map((_, index) => (
+            {Array.from({ length: 10 }).map((_, index) => (
               <PostCardSkeleton key={index} />
             ))}
           </>

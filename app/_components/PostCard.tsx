@@ -5,6 +5,7 @@ import { Post } from '@/types/post';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { formatDate } from '../utils';
 
 interface Props {
   post: Post;
@@ -14,9 +15,7 @@ const FALLBACK_IMAGE = '/images/thumbnail-default.png';
 
 const PostCard = ({ post }: Props) => {
   const [imgSrc, setImgSrc] = useState(
-    post.thumbnail && post.thumbnail.length > 0
-      ? post.thumbnail
-      : FALLBACK_IMAGE
+    post.thumbnail ? post.thumbnail : FALLBACK_IMAGE
   );
 
   return (
@@ -43,9 +42,7 @@ const PostCard = ({ post }: Props) => {
             <div className="bg-gray_10 relative size-24 rounded-full" />
             <p className="text-[13px]">이름</p>
           </div>
-          <p className="text-gray_15 text-[11px]">
-            {new Date(post.pubDate).toLocaleDateString()}
-          </p>
+          <p className="text-gray_15 text-[11px]">{formatDate(post.pubDate)}</p>
         </div>
       </div>
       <div className="relative">

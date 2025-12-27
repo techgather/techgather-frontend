@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
+import Footer from './_components/Footer';
 import Header from './_components/Header';
 import Providers from './_components/Provider';
 
@@ -36,7 +37,8 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          <div className="mt-52 max-w-1080">{children}</div>
+          <div className="mt-52 max-w-1440">{children}</div>
+          <Footer />
         </Providers>
       </body>
     </html>
