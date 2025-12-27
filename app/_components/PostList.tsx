@@ -1,11 +1,11 @@
 'use client';
 
+import PostCard from '@/components/post/PostCard';
+import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
 import { SelectOptionType } from '../constans/tab';
-import PostCard from './PostCard';
-import PostCardSkeleton from './PostCardSkeleton';
 import SelectOption from './SelectOption';
 
 const PostList = () => {

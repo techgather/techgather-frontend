@@ -5,7 +5,7 @@ import { Post } from '@/types/post';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { formatDate } from '../utils';
+import { formatDate } from '../../app/utils';
 
 interface Props {
   post: Post;

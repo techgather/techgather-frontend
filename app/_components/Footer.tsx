@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <Image
               alt="푸터 로고"
-              src="icons/footer-logo.svg"
+              src="/icons/footer-logo.svg"
               width={101}
               height={24}
             />
