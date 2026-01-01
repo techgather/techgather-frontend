@@ -18,34 +18,36 @@ async function Page({ params }: Props) {
   const queryClient = new QueryClient();
   const decodeKeyword = decodeURIComponent(keyword);
 
-  await queryClient.prefetchInfiniteQuery<
-    DashboardResponse,
-    Error,
-    DashboardResponse,
-    ['posts', string],
-    number | undefined
-  >({
-    queryKey: ['posts', decodeKeyword],
-    initialPageParam: undefined,
-    queryFn: ({ pageParam }) =>
-      getPostByKeyword({
-        keyword: decodeKeyword,
-        nextPostId: pageParam,
-        limit: 19,
-      }),
-    getNextPageParam: (lastPage: DashboardResponse) =>
-      lastPage.hasNext ? lastPage.nextPostId : undefined,
-  });
+  // await queryClient.prefetchInfiniteQuery<
+  //   DashboardResponse,
+  //   Error,
+  //   DashboardResponse,
+  //   ['posts', string],
+  //   number | undefined
+  // >({
+  //   queryKey: ['posts', decodeKeyword],
+  //   initialPageParam: undefined,
+  //   queryFn: ({ pageParam }) =>
+  //     getPostByKeyword({
+  //       keyword: decodeKeyword,
+  //       nextPostId: pageParam,
+  //       limit: 19,
+  //     }),
+  //   getNextPageParam: (lastPage: DashboardResponse) =>
+  //     lastPage.hasNext ? lastPage.nextPostId : undefined,
+  // });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col items-center">
-        <div className="flex h-200">
-          <p className="text-gray_20 flex items-center gap-10 text-[24px] font-semibold">
-            <span className="text-[50px] font-bold text-black">
-              {decodeKeyword}
-            </span>
-            검색 결과입니다.
-          </p>
+      <div className="flex w-full flex-col">
+        <div className="flex w-full px-24 py-33 text-[16px] leading-[1.36]">
+          <div className="flex h-24 items-center gap-4">
+            <p className="text-main font-bold">'{decodeKeyword}'</p>
+            <p className="font-medium">검색 결과</p>
+            <p className="text-gray_15 font-bold">
+              {0}
+              <span className="font-medium text-black">개</span>
+            </p>
+          </div>
         </div>
         <PostList keyword={decodeKeyword} />
       </div>

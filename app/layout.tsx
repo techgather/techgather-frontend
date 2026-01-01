@@ -37,7 +37,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          <div className="mt-52 max-w-1440">{children}</div>
+          <div className="mt-52 w-full max-w-1440">{children}</div>
           <Footer />
         </Providers>
       </body>

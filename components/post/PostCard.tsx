@@ -9,11 +9,29 @@ import { formatDate } from '../../app/utils';
 
 interface Props {
   post: Post;
+  keyword?: string;
 }
 
 const FALLBACK_IMAGE = '/images/thumbnail-default.png';
 
-const PostCard = ({ post }: Props) => {
+const highlightKeyword = (text: string, keyword: string) => {
+  if (!keyword) return text;
+
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+
+  return text.split(regex).map((part, index) =>
+    part.toLowerCase() === keyword.toLowerCase() ? (
+      <span key={index} className="text-main">
+        {part}
+      </span>
+    ) : (
+      part
+    )
+  );
+};
+
+const PostCard = ({ post, keyword }: Props) => {
   const [imgSrc, setImgSrc] = useState(
     post.thumbnail ? post.thumbnail : FALLBACK_IMAGE
   );
@@ -35,7 +53,7 @@ const PostCard = ({ post }: Props) => {
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">
         <h2 className="block h-44 truncate text-[15px] font-bold text-wrap whitespace-pre-wrap">
-          {post.title}
+          {keyword ? highlightKeyword(post.title, keyword) : post.title}
         </h2>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-6">
