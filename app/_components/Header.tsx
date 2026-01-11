@@ -5,6 +5,7 @@ import SearchIcon from '@/public/icons/search.svg';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
+import LoginDialog from './LoginDialog';
 
 const Header = () => {
   const router = useRouter();
@@ -18,7 +19,6 @@ const Header = () => {
     if (!keyword) return;
 
     router.push(`/search/${keyword}`);
-    e.currentTarget.reset();
   };
 
   return (
@@ -32,16 +32,20 @@ const Header = () => {
           onClick={() => router.push('/')}
           className="cursor-pointer"
         />
-        <form onSubmit={handleSubmit} className="group relative">
-          <Input
-            id="keyword"
-            name="keyword"
-            type="text"
-            placeholder="글 제목, 태그명 검색"
-            className="border-gray_30 focus-visible:ring-none hidden h-30 w-240 px-12 py-6 text-[13px] text-white transition ease-in focus-visible:border-[#11FFB7] sm:block"
-          />
-          <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
-        </form>
+        <div className="flex items-center gap-36">
+          <form onSubmit={handleSubmit} className="group relative">
+            <Input
+              minLength={2}
+              id="keyword"
+              name="keyword"
+              type="text"
+              placeholder="글 제목, 태그명 검색"
+              className="border-gray_30 focus-visible:ring-none focus-visible:border-main hidden h-30 w-240 px-12 py-6 text-[13px] text-white transition ease-in sm:block"
+            />
+            <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
+          </form>
+          <LoginDialog />
+        </div>
       </div>
     </header>
   );
