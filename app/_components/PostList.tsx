@@ -10,7 +10,7 @@ import SelectOption from './SelectOption';
 
 const PostList = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    usePostList({ limit: 19 });
+    usePostList({ limit: 20 });
 
   const [selectedOption, setSelectedOption] = useState<SelectOptionType>('all');
   const { inView, ref } = useInView();
@@ -31,7 +31,7 @@ const PostList = () => {
   }, [inView, hasNextPage]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <div className="py-28">
         <SelectOption
           currentOption={selectedOption}

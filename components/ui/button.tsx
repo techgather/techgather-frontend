@@ -27,6 +27,11 @@ const buttonVariants = cva(
         'icon-sm': 'size-32',
         'icon-lg': 'size-40',
       },
+      color: {
+        red: 'bg-[#FF6A64] hover:bg-[#FF6A64]/90',
+        green: 'bg-main_2 hover:bg-main_2/90',
+        gray: 'bg-gray_10 hover:bg-gray_10/90',
+      },
     },
     defaultVariants: {
       variant: 'default',
@@ -39,6 +44,7 @@ function Button({
   className,
   variant = 'default',
   size = 'default',
+  color,
   asChild = false,
   ...props
 }: React.ComponentProps<'button'> &
@@ -52,7 +58,7 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, color, className }))}
       {...props}
     />
   );

@@ -55,6 +55,7 @@
   --color-gray_3: var(--gray_3);
   --color-gray_2: var(--gray_2);
   --color-main: var(--main);
+  --color-main_2: var(--main_2);
 }
 
 :root {
@@ -104,6 +105,7 @@
   --gray_3: #edeef0;
   --gray_2: #f0f3f9;
   --main: #11ffb7;
+  --main_2: #00b987;
 }
 
 .dark {

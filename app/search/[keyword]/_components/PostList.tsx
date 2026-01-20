@@ -1,40 +1,24 @@
 'use client';
 
+import { mockData } from '@/app/constans/mock';
 import PostCard from '@/components/post/PostCard';
-import PostCardSkeleton from '@/components/post/PostCardSkeleton';
-import { Post } from '@/types/post';
-import { useEffect, useMemo } from 'react';
-import { useInView } from 'react-intersection-observer';
-import useSearchPostList from '../_hooks/usePostList';
+
+// import PostCardSkeleton from '@/components/post/PostCardSkeleton';
+// import { Post } from '@/types/post';
+// import { useEffect, useMemo } from 'react';
+// import { useInView } from 'react-intersection-observer';
+
+// import useSearchPostList from '../_hooks/usePostList';
 
 interface Props {
   keyword: string;
 }
 
-const mockData: Post[] = [
-  {
-    postId: 1,
-    title: 'test 완벽 가이드',
-    thumbnail: 'https://via.placeholder.com/300x200?text=TypeScript',
-    tags: ['typescript', 'javascript'],
-    pubDate: '2026-01-01',
-    url: '',
-  },
-  {
-    postId: 2,
-    title: 'React 성능 최적화',
-    thumbnail: 'https://via.placeholder.com/300x200?text=React',
-    tags: ['react', 'performance'],
-    pubDate: '2026-01-01',
-    url: '',
-  },
-];
-
 const PostList = ({ keyword }: Props) => {
   // const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
   //   useSearchPostList({ keyword, limit: 19 });
-  const { inView, ref } = useInView();
-  const postList = mockData;
+  // const { inView, ref } = useInView();
+  const postList = mockData.posts;
 
   // const postList = useMemo(
   //   () => data?.pages.flatMap((page) => page.posts) ?? [],

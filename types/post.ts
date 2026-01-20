@@ -4,7 +4,9 @@ export interface Post {
   pubDate: string;
   thumbnail: string;
   url: string;
+  sourceSiteName: string;
   tags: string[];
+  language: string;
 }
 
 export interface DashboardResponse {

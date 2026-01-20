@@ -22,7 +22,7 @@ const LoginDialog = () => {
           로그인
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-600 px-24 py-48">
+      <DialogContent className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg">
         <DialogHeader aria-describedby="undefined">
           <DialogTitle className="flex w-full justify-center text-xl/[136%] font-bold">
             로그인

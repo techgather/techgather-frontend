@@ -4,8 +4,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { getPosts } from '../service/client';
 import PostList from './_components/PostList';
-import { getPosts } from './service/client';
 
 export default async function Home() {
   const queryClient = new QueryClient();
@@ -14,10 +14,10 @@ export default async function Home() {
     DashboardResponse,
     Error,
     DashboardResponse,
-    ['posts'],
+    ['admin-posts'],
     number | undefined
   >({
-    queryKey: ['posts'],
+    queryKey: ['admin-posts'],
     initialPageParam: undefined,
     queryFn: ({ pageParam }) => getPosts({ nextPostId: pageParam, limit: 20 }),
     getNextPageParam: (lastPage: DashboardResponse) =>
