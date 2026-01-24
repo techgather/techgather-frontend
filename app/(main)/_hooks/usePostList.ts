@@ -1,7 +1,7 @@
+import { getPosts } from '@/app/service/client';
+import { delayFn } from '@/app/utils';
 import { DashboardResponse } from '@/types/post';
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from '../service/client';
-import { delayFn } from '../utils';
 
 const usePostList = ({ limit = 20 }: { limit?: number }) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {

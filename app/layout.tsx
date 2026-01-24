@@ -36,8 +36,7 @@ export default function RootLayout({
         className={`${Pretendard.className} flex flex-col items-center bg-white antialiased`}
       >
         <Providers>
-          <Header />
-          <div className="mt-52 w-full max-w-1440">{children}</div>
+          {children}
           <Footer />
         </Providers>
       </body>

@@ -4,8 +4,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { getPosts } from '../service/client';
 import PostList from './_components/PostList';
-import { getPosts } from './service/client';
 
 export default async function Home() {
   const queryClient = new QueryClient();

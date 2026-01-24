@@ -5,8 +5,8 @@ import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
-import { SelectOptionType } from '../constans/tab';
-import SelectOption from './SelectOption';
+import SelectOption from '../../_components/SelectOption';
+import { SelectOptionType } from '../../constans/tab';
 
 const PostList = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
