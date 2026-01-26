@@ -32,7 +32,7 @@ const Header = () => {
           onClick={() => router.push('/')}
           className="cursor-pointer"
         />
-        <div className="flex items-center gap-36">
+        <div className="flex items-center gap-20 md:gap-36">
           <form onSubmit={handleSubmit} className="group relative">
             <Input
               minLength={2}

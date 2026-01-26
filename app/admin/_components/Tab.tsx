@@ -1,12 +1,13 @@
 'use client';
 
+import { AdminMenuType } from '@/app/constans/header';
 import { ADMIN_TABS, AdminTabType } from '@/app/constans/tab';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 interface Props {
-  currentOption: AdminTabType;
-  handleClick: (option: AdminTabType) => void;
+  currentOption: AdminMenuType;
+  handleClick: (option: AdminMenuType) => void;
 }
 
 const Tab = ({ currentOption, handleClick }: Props) => {
@@ -29,7 +30,7 @@ const Tab = ({ currentOption, handleClick }: Props) => {
           >
             {isActive && (
               <motion.div
-                layoutId="tab-indicator"
+                layoutId="admin-tab-indicator"
                 className="bg-gray_70 absolute inset-0 z-0 rounded-sm shadow-sm"
                 transition={{
                   type: 'spring',

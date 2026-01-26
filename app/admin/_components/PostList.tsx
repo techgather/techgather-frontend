@@ -6,6 +6,7 @@ import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useAdminPostList from '../_hooks/useAdminPostList';
@@ -13,15 +14,19 @@ import useAdminPostList from '../_hooks/useAdminPostList';
 const PostList = () => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
     useAdminPostList({ limit: 20 });
-
-  const [selectedOption, setSelectedOption] = useState<SelectOptionType>(
-    SelectOptionType.All
-  );
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searhchParams = useSearchParams();
+  const router = useRouter();
+  const currentOption =
+    (searhchParams.get('option') as SelectOptionType) ?? SelectOptionType.All;
   const [checkedList, setCheckedList] = useState<number[]>([]);
   const { inView, ref } = useInView();
 
   const handleOptionChange = (option: SelectOptionType) => {
-    setSelectedOption(option);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('option', option);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const postList = useMemo(
@@ -48,7 +53,7 @@ const PostList = () => {
       <div className="flex w-full items-center justify-between px-24 py-12 sm:py-28">
         <div className="hidden w-71 sm:block" />
         <SelectOption
-          currentOption={selectedOption}
+          currentOption={currentOption}
           handleClick={handleOptionChange}
         />
         <Button

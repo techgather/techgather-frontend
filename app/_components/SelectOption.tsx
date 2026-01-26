@@ -32,7 +32,7 @@ const SelectOption = ({ currentOption, handleClick }: Props) => {
           >
             {isActive && (
               <motion.div
-                layoutId="tab-indicator"
+                layoutId="option-tab-indicator"
                 className="absolute inset-0 z-0 rounded-sm bg-white shadow-sm"
                 transition={{
                   type: 'spring',
