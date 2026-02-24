@@ -12,15 +12,15 @@ import { useInView } from 'react-intersection-observer';
 import useAdminPostList from '../_hooks/useAdminPostList';
 
 const PostList = () => {
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useAdminPostList({ limit: 20 });
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const searhchParams = useSearchParams();
   const router = useRouter();
   const currentOption =
-    (searhchParams.get('option') as SelectOptionType) ?? SelectOptionType.All;
+    (searchParams.get('option') as SelectOptionType) ?? SelectOptionType.All;
   const [checkedList, setCheckedList] = useState<number[]>([]);
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    useAdminPostList({ limit: 20 });
+
   const { inView, ref } = useInView();
 
   const handleOptionChange = (option: SelectOptionType) => {

@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const PostCardSkeleton = () => {
   return (
-    <div className="h-277 w-257 p-12">
+    <div className="h-fit w-312 p-12 md:h-277 md:w-257">
       <Skeleton className="rounded-12 border-gray_5 relative aspect-video max-w-233" />
       <div className="flex flex-col gap-8 pt-12 pb-16">
         <div className="flex flex-col gap-4">

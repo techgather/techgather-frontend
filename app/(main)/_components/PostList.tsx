@@ -38,7 +38,7 @@ const PostList = () => {
           handleClick={handleOptionChange}
         />
       </div>
-      <div className="grid grid-cols-1 gap-y-48 px-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="gapy-24 grid grid-cols-1 px-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-5">
         {postList.map((item, index) => (
           <PostCard post={item} key={index} />
         ))}

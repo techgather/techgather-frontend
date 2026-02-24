@@ -43,7 +43,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   return (
     <div
       className={cn(
-        'group hover:border-main_2 flex h-323 w-257 cursor-pointer flex-col rounded-2xl border border-transparent p-12 transition-colors duration-200 hover:bg-[#E3FDF5]',
+        'group hover:border-main_2 flex w-257 cursor-pointer flex-col rounded-2xl border border-transparent p-12 transition-colors duration-200 hover:bg-[#E3FDF5]',
         { 'border-main_2 bg-[#E3FDF5]': checked }
       )}
       onClick={() => handleCheck(post.postId)}
@@ -77,7 +77,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
         />
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">
-        <h2 className="block h-44 truncate text-[15px] font-bold text-wrap whitespace-pre-wrap">
+        <h2 className="block h-22 w-full truncate text-[15px] font-bold md:h-44 md:text-wrap">
           {keyword ? highlightKeyword(post.title, keyword) : post.title}
         </h2>
         <div className="flex items-center gap-8">
@@ -88,7 +88,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
           <p className="text-gray_15 text-[11px]">{formatDate(post.pubDate)}</p>
         </div>
       </div>
-      <div className="relative mb-18 h-18">
+      <div className="relative mb-18 min-h-18">
         <div className="flex gap-6 overflow-x-hidden">
           {post.tags.map((item, index) => (
             <Badge key={index}>{item}</Badge>

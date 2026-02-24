@@ -1,35 +1,30 @@
 'use client';
 
-import { mockData } from '@/app/constans/mock';
 import PostCard from '@/components/post/PostCard';
-
-// import PostCardSkeleton from '@/components/post/PostCardSkeleton';
-// import { Post } from '@/types/post';
-// import { useEffect, useMemo } from 'react';
-// import { useInView } from 'react-intersection-observer';
-
-// import useSearchPostList from '../_hooks/usePostList';
+import PostCardSkeleton from '@/components/post/PostCardSkeleton';
+import { useEffect, useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
+import useSearchPostList from '../_hooks/usePostList';
 
 interface Props {
   keyword: string;
 }
 
 const PostList = ({ keyword }: Props) => {
-  // const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-  //   useSearchPostList({ keyword, limit: 19 });
-  // const { inView, ref } = useInView();
-  const postList = mockData.posts;
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    useSearchPostList({ keyword, limit: 19 });
+  const { inView, ref } = useInView();
 
-  // const postList = useMemo(
-  //   () => data?.pages.flatMap((page) => page.posts) ?? [],
-  //   [data]
-  // );
+  const postList = useMemo(
+    () => data?.pages.flatMap((page) => page.posts) ?? [],
+    [data]
+  );
 
-  // useEffect(() => {
-  //   if (inView && hasNextPage) {
-  //     fetchNextPage();
-  //   }
-  // }, [inView, hasNextPage]);
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage]);
 
   return (
     <div className="flex flex-col items-center">
@@ -43,17 +38,17 @@ const PostList = ({ keyword }: Props) => {
             {postList.map((item, index) => (
               <PostCard post={item} key={index} keyword={keyword} />
             ))}
-            {/* {isFetching && (
+            {isFetching && (
               <>
                 {Array.from({ length: 10 }).map((_, index) => (
                   <PostCardSkeleton key={index} />
                 ))}
               </>
-            )} */}
+            )}
           </div>
-          {/* {!isFetching && !isLoading && hasNextPage && (
+          {!isFetching && !isLoading && hasNextPage && (
             <div ref={ref} className="h-1 min-h-1" />
-          )} */}
+          )}
         </>
       )}
     </div>

@@ -1,11 +1,11 @@
-import { getPosts } from '@/app/service/client';
+import { getAdminPosts } from '@/app/service/client';
 import { delayFn } from '@/app/utils';
 import { DashboardResponse } from '@/types/post';
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 const useAdminPostList = ({ limit = 20 }: { limit?: number }) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {
-    const result = await getPosts({ nextPostId: pageParam, limit });
+    const result = await getAdminPosts({ nextPostId: pageParam, limit });
     await delayFn(500);
     return result;
   };

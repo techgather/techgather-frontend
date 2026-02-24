@@ -40,9 +40,9 @@ const PostCard = ({ post, keyword }: Props) => {
     <Link
       href={post.url}
       target="_blank"
-      className="group hover:bg-gray_2 flex h-277 w-257 cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200"
+      className="group hover:bg-gray_2 flex h-fit w-312 cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200 md:h-277 md:w-257"
     >
-      <div className="rounded-12 border-gray_5 relative aspect-video max-w-233 border">
+      <div className="rounded-12 border-gray_5 relative aspect-video max-w-311 border md:max-w-233">
         <Image
           src={imgSrc}
           alt="thumbnail"
@@ -52,7 +52,7 @@ const PostCard = ({ post, keyword }: Props) => {
         />
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">
-        <h2 className="block h-44 truncate text-[15px] font-bold text-wrap whitespace-pre-wrap">
+        <h2 className="block h-22 truncate text-[15px] font-bold md:h-44 md:text-wrap">
           {keyword ? highlightKeyword(post.title, keyword) : post.title}
         </h2>
         <div className="flex items-center gap-8">

@@ -36,6 +36,7 @@ async function Page({ params }: Props) {
   //   getNextPageParam: (lastPage: DashboardResponse) =>
   //     lastPage.hasNext ? lastPage.nextPostId : undefined,
   // });
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex w-full flex-col">
