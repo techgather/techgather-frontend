@@ -1,0 +1,633 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TechGather API",
+    "description": "API 리스트",
+    "contact": { "name": "DevLog" },
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:8888/api", "description": "api 모듈 엔드포인트" }
+  ],
+  "tags": [
+    { "name": "1-1 User Posts", "description": "User post read APIs" },
+    {
+      "name": "2-2 Admin Categories",
+      "description": "Admin category CRUD APIs"
+    },
+    { "name": "2-1 Admin Posts", "description": "Admin post management APIs" },
+    { "name": "1-2 User Categories", "description": "User category read APIs" }
+  ],
+  "paths": {
+    "/admin/categories/{categoryId}": {
+      "get": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 단건 조회",
+        "operationId": "a8-cat-get",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CategoryResponse" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 수정",
+        "operationId": "a9-cat-update",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateCategoryRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CategoryResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 삭제",
+        "operationId": "a10-cat-delete",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/admin/categories/groups/{categoryGroupId}": {
+      "get": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 그룹 단건 조회",
+        "operationId": "a3-group-get",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryGroupResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 그룹 수정",
+        "operationId": "a4-group-update",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryGroupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryGroupResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 그룹 삭제",
+        "operationId": "a5-group-delete",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/admin/categories": {
+      "get": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 목록 조회",
+        "operationId": "a7-cat-list",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CategoryResponse" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 생성",
+        "operationId": "a6-cat-create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateCategoryRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CategoryResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/categories/groups": {
+      "get": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 그룹 목록 조회",
+        "operationId": "a2-group-list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryGroupResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["2-2 Admin Categories"],
+        "summary": "카테고리 그룹 생성",
+        "operationId": "a1-group-create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryGroupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryGroupResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts": {
+      "get": {
+        "tags": ["2-1 Admin Posts"],
+        "summary": "관리자 게시글 목록 조회",
+        "operationId": "a1-post-list",
+        "parameters": [
+          {
+            "name": "searchCondition",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/PostSearchCondition" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["DISCARDED", "NOT_PUBLISHED", "PUBLISHED", "ON_HOLD"]
+            }
+          },
+          {
+            "name": "lastPostId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64", "default": 20 }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["KO", "EN"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/PostResponseList" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["2-1 Admin Posts"],
+        "summary": "게시글 상태 변경",
+        "operationId": "a2-post-status",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdatePostsRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": ["1-1 User Posts"],
+        "summary": "게시글 목록 조회",
+        "operationId": "u1-post-list",
+        "parameters": [
+          {
+            "name": "searchCondition",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/PostSearchCondition" }
+          },
+          {
+            "name": "lastPostId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64", "default": 20 }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["KO", "EN"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/PostResponseList" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/source-sites": {
+      "get": {
+        "tags": ["1-1 User Posts"],
+        "summary": "소스 사이트 목록 조회",
+        "operationId": "u2-post-sources",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["1-2 User Categories"],
+        "summary": "카테고리 목록 조회",
+        "operationId": "u3-cat-list",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CategoryResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{categoryId}": {
+      "get": {
+        "tags": ["1-2 User Categories"],
+        "summary": "카테고리 단건 조회",
+        "operationId": "u4-cat-get",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/CategoryResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/groups": {
+      "get": {
+        "tags": ["1-2 User Categories"],
+        "summary": "카테고리 그룹 목록 조회",
+        "operationId": "u1-cat-groups",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryGroupResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/groups/{categoryGroupId}": {
+      "get": {
+        "tags": ["1-2 User Categories"],
+        "summary": "카테고리 그룹 단건 조회",
+        "operationId": "u2-cat-group",
+        "parameters": [
+          {
+            "name": "categoryGroupId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryGroupResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts/source-sites": {
+      "get": {
+        "tags": ["2-1 Admin Posts"],
+        "summary": "관리자 소스 사이트 목록 조회",
+        "operationId": "a3-post-sources",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["DISCARDED", "NOT_PUBLISHED", "PUBLISHED", "ON_HOLD"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateCategoryRequest": {
+        "type": "object",
+        "properties": {
+          "categoryGroupId": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "maxLength": 100, "minLength": 0 }
+        },
+        "required": ["categoryGroupId", "name"]
+      },
+      "CategoryResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "categoryGroupId": { "type": "integer", "format": "int64" },
+          "categoryGroupName": { "type": "string" }
+        }
+      },
+      "UpdateCategoryGroupRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "maxLength": 100, "minLength": 0 }
+        },
+        "required": ["name"]
+      },
+      "CategoryGroupResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" }
+        }
+      },
+      "CreateCategoryRequest": {
+        "type": "object",
+        "properties": {
+          "categoryGroupId": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "maxLength": 100, "minLength": 0 }
+        },
+        "required": ["categoryGroupId", "name"]
+      },
+      "CreateCategoryGroupRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "maxLength": 100, "minLength": 0 }
+        },
+        "required": ["name"]
+      },
+      "UpdatePostsRequest": {
+        "type": "object",
+        "properties": {
+          "postIds": { "type": "array", "items": { "type": "string" } },
+          "status": {
+            "type": "string",
+            "enum": ["DISCARDED", "NOT_PUBLISHED", "PUBLISHED", "ON_HOLD"]
+          },
+          "categoryIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "PostSearchCondition": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "maxLength": 2147483647,
+            "minLength": 2
+          },
+          "categoryIds": { "type": "array", "items": { "type": "string" } },
+          "sourceSiteName": { "type": "string" }
+        }
+      },
+      "PostCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "groupName": { "type": "string" },
+          "categoryName": { "type": "string" }
+        }
+      },
+      "PostResponse": {
+        "type": "object",
+        "properties": {
+          "postId": { "type": "integer", "format": "int64" },
+          "title": { "type": "string" },
+          "pubDate": { "type": "string", "format": "date-time" },
+          "thumbnail": { "type": "string" },
+          "url": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "categories": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PostCategoryResponse" }
+          },
+          "sourceSiteName": { "type": "string" },
+          "language": { "type": "string", "enum": ["KO", "EN"] }
+        }
+      },
+      "PostResponseList": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PostResponse" }
+          },
+          "hasNext": { "type": "boolean" },
+          "nextPostId": { "type": "integer", "format": "int64" }
+        }
+      }
+    }
+  }
+}
