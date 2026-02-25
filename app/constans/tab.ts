@@ -16,11 +16,13 @@ export const TABS = [
 export const AdminTabType = {
   All: 'all',
   Deleted: 'deleted',
+  Accepted: 'accepted',
 } as const;
 
 export type AdminTabType = (typeof AdminTabType)[keyof typeof AdminTabType];
 
 export const ADMIN_TABS = [
-  { label: '모든 게시물', value: AdminTabType.All },
+  { label: '대기중인 게시물', value: AdminTabType.All },
   { label: '삭제한 게시물', value: AdminTabType.Deleted },
+  { label: '합격된 게시물', value: AdminTabType.Accepted },
 ];

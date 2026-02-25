@@ -31,6 +31,9 @@ const Header = () => {
       case AdminMenuType.Deleted:
         router.push(`${pathname}?${params.toString()}`);
         break;
+      case AdminMenuType.Accepted:
+        router.push(`${pathname}?${params.toString()}`);
+        break;
 
       case AdminMenuType.MyPage:
         router.push('/mypage');

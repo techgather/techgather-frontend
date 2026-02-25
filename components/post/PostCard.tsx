@@ -40,9 +40,9 @@ const PostCard = ({ post, keyword }: Props) => {
     <Link
       href={post.url}
       target="_blank"
-      className="group hover:bg-gray_2 flex h-fit w-312 cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200 md:h-277 md:w-257"
+      className="group hover:bg-gray_2 flex h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200 sm:w-257 md:h-277"
     >
-      <div className="rounded-12 border-gray_5 relative aspect-video max-w-311 border md:max-w-233">
+      <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
         <Image
           src={imgSrc}
           alt="thumbnail"

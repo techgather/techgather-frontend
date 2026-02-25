@@ -43,12 +43,12 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   return (
     <div
       className={cn(
-        'group hover:border-main_2 flex w-257 cursor-pointer flex-col rounded-2xl border border-transparent p-12 transition-colors duration-200 hover:bg-[#E3FDF5]',
+        'group hover:border-main_2 flex w-full cursor-pointer flex-col rounded-2xl border border-transparent p-12 transition-colors duration-200 hover:bg-[#E3FDF5] sm:w-257',
         { 'border-main_2 bg-[#E3FDF5]': checked }
       )}
       onClick={() => handleCheck(post.postId)}
     >
-      <div className="rounded-12 border-gray_5 relative aspect-video max-w-233 border">
+      <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
         <div className="absolute top-9 left-9 z-10">
           {checked ? (
             <Image
