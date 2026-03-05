@@ -1,9 +1,10 @@
 'use client';
 
-import { ADMIN_MOBILE_MENU, AdminMenuType } from '@/app/constans/header';
+import { ADMIN_TABS } from '@/app/constans/tab';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SearchIcon from '@/public/icons/search.svg';
+import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -17,31 +18,32 @@ const Header = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const currentTab =
-    (searchParams.get('tab') as AdminMenuType) ?? AdminMenuType.All;
+    (searchParams.get('tab') as UpdatePostsRequestStatusEnum) ??
+    UpdatePostsRequestStatusEnum.NotPublished;
 
-  const handleAction = (action: AdminMenuType) => {
+  const handleAction = (action: UpdatePostsRequestStatusEnum) => {
     setIsOpen(false);
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', action);
 
     switch (action) {
-      case AdminMenuType.All:
+      case UpdatePostsRequestStatusEnum.NotPublished:
+        router.push(pathname);
+        break;
+      case UpdatePostsRequestStatusEnum.Discarded:
         router.push(`${pathname}?${params.toString()}`);
         break;
-      case AdminMenuType.Deleted:
-        router.push(`${pathname}?${params.toString()}`);
-        break;
-      case AdminMenuType.Accepted:
+      case UpdatePostsRequestStatusEnum.Published:
         router.push(`${pathname}?${params.toString()}`);
         break;
 
-      case AdminMenuType.MyPage:
-        router.push('/mypage');
+      case UpdatePostsRequestStatusEnum.OnHold:
+        router.push(`${pathname}?${params.toString()}`);
         break;
 
-      case AdminMenuType.Logout:
-        // logout();
-        break;
+      // case AdminMenuType.Logout:
+      //   // logout();
+      //   break;
     }
   };
 
@@ -84,8 +86,8 @@ const Header = () => {
           <Image
             alt="header logo"
             src="/icons/logo.svg"
-            width={101}
-            height={24}
+            width={66.6}
+            height={32}
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
@@ -135,7 +137,7 @@ const Header = () => {
           )}
         >
           <ul className="flex flex-col gap-8 px-24 pt-12 pb-24">
-            {ADMIN_MOBILE_MENU.map((item) => (
+            {ADMIN_TABS.map((item) => (
               <li
                 key={item.value}
                 className={cn(
