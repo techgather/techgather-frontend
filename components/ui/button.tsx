@@ -18,6 +18,8 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        dropdown:
+          'py-6 pl-4 pr-8 rounded-md border border-gray-300 h-36 w-180 text-[15px] flex justify-between items-center data-[state=open]:[&>svg]:rotate-180 transition-all',
       },
       size: {
         default: 'h-36 px-16 py-8 has-[>svg]:px-12',

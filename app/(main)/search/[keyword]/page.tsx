@@ -1,4 +1,3 @@
-import { getPostByKeyword } from '@/app/service/client';
 import { DashboardResponse } from '@/types/post';
 import {
   dehydrate,

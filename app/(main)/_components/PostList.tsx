@@ -2,20 +2,21 @@
 
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
+import { PostResponseLanguageEnum } from '@/types/api';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
 import SelectOption from '../../_components/SelectOption';
-import { SelectOptionType } from '../../constans/tab';
 
-const PostList = () => {
+const PostList = ({ tab }: { tab: string }) => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
     usePostList({ limit: 20 });
 
-  const [selectedOption, setSelectedOption] = useState<SelectOptionType>('all');
+  const [selectedOption, setSelectedOption] =
+    useState<PostResponseLanguageEnum>();
   const { inView, ref } = useInView();
 
-  const handleOptionChange = (option: SelectOptionType) => {
+  const handleOptionChange = (option?: PostResponseLanguageEnum) => {
     setSelectedOption(option);
   };
 

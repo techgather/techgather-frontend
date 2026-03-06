@@ -1,4 +1,4 @@
-import { getPostByKeyword } from '@/app/service/client';
+import { getPosts } from '@/app/service/client';
 import { delayFn } from '@/app/utils';
 import { DashboardResponse } from '@/types/post';
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
@@ -11,9 +11,9 @@ const useSearchPostList = ({
   limit?: number;
 }) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {
-    const result = await getPostByKeyword({
-      keyword,
-      nextPostId: pageParam,
+    const result = await getPosts({
+      searchCondition: { keyword },
+      lastPostId: pageParam,
       limit,
     });
     await delayFn(500);

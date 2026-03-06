@@ -5,7 +5,11 @@ import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 const usePostList = ({ limit = 20 }: { limit?: number }) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {
-    const result = await getPosts({ nextPostId: pageParam, limit });
+    const result = await getPosts({
+      lastPostId: pageParam,
+      limit,
+      searchCondition: {},
+    });
     await delayFn(500);
     return result;
   };

@@ -1,13 +1,13 @@
 'use client';
 
-import { AdminMenuType } from '@/app/constans/header';
-import { ADMIN_TABS, AdminTabType } from '@/app/constans/tab';
+import { ADMIN_TABS } from '@/app/constans/tab';
 import { cn } from '@/lib/utils';
+import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { motion } from 'framer-motion';
 
 interface Props {
-  currentOption: AdminMenuType;
-  handleClick: (option: AdminMenuType) => void;
+  currentOption: UpdatePostsRequestStatusEnum;
+  handleClick: (option: UpdatePostsRequestStatusEnum) => void;
 }
 
 const Tab = ({ currentOption, handleClick }: Props) => {
