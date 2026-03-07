@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useCategoryGroup = () => {
   return useQuery({
-    queryKey: ['category-gruop'],
+    queryKey: ['category-group'],
     queryFn: getCategoryGroup,
   });
 };

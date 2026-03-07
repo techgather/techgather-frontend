@@ -16,6 +16,7 @@ import useCategory from '../_hooks/useCategory';
 import useCategoryGroup from '../_hooks/useCategoryGroup';
 import useDispatch from '../_hooks/useDispatch';
 import useUpdatePostStatus from '../_hooks/useUpdatePostStatus';
+import CreateCategoryDialog from './CreateCategoryDialog';
 
 interface Props {
   tab: UpdatePostsRequestStatusEnum;
@@ -29,9 +30,9 @@ const PostList = ({ tab }: Props) => {
   const { data: categoryGroup } = useCategoryGroup();
   const [selectStatus, setSelectStats] =
     useState<UpdatePostsRequestStatusEnum>();
-  const [selectedGroup, setSelectedGroup] = useState<number>();
+  const [selectedGroup, setSelectedGroup] = useState<string>();
   const { data: category } = useCategory(selectedGroup);
-  const [categoryList, setCategoryList] = useState<number[]>([]);
+  const [categoryList, setCategoryList] = useState<string[]>([]);
   const { mutate } = useUpdatePostStatus();
 
   const { inView, ref } = useInView();
@@ -44,13 +45,13 @@ const PostList = ({ tab }: Props) => {
   const categoryGroupDropdown =
     categoryGroup?.map((item) => ({
       label: item.name ?? '',
-      value: item.id ?? 0,
+      value: item.id ?? '',
     })) ?? [];
 
   const categoryDropdown =
     category?.map((item) => ({
       label: item.name ?? '',
-      value: item.id ?? 0,
+      value: item.id ?? '',
     })) ?? [];
 
   const handleCheck = (postId: string) => {
@@ -96,6 +97,12 @@ const PostList = ({ tab }: Props) => {
   };
 
   useEffect(() => {
+    setSelectStats(undefined);
+    setSelectedGroup(undefined);
+    setCheckedList([]);
+  }, [tab]);
+
+  useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
@@ -134,8 +141,8 @@ const PostList = ({ tab }: Props) => {
           {/* 카테고리 그룹 선택 */}
           <div className="flex flex-col gap-4">
             <div className="text-gray_70 flex justify-between text-[13px]/[15px]">
-              분류
-              {/* TODO : 생성 모달 */}
+              그룹
+              <CreateCategoryDialog type="group" />
             </div>
             <CheckableDropdown
               trigger={
@@ -164,7 +171,10 @@ const PostList = ({ tab }: Props) => {
           {/* 카테고리 선택 */}
           {selectedGroup && (
             <div className="flex flex-col gap-4">
-              <div className="text-gray_70 text-[13px]/[15px]">카테고리</div>
+              <div className="text-gray_70 flex justify-between text-[13px]/[15px]">
+                카테고리
+                <CreateCategoryDialog type="category" groupId={selectedGroup} />
+              </div>
               <CheckableDropdown
                 trigger={
                   <Button
@@ -176,7 +186,7 @@ const PostList = ({ tab }: Props) => {
                     {categoryList.length > 0
                       ? category
                           ?.filter((item) =>
-                            categoryList.includes(item.id ?? 0)
+                            categoryList.includes(item.id ?? '')
                           )
                           .map((item) => item.name)
                           .join(', ')

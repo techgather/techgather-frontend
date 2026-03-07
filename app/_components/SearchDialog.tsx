@@ -12,7 +12,6 @@ import { Input } from '@/components/ui/input';
 import SearchIcon from '@/public/icons/search.svg';
 import { XIcon } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 

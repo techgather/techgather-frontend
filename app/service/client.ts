@@ -1,6 +1,8 @@
 import {
   CategoryGroupResponse,
   CategoryResponse,
+  CreateCategoryGroupRequest,
+  CreateCategoryRequest,
   PostResponseLanguageEnum,
   PostResponseList,
   PostSearchCondition,
@@ -124,7 +126,7 @@ export const getCategoryGroup = async (): Promise<CategoryGroupResponse[]> => {
 };
 
 export const getCategory = async (
-  groupId: number
+  groupId: string
 ): Promise<CategoryResponse[]> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/admin/categories?categoryGroupId=${groupId}`,
@@ -133,6 +135,48 @@ export const getCategory = async (
 
   if (!res.ok) {
     throw new Error('Failed to fetch posts');
+  }
+
+  return res.json();
+};
+
+export const createGroup = async (
+  body: CreateCategoryGroupRequest
+): Promise<CategoryGroupResponse> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/categories/groups`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to create group');
+  }
+
+  return res.json();
+};
+
+export const createCategory = async (
+  body: CreateCategoryRequest
+): Promise<CategoryResponse> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/categories`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to create category');
   }
 
   return res.json();
