@@ -96,7 +96,7 @@ export const updatePostStatus = async (body: UpdatePostsRequest) => {
     throw new Error('Failed to update posts');
   }
 
-  return res.json();
+  return res.text();
 };
 
 export const getSourceSite = async () => {

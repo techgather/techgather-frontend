@@ -1,5 +1,6 @@
 'use client';
 
+import { Site, SITE_MAP } from '@/app/constans/site';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
@@ -39,6 +40,8 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail ? post?.thumbnail : FALLBACK_IMAGE
   );
+
+  const siteName = (post?.sourceSiteName ?? '') as Site;
 
   return (
     <div
@@ -82,8 +85,21 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
         </h2>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-6">
-            <div className="bg-gray_10 relative size-24 rounded-full" />
-            <p className="text-[13px]">{post?.sourceSiteName}</p>
+            <div
+              className={cn(
+                'border-gray_5 flex size-24 items-center justify-center rounded-full border',
+                { 'bg-black': post?.sourceSiteName === 'musinsa' }
+              )}
+            >
+              <Image
+                src={SITE_MAP[siteName].icon}
+                alt={SITE_MAP[siteName].label}
+                width={18}
+                height={18}
+              />
+            </div>
+
+            <p className="text-[13px]">{SITE_MAP[siteName].label}</p>
           </div>
           <p className="text-gray_15 text-[11px]">
             {formatDate(post?.pubDate?.toString() ?? '')}
@@ -92,7 +108,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
       </div>
 
       <div className="relative mb-18 min-h-18">
-        {post?.categories && post.categories.length > 0 && (
+        {post?.categories && post.categories.length > 0 ? (
           <>
             <div className="flex gap-6 overflow-x-hidden">
               {post?.categories?.map((item, index) => (
@@ -101,6 +117,8 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
             </div>
             <div className="pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent transition-colors duration-200 group-hover:from-[#E3FDF5]" />
           </>
+        ) : (
+          <Badge>카테고리 없음</Badge>
         )}
       </div>
       <Link href={post?.url ?? ''} target="_blank">

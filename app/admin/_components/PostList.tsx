@@ -62,7 +62,7 @@ const PostList = ({ tab }: Props) => {
     }
   };
 
-  const handleUpdate = () => {
+  const handlePostStatus = () => {
     if (
       tab === UpdatePostsRequestStatusEnum.Discarded ||
       tab === UpdatePostsRequestStatusEnum.Published
@@ -80,7 +80,10 @@ const PostList = ({ tab }: Props) => {
         }
       );
     }
-    if (tab === UpdatePostsRequestStatusEnum.NotPublished) {
+    if (
+      tab === UpdatePostsRequestStatusEnum.NotPublished ||
+      tab === UpdatePostsRequestStatusEnum.OnHold
+    ) {
       mutate(
         {
           postIds: checkedList,
@@ -96,10 +99,29 @@ const PostList = ({ tab }: Props) => {
     }
   };
 
+  const handleUpdate = () => {
+    mutate(
+      {
+        postIds: checkedList,
+        status: selectStatus ?? tab,
+        categoryIds: categoryList,
+      },
+      {
+        onSuccess: () => {
+          setCheckedList([]);
+          setSelectStats(undefined);
+          setSelectedGroup(undefined);
+          setCategoryList([]);
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     setSelectStats(undefined);
     setSelectedGroup(undefined);
     setCheckedList([]);
+    setCategoryList([]);
   }, [tab]);
 
   useEffect(() => {
@@ -111,7 +133,7 @@ const PostList = ({ tab }: Props) => {
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex w-full items-center justify-between px-24 py-12 sm:py-28">
-        <div className="flex gap-12">
+        <div className="flex items-end gap-12">
           {/* 포스트 상태 선택 */}
           <div className="flex flex-col gap-4">
             <div className="text-gray_70 text-[13px]/[15px]">상태</div>
@@ -206,6 +228,13 @@ const PostList = ({ tab }: Props) => {
               />
             </div>
           )}
+          <Button
+            className="border border-black bg-white px-16 py-8 text-sm leading-18 font-bold text-black"
+            disabled={checkedList.length === 0}
+            onClick={handleUpdate}
+          >
+            변경
+          </Button>
         </div>
         <Button
           color={
@@ -217,7 +246,7 @@ const PostList = ({ tab }: Props) => {
           }
           className={cn('px-16 py-4 text-sm leading-18 font-bold')}
           disabled={checkedList.length === 0}
-          onClick={handleUpdate}
+          onClick={handlePostStatus}
         >
           {tab === UpdatePostsRequestStatusEnum.Discarded
             ? '글 복원'
