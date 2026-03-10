@@ -27,7 +27,7 @@ const Footer = () => {
             </Link>
           </div>
         </div>
-        <p>© DEVLOG. All rights reserved.</p>
+        <p>© DevPick. All rights reserved.</p>
       </div>
     </footer>
   );

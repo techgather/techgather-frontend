@@ -1,14 +1,16 @@
 'use client';
 
+import { Site, SITE_MAP } from '@/app/constans/site';
 import { Badge } from '@/components/ui/badge';
-import { Post } from '@/types/post';
+import { cn } from '@/lib/utils';
+import { PostResponse } from '@/types/api';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { formatDate } from '../../app/utils';
 
 interface Props {
-  post: Post;
+  post?: PostResponse;
   keyword?: string;
 }
 
@@ -33,12 +35,14 @@ const highlightKeyword = (text: string, keyword: string) => {
 
 const PostCard = ({ post, keyword }: Props) => {
   const [imgSrc, setImgSrc] = useState(
-    post.thumbnail ? post.thumbnail : FALLBACK_IMAGE
+    post?.thumbnail ? post.thumbnail : FALLBACK_IMAGE
   );
+
+  const siteName = (post?.sourceSiteName ?? '') as Site;
 
   return (
     <Link
-      href={post.url}
+      href={post?.url ?? ''}
       target="_blank"
       className="group hover:bg-gray_2 flex h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200 sm:w-257 md:h-277"
     >
@@ -53,23 +57,46 @@ const PostCard = ({ post, keyword }: Props) => {
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">
         <h2 className="block h-22 truncate text-[15px] font-bold md:h-44 md:text-wrap">
-          {keyword ? highlightKeyword(post.title, keyword) : post.title}
+          {keyword ? highlightKeyword(post?.title ?? '', keyword) : post?.title}
         </h2>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-6">
-            <div className="bg-gray_10 relative size-24 rounded-full" />
-            <p className="text-[13px]">{post.sourceSiteName}</p>
+            <div
+              className={cn(
+                'border-gray_5 flex size-24 items-center justify-center rounded-full border',
+                { 'bg-black': post?.sourceSiteName === 'musinsa' }
+              )}
+            >
+              <Image
+                src={SITE_MAP[siteName].icon}
+                alt={SITE_MAP[siteName].label}
+                width={18}
+                height={18}
+              />
+            </div>
+
+            <p className="text-[13px]">{SITE_MAP[siteName].label}</p>
           </div>
-          <p className="text-gray_15 text-[11px]">{formatDate(post.pubDate)}</p>
+
+          <p className="text-gray_15 text-[11px]">
+            {' '}
+            {formatDate(post?.pubDate?.toString() ?? '')}
+          </p>
         </div>
       </div>
-      <div className="relative">
-        <div className="flex gap-6 overflow-x-hidden">
-          {post.tags.map((item, index) => (
-            <Badge key={index}>{item}</Badge>
-          ))}
-        </div>
-        <div className="group-hover:from-gray_2 pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent transition-colors duration-200" />
+      <div className="relative mb-18 min-h-18">
+        {post?.categories && post.categories.length > 0 ? (
+          <>
+            <div className="flex gap-6 overflow-x-hidden">
+              {post?.categories?.map((item, index) => (
+                <Badge key={index}>{item.categoryName}</Badge>
+              ))}
+            </div>
+            <div className="pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent transition-colors duration-200 group-hover:from-[#E3FDF5]" />
+          </>
+        ) : (
+          <Badge>카테고리 없음</Badge>
+        )}
       </div>
     </Link>
   );

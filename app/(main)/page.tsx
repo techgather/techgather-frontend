@@ -1,15 +1,39 @@
-import { AdminTabType } from '../constans/tab';
+import { PostResponseList } from '@/types/api';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { getPosts } from '../service/client';
 import PostList from './_components/PostList';
 
-interface PageProps {
-  searchParams: { tab?: string };
-}
+export default async function () {
+  const queryClient = new QueryClient();
 
-export default async function ({ searchParams }: PageProps) {
-  const currentTab = searchParams.tab ?? AdminTabType.All;
+  await queryClient.prefetchInfiniteQuery<
+    PostResponseList,
+    Error,
+    PostResponseList,
+    ['posts'],
+    number | undefined
+  >({
+    queryKey: ['posts'],
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) =>
+      getPosts({
+        searchCondition: {},
+        lastPostId: pageParam,
+        limit: 19,
+      }),
+    getNextPageParam: (lastPage: PostResponseList) =>
+      lastPage.hasNext ? lastPage.nextPostId : undefined,
+  });
+
   return (
-    <div className="flex flex-col items-center">
-      <PostList tab={currentTab} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-col items-center">
+        <PostList />
+      </div>
+    </HydrationBoundary>
   );
 }

@@ -9,7 +9,6 @@ import {
   UpdatePostsRequest,
   UpdatePostsRequestStatusEnum,
 } from '@/types/api';
-import { DashboardResponse } from '@/types/post';
 
 interface PostParams {
   searchCondition: PostSearchCondition;
@@ -23,13 +22,36 @@ export const getPosts = async ({
   limit = 20,
   language,
   searchCondition,
-}: PostParams): Promise<DashboardResponse> => {
+}: PostParams): Promise<PostResponseList> => {
   const params = new URLSearchParams();
 
   if (lastPostId !== undefined) {
     params.append('lastPostId', String(lastPostId));
   }
+
   params.append('limit', String(limit));
+
+  if (language) {
+    params.append('language', language);
+  }
+
+  if (searchCondition) {
+    const { keyword, categoryIds, sourceSiteName } = searchCondition;
+
+    if (keyword) {
+      params.append('keyword', keyword);
+    }
+
+    if (sourceSiteName) {
+      params.append('sourceSiteName', sourceSiteName);
+    }
+
+    if (categoryIds?.length) {
+      categoryIds.forEach((id) => {
+        params.append('categoryIds', id);
+      });
+    }
+  }
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/posts?${params.toString()}`,

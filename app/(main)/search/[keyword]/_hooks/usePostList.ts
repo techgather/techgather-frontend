@@ -1,5 +1,6 @@
 import { getPosts } from '@/app/service/client';
 import { delayFn } from '@/app/utils';
+import { PostResponseList } from '@/types/api';
 import { DashboardResponse } from '@/types/post';
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
@@ -21,9 +22,9 @@ const useSearchPostList = ({
   };
 
   return useInfiniteQuery<
-    DashboardResponse,
+    PostResponseList,
     Error,
-    InfiniteData<DashboardResponse>,
+    InfiniteData<PostResponseList>,
     ['posts', string],
     number | undefined
   >({

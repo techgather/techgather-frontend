@@ -81,7 +81,7 @@ const Header = () => {
         )}
         onClick={() => setIsOpen(false)}
       />
-      <header className="bg-gray_90 fixed top-0 z-50 flex w-full flex-col items-center justify-center">
+      <header className="bg-gray_90 fixed top-0 left-0 z-50 flex w-full flex-col items-center justify-center">
         <div className="relative grid h-48 w-full max-w-1440 grid-cols-2 items-center px-24 py-10 md:h-52 md:grid-cols-3">
           <Image
             alt="header logo"

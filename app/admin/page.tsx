@@ -1,4 +1,5 @@
 import { UpdatePostsRequestStatusEnum } from '@/types/api';
+import Header from './_components/Header';
 import PostList from './_components/PostList';
 
 interface PageProps {
@@ -11,8 +12,11 @@ export default async function ({ searchParams }: PageProps) {
   const tab = currentTab ?? UpdatePostsRequestStatusEnum.NotPublished;
 
   return (
-    <div className="flex flex-col items-center">
-      <PostList tab={tab} />
-    </div>
+    <>
+      <Header />
+      <div className="mt-52 flex w-screen max-w-1440 flex-col items-center">
+        <PostList tab={tab} />
+      </div>
+    </>
   );
 }

@@ -6,12 +6,5 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <Suspense fallback={null}>
-        <Header />
-      </Suspense>
-      <div className="mt-52 w-full max-w-1440">{children}</div>
-    </>
-  );
+  return <div>{children}</div>;
 }

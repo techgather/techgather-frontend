@@ -254,10 +254,10 @@ const PostList = ({ tab }: Props) => {
         </Button>
       </div>
       <div className="grid grid-cols-1 gap-x-12 gap-y-12 px-12 sm:grid-cols-2 sm:gap-y-48 sm:px-24 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {postList.map((post, index) => (
+        {postList.map((post) => (
           <AdminPostCard
             post={post}
-            key={index}
+            key={post?.postId}
             handleCheck={handleCheck}
             checked={checkedList.includes(post?.postId?.toString() ?? '')}
           />

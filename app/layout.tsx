@@ -21,7 +21,7 @@ const Pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'devLog',
+  title: 'DevPick',
   description: 'developer blog archive',
 };
 

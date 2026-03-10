@@ -2,6 +2,7 @@
 
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
+import Image from 'next/image';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useSearchPostList from '../_hooks/usePostList';
@@ -29,8 +30,14 @@ const PostList = ({ keyword }: Props) => {
   return (
     <div className="flex flex-col items-center">
       {postList.length === 0 ? (
-        <div className="text-gray_15 flex h-300 items-center justify-center text-4xl font-semibold">
-          검색 결과가 없습니다!
+        <div className="text-gray_15 flex h-[calc(100vh-300px)] flex-col items-center justify-center gap-20 text-[15px]/[18px]">
+          <Image
+            src="/icons/search-empty-icon.svg"
+            alt="검색 결과 없음 아이콘"
+            width={88}
+            height={88}
+          />
+          검색 결과가 없어요.
         </div>
       ) : (
         <>
