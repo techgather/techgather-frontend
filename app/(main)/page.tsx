@@ -4,11 +4,16 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getPosts } from '../service/client';
+import { getCategory, getPosts, getSourceSite } from '../service/client';
 import PostList from './_components/PostList';
+import SideMenu from './_components/SideMenu';
+
+const DEFAULT_GROUPID = '292680441089056769';
 
 export default async function () {
   const queryClient = new QueryClient();
+  const categoryList = await getCategory(DEFAULT_GROUPID);
+  const sourceSiteList = await getSourceSite();
 
   await queryClient.prefetchInfiniteQuery<
     PostResponseList,
@@ -31,8 +36,9 @@ export default async function () {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col items-center">
-        <PostList />
+      <div className="flex justify-center gap-24 pt-50">
+        <SideMenu menu={categoryList} />
+        <PostList sourceSite={sourceSiteList} />
       </div>
     </HydrationBoundary>
   );

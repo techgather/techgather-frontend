@@ -1,27 +1,26 @@
 import { getPosts } from '@/app/service/client';
 import { delayFn } from '@/app/utils';
-import { PostResponseList } from '@/types/api';
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-const usePostList = ({ limit = 20 }: { limit?: number }) => {
+const usePostList = ({
+  limit = 20,
+  sourceSite,
+}: {
+  limit?: number;
+  sourceSite?: string;
+}) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {
     const result = await getPosts({
       lastPostId: pageParam,
       limit,
-      searchCondition: {},
+      searchCondition: { sourceSiteName: sourceSite },
     });
     await delayFn(500);
     return result;
   };
 
-  return useInfiniteQuery<
-    PostResponseList,
-    Error,
-    InfiniteData<PostResponseList>,
-    ['posts'],
-    number | undefined
-  >({
-    queryKey: ['posts'],
+  return useInfiniteQuery({
+    queryKey: ['posts', sourceSite],
     initialPageParam: undefined,
     queryFn: fetchApi,
     getNextPageParam: (lastPage) =>

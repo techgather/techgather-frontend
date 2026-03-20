@@ -79,21 +79,17 @@ const PostCard = ({ post, keyword }: Props) => {
           </div>
 
           <p className="text-gray_15 text-[11px]">
-            {' '}
             {formatDate(post?.pubDate?.toString() ?? '')}
           </p>
         </div>
       </div>
       <div className="relative mb-18 min-h-18">
         {post?.categories && post.categories.length > 0 ? (
-          <>
-            <div className="flex gap-6 overflow-x-hidden">
-              {post?.categories?.map((item, index) => (
-                <Badge key={index}>{item.categoryName}</Badge>
-              ))}
-            </div>
-            <div className="pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent transition-colors duration-200 group-hover:from-[#E3FDF5]" />
-          </>
+          <div className="flex gap-6 overflow-x-hidden">
+            {post?.categories?.map((item, index) => (
+              <Badge key={index}>{item.categoryName}</Badge>
+            ))}
+          </div>
         ) : (
           <Badge>카테고리 없음</Badge>
         )}
