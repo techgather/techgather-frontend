@@ -7,7 +7,7 @@ interface Props {
 
 const SideMenu = ({ menu }: Props) => {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="hidden flex-col gap-8 md:flex">
       <div className="bg-gray_2 text-gray_40 flex h-40 w-220 rounded-full px-20 py-8 text-base leading-24 font-bold capitalize">
         전체
       </div>

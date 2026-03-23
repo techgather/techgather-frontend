@@ -7,15 +7,18 @@ import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
+import { CategoryResponse } from '@/types/api';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
+import MobileFilter from './MobileFilter';
 
 interface Props {
   sourceSite: string[];
+  categoryList: CategoryResponse[];
 }
 
-const PostList = ({ sourceSite }: Props) => {
+const PostList = ({ sourceSite, categoryList }: Props) => {
   const [site, setSite] = useState<Site[]>([]);
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
     usePostList({ limit: 20, sourceSite: site[0] });
@@ -27,9 +30,15 @@ const PostList = ({ sourceSite }: Props) => {
   );
 
   const SiteDropdownList = sourceSite.map((item) => ({
-    label: SITE_MAP[item as Site].label,
+    label: SITE_MAP[item as Site].label as string,
     value: item as Site,
   }));
+
+  const handleSiteSelect = (value: Site) => {
+    setSite((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -46,6 +55,12 @@ const PostList = ({ sourceSite }: Props) => {
             10
           </span>
         </div>
+        {/* <MobileFilter
+          menu={categoryList}
+          sourceSite={SiteDropdownList}
+          selectSite={handleSiteSelect}
+          site={site}
+        /> */}
         <CheckableDropdown
           trigger={
             <Button
@@ -69,16 +84,10 @@ const PostList = ({ sourceSite }: Props) => {
           }
           dropdownitems={SiteDropdownList}
           selectedValues={site}
-          onValueChange={(value: Site) => {
-            setSite((prev) =>
-              prev.includes(value)
-                ? prev.filter((v) => v !== value)
-                : [...prev, value]
-            );
-          }}
+          onValueChange={handleSiteSelect}
         />
       </div>
-      <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-2 md:gap-y-48 lg:grid-cols-3 2xl:grid-cols-4">
         {postList.map((item, index) => (
           <PostCard post={item} key={index} />
         ))}

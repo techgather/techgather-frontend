@@ -36,9 +36,9 @@ export default async function () {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex justify-center gap-24 pt-50">
+      <div className="flex justify-center gap-24 pt-24 md:pt-40">
         <SideMenu menu={categoryList} />
-        <PostList sourceSite={sourceSiteList} />
+        <PostList sourceSite={sourceSiteList} categoryList={categoryList} />
       </div>
     </HydrationBoundary>
   );
