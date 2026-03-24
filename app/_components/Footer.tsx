@@ -5,29 +5,33 @@ const Footer = () => {
   return (
     <footer className="bg-gray_2 mt-40 flex w-full items-center justify-center">
       <div className="text-gray_15 flex w-full max-w-1440 flex-col gap-20 px-24 py-22 text-[13px]">
-        <div className="flex flex-col gap-12">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-28">
+          <div className="flex flex-col gap-12">
             <Image
               alt="푸터 로고"
               src="/icons/footer-logo.svg"
-              width={101}
-              height={24}
+              width={66}
+              height={30.36}
             />
-            <div className="flex items-center gap-4">
-              <p>데브로그</p>
-              <p>최신 개발 트렌드를 엄선하여 </p>
+            <div className="text-gray_20 text-[14px] leading-16">
+              테크 블로그들의 최신 아티클을 현직 개발자가 직접 엄선하여
+              게재합니다
             </div>
           </div>
-          <div className="flex gap-13">
-            <Link href={'https://github.com/techgather/techgather-frontend'}>
-              개인정보처리방침
-            </Link>
-            <Link href={'https://github.com/techgather/techgather-frontend'}>
-              이용약관
-            </Link>
+          <div className="flex flex-col gap-8">
+            <div>문의 sj07245@naver.com</div>
+            <div className="flex gap-8">
+              <Link href={'https://github.com/techgather/techgather-frontend'}>
+                개인정보처리방침
+              </Link>
+              |
+              <Link href={'https://github.com/techgather/techgather-frontend'}>
+                이용약관
+              </Link>
+            </div>
+            <p>Copyright © 2026 DevPick. All Rights Reserved</p>
           </div>
         </div>
-        <p>© DevPick. All rights reserved.</p>
       </div>
     </footer>
   );

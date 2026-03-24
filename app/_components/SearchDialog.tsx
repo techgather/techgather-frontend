@@ -51,8 +51,8 @@ const SearchDialog = ({ openState, setOpenState }: Props) => {
               <Image
                 alt="header logo"
                 src="/icons/logo.svg"
-                width={101}
-                height={24}
+                width={60}
+                height={27.6}
                 onClick={() => router.push('/')}
                 className="cursor-pointer"
               />

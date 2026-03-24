@@ -29,8 +29,8 @@ const Header = () => {
         <Image
           alt="header logo"
           src="/icons/logo.svg"
-          width={66.6}
-          height={32}
+          width={60}
+          height={27.6}
           onClick={() => router.push('/')}
           className="cursor-pointer"
         />

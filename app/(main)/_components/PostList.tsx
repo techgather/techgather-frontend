@@ -55,37 +55,41 @@ const PostList = ({ sourceSite, categoryList }: Props) => {
             10
           </span>
         </div>
-        {/* <MobileFilter
-          menu={categoryList}
-          sourceSite={SiteDropdownList}
-          selectSite={handleSiteSelect}
-          site={site}
-        /> */}
-        <CheckableDropdown
-          trigger={
-            <Button
-              variant="dropdown"
-              className={cn(
-                'w-232 overflow-hidden text-[13px] leading-15 text-ellipsis whitespace-nowrap',
-                site.length > 0 ? 'text-black' : 'text-gray_10'
-              )}
-            >
-              <div className="w-196 overflow-hidden text-start text-[13px] leading-15 text-ellipsis whitespace-nowrap">
-                {sourceSite.length > 0 && site.length > 0
-                  ? site
-                      .filter((item) => sourceSite.includes(item ?? ''))
-                      .map((item) => SITE_MAP[item as Site].label)
-                      .join(', ')
-                  : '테크 블로그 선택'}
-              </div>
+        <div className="block md:hidden">
+          <MobileFilter
+            menu={categoryList}
+            sourceSite={SiteDropdownList}
+            selectSite={handleSiteSelect}
+            site={site}
+          />
+        </div>
+        <div className="hidden md:block">
+          <CheckableDropdown
+            trigger={
+              <Button
+                variant="dropdown"
+                className={cn(
+                  'w-232 overflow-hidden text-[13px] leading-15 text-ellipsis whitespace-nowrap',
+                  site.length > 0 ? 'text-black' : 'text-gray_10'
+                )}
+              >
+                <div className="w-196 overflow-hidden text-start text-[13px] leading-15 text-ellipsis whitespace-nowrap">
+                  {sourceSite.length > 0 && site.length > 0
+                    ? site
+                        .filter((item) => sourceSite.includes(item ?? ''))
+                        .map((item) => SITE_MAP[item as Site].label)
+                        .join(', ')
+                    : '테크 블로그 선택'}
+                </div>
 
-              <ChevronIcon className="right-0 transition-transform duration-200" />
-            </Button>
-          }
-          dropdownitems={SiteDropdownList}
-          selectedValues={site}
-          onValueChange={handleSiteSelect}
-        />
+                <ChevronIcon className="right-0 transition-transform duration-200" />
+              </Button>
+            }
+            dropdownitems={SiteDropdownList}
+            selectedValues={site}
+            onValueChange={handleSiteSelect}
+          />
+        </div>
       </div>
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-2 md:gap-y-48 lg:grid-cols-3 2xl:grid-cols-4">
         {postList.map((item, index) => (

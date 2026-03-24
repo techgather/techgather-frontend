@@ -29,13 +29,12 @@ const MobileMenu = () => {
       <DrawerContent className="bg-gray_90">
         <DrawerHeader>
           <DrawerTitle>
-            {' '}
             <div className="grid w-full max-w-1440 grid-cols-2 items-center">
               <Image
                 alt="header logo"
                 src="/icons/logo.svg"
-                width={101}
-                height={24}
+                width={60}
+                height={27.6}
                 onClick={() => router.push('/')}
                 className="cursor-pointer"
               />
