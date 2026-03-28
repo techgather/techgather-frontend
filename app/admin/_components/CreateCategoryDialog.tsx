@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { PlusIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import useCreateCategory from '../_hooks/useCreateCategory';
@@ -23,17 +24,26 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
   const { mutate: createGroup } = useCreateGroup();
   const { mutate: createCategory } = useCreateCategory();
   const [name, setName] = useState('');
+  const [slug, setSlug] = useState('');
+  const [description, setDescription] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = () => {
-    if (!name) return;
+    if (!name || !slug) return;
     if (type === 'group') {
       createGroup({ name });
     }
     if (type === 'category' && groupId) {
-      createCategory({ categoryGroupId: groupId, name });
+      createCategory({
+        categoryGroupId: groupId,
+        name,
+        slug,
+        description,
+      });
     }
     setName('');
+    setSlug('');
+    setDescription('');
     setIsOpen(false);
   };
 
@@ -55,23 +65,63 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
           </DialogTitle>
         </DialogHeader>
         <div className="group relative flex w-full flex-col gap-20">
-          <Input
-            onChange={(value) => setName(value.target.value)}
-            minLength={2}
-            id="keyword"
-            name="keyword"
-            type="text"
-            placeholder={
-              type === 'group'
-                ? '그룹 이름을 입력해주세요'
-                : '카테고리를 이름을 입력해주세요'
-            }
-            className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
-          />
+          <div className="flex flex-col gap-10">
+            <Label htmlFor="keyword" className="flex gap-4 font-semibold">
+              {type === 'group' ? '그룹 이름' : '카테고리 이름'}
+              <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="keyword"
+              name="keyword"
+              type="text"
+              minLength={2}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={
+                type === 'group'
+                  ? '그룹 이름을 입력해주세요'
+                  : '카테고리를 이름을 입력해주세요'
+              }
+              className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
+            />
+          </div>
+          {type === 'category' && (
+            <>
+              <div className="flex flex-col gap-10">
+                <Label htmlFor="slug" className="flex gap-4 font-semibold">
+                  경로
+                  <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  onChange={(value) => setSlug(value.target.value)}
+                  minLength={2}
+                  id="slug"
+                  name="slug"
+                  type="text"
+                  placeholder={'경로를 이름을 입력해주세요'}
+                  className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
+                />
+              </div>
+              <div className="flex flex-col gap-10">
+                <Label htmlFor="description" className="font-semibold">
+                  부가 설명
+                </Label>
+                <Input
+                  onChange={(value) => setDescription(value.target.value)}
+                  minLength={2}
+                  id="description"
+                  name="description"
+                  type="text"
+                  placeholder={'부가 설명을 이름을 입력해주세요'}
+                  className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
+                />
+              </div>
+            </>
+          )}
+
           <Button
             className="px-16 py-4 text-sm leading-18 font-bold"
             onClick={handleSubmit}
-            disabled={!name}
+            disabled={!name || !slug}
             color="green"
           >
             제출하기

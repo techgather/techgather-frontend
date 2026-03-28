@@ -36,19 +36,21 @@ export const getPosts = async ({
   }
 
   if (searchCondition) {
-    const { keyword, categoryIds, sourceSiteName } = searchCondition;
+    const { keyword, categorySlugs, sourceSiteNames } = searchCondition;
 
     if (keyword) {
       params.append('keyword', keyword);
     }
 
-    if (sourceSiteName) {
-      params.append('sourceSiteName', sourceSiteName);
+    if (sourceSiteNames) {
+      sourceSiteNames.forEach((site) => {
+        params.append('sourceSiteNames', site);
+      });
     }
 
-    if (categoryIds?.length) {
-      categoryIds.forEach((id) => {
-        params.append('categoryIds', id);
+    if (categorySlugs?.length) {
+      categorySlugs.forEach((slug) => {
+        params.append('categorySlugs', slug);
       });
     }
   }

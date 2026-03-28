@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${Pretendard.className} flex flex-col items-center bg-white antialiased`}
+        className={`${Pretendard.className} custom-scrollbar flex flex-col items-center bg-white antialiased`}
       >
         <Providers>
           {children}

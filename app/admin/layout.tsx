@@ -1,6 +1,3 @@
-import { Suspense } from 'react';
-import Header from './_components/Header';
-
 export default async function Layout({
   children,
 }: Readonly<{

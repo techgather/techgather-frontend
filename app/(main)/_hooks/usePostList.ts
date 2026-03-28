@@ -7,13 +7,13 @@ const usePostList = ({
   sourceSite,
 }: {
   limit?: number;
-  sourceSite?: string;
+  sourceSite?: string[];
 }) => {
   const fetchApi = async ({ pageParam }: { pageParam?: number }) => {
     const result = await getPosts({
       lastPostId: pageParam,
       limit,
-      searchCondition: { sourceSiteName: sourceSite },
+      searchCondition: { categorySlugs: sourceSite },
     });
     await delayFn(500);
     return result;

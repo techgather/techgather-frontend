@@ -31,7 +31,7 @@ const CheckableDropdown = <T,>({
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="max-h-400 w-(--radix-dropdown-menu-trigger-width)"
+        className="custom-scrollbar max-h-400 w-(--radix-dropdown-menu-trigger-width)"
         align="start"
       >
         <DropdownMenuGroup>

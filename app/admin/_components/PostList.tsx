@@ -6,7 +6,6 @@ import DefaultDropdown from '@/components/dropdown/DefaultDropdown';
 import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,7 +32,7 @@ const PostList = ({ tab }: Props) => {
   const [selectedGroup, setSelectedGroup] = useState<string>();
   const { data: category } = useCategory(selectedGroup);
   const [categoryList, setCategoryList] = useState<string[]>([]);
-  const { mutate } = useUpdatePostStatus();
+  const { mutate, isPending } = useUpdatePostStatus();
 
   const { inView, ref } = useInView();
 
@@ -59,43 +58,6 @@ const PostList = ({ tab }: Props) => {
       setCheckedList(checkedList.filter((id) => id !== postId));
     } else {
       setCheckedList([...checkedList, postId]);
-    }
-  };
-
-  const handlePostStatus = () => {
-    if (
-      tab === UpdatePostsRequestStatusEnum.Discarded ||
-      tab === UpdatePostsRequestStatusEnum.Published
-    ) {
-      mutate(
-        {
-          postIds: checkedList,
-          status: UpdatePostsRequestStatusEnum.NotPublished,
-          categoryIds: [],
-        },
-        {
-          onSuccess: () => {
-            setCheckedList([]);
-          },
-        }
-      );
-    }
-    if (
-      tab === UpdatePostsRequestStatusEnum.NotPublished ||
-      tab === UpdatePostsRequestStatusEnum.OnHold
-    ) {
-      mutate(
-        {
-          postIds: checkedList,
-          status: UpdatePostsRequestStatusEnum.Published,
-          categoryIds: [],
-        },
-        {
-          onSuccess: () => {
-            setCheckedList([]);
-          },
-        }
-      );
     }
   };
 
@@ -128,11 +90,11 @@ const PostList = ({ tab }: Props) => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage]);
+  }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="flex w-full items-center justify-between px-24 py-12 sm:py-28">
+    <div className="flex w-full flex-col items-center gap-24">
+      <div className="flex w-full items-center justify-between px-24 pt-12 sm:pt-24">
         <div className="flex items-end gap-12">
           {/* 포스트 상태 선택 */}
           <div className="flex flex-col gap-4">
@@ -236,7 +198,7 @@ const PostList = ({ tab }: Props) => {
             변경
           </Button>
         </div>
-        <Button
+        {/* <Button
           color={
             checkedList.length > 0
               ? tab === UpdatePostsRequestStatusEnum.Discarded
@@ -251,21 +213,25 @@ const PostList = ({ tab }: Props) => {
           {tab === UpdatePostsRequestStatusEnum.Discarded
             ? '글 복원'
             : '글 삭제'}
-        </Button>
+        </Button> */}
       </div>
-      <div className="gapy-24 grid grid-cols-1 pt-50 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
-        {postList.map((post) => (
-          <AdminPostCard
-            post={post}
-            key={post?.postId}
-            handleCheck={handleCheck}
-            checked={checkedList.includes(post?.postId?.toString() ?? '')}
-          />
-        ))}
-        {isFetching && (
+      <div className="bg-gray_5 h-1 w-full" />
+      <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
+        {isFetching || isPending ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (
               <PostCardSkeleton key={index} />
+            ))}
+          </>
+        ) : (
+          <>
+            {postList.map((post) => (
+              <AdminPostCard
+                post={post}
+                key={post?.postId}
+                handleCheck={handleCheck}
+                checked={checkedList.includes(post?.postId?.toString() ?? '')}
+              />
             ))}
           </>
         )}

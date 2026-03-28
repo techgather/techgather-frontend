@@ -21,13 +21,15 @@ interface Props {
 const PostList = ({ sourceSite, categoryList }: Props) => {
   const [site, setSite] = useState<Site[]>([]);
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    usePostList({ limit: 20, sourceSite: site[0] });
+    usePostList({ limit: 20, sourceSite: site });
   const { inView, ref } = useInView();
 
   const postList = useMemo(
     () => data?.pages.flatMap((page) => page.posts) ?? [],
     [data]
   );
+
+  const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
 
   const SiteDropdownList = sourceSite.map((item) => ({
     label: SITE_MAP[item as Site].label as string,
@@ -52,7 +54,7 @@ const PostList = ({ sourceSite, categoryList }: Props) => {
         <div className="text-gray_15 flex items-center gap-8 text-[15px] leading-17">
           전체
           <span className="text-gary_10 spac text-[15px] leading-17 font-bold tracking-tight">
-            10
+            {totalCount}
           </span>
         </div>
         <div className="block md:hidden">

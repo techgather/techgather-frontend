@@ -13,7 +13,7 @@ const SideMenu = ({ menu }: Props) => {
       </div>
       {menu.map((item) => (
         <Link
-          href={`/category/${item.id}`}
+          href={`/category/${item.slug}`}
           key={item.id}
           className="text-gray_10 hover:bg-gray_2 hover:text-gray_40 hover:text-bold flex h-40 w-220 cursor-pointer rounded-full px-20 py-8 text-base leading-24 capitalize transition-all duration-100"
         >
