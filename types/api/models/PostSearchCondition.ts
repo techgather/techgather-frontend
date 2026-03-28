@@ -31,13 +31,13 @@ export interface PostSearchCondition {
    * @type {Array<string>}
    * @memberof PostSearchCondition
    */
-  categoryIds?: Array<string>;
+  categorySlugs?: Array<string>;
   /**
    *
-   * @type {string}
+   * @type {Array<string>}
    * @memberof PostSearchCondition
    */
-  sourceSiteName?: string;
+  sourceSiteNames?: Array<string>;
 }
 
 /**
@@ -62,9 +62,10 @@ export function PostSearchConditionFromJSONTyped(
   }
   return {
     keyword: json['keyword'] == null ? undefined : json['keyword'],
-    categoryIds: json['categoryIds'] == null ? undefined : json['categoryIds'],
-    sourceSiteName:
-      json['sourceSiteName'] == null ? undefined : json['sourceSiteName'],
+    categorySlugs:
+      json['categorySlugs'] == null ? undefined : json['categorySlugs'],
+    sourceSiteNames:
+      json['sourceSiteNames'] == null ? undefined : json['sourceSiteNames'],
   };
 }
 
@@ -82,7 +83,7 @@ export function PostSearchConditionToJSONTyped(
 
   return {
     keyword: value['keyword'],
-    categoryIds: value['categoryIds'],
-    sourceSiteName: value['sourceSiteName'],
+    categorySlugs: value['categorySlugs'],
+    sourceSiteNames: value['sourceSiteNames'],
   };
 }

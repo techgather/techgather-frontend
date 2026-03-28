@@ -35,6 +35,12 @@ export interface PostResponseList {
   posts?: Array<PostResponse>;
   /**
    *
+   * @type {number}
+   * @memberof PostResponseList
+   */
+  totalCount?: number;
+  /**
+   *
    * @type {boolean}
    * @memberof PostResponseList
    */
@@ -72,6 +78,7 @@ export function PostResponseListFromJSONTyped(
       json['posts'] == null
         ? undefined
         : (json['posts'] as Array<any>).map(PostResponseFromJSON),
+    totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
     hasNext: json['hasNext'] == null ? undefined : json['hasNext'],
     nextPostId: json['nextPostId'] == null ? undefined : json['nextPostId'],
   };
@@ -94,6 +101,7 @@ export function PostResponseListToJSONTyped(
       value['posts'] == null
         ? undefined
         : (value['posts'] as Array<any>).map(PostResponseToJSON),
+    totalCount: value['totalCount'],
     hasNext: value['hasNext'],
     nextPostId: value['nextPostId'],
   };

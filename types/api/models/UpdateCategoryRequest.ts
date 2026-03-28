@@ -25,13 +25,19 @@ export interface UpdateCategoryRequest {
    * @type {string}
    * @memberof UpdateCategoryRequest
    */
-  categoryGroupId: string;
+  name: string;
   /**
    *
    * @type {string}
    * @memberof UpdateCategoryRequest
    */
-  name: string;
+  slug: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateCategoryRequest
+   */
+  description: string;
 }
 
 /**
@@ -40,9 +46,10 @@ export interface UpdateCategoryRequest {
 export function instanceOfUpdateCategoryRequest(
   value: object
 ): value is UpdateCategoryRequest {
-  if (!('categoryGroupId' in value) || value['categoryGroupId'] === undefined)
-    return false;
   if (!('name' in value) || value['name'] === undefined) return false;
+  if (!('slug' in value) || value['slug'] === undefined) return false;
+  if (!('description' in value) || value['description'] === undefined)
+    return false;
   return true;
 }
 
@@ -60,8 +67,9 @@ export function UpdateCategoryRequestFromJSONTyped(
     return json;
   }
   return {
-    categoryGroupId: json['categoryGroupId'],
     name: json['name'],
+    slug: json['slug'],
+    description: json['description'],
   };
 }
 
@@ -78,7 +86,8 @@ export function UpdateCategoryRequestToJSONTyped(
   }
 
   return {
-    categoryGroupId: value['categoryGroupId'],
     name: value['name'],
+    slug: value['slug'],
+    description: value['description'],
   };
 }

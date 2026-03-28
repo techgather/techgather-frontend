@@ -34,6 +34,18 @@ export interface CategoryResponse {
   name?: string;
   /**
    *
+   * @type {string}
+   * @memberof CategoryResponse
+   */
+  slug?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CategoryResponse
+   */
+  description?: string;
+  /**
+   *
    * @type {number}
    * @memberof CategoryResponse
    */
@@ -69,6 +81,8 @@ export function CategoryResponseFromJSONTyped(
   return {
     id: json['id'] == null ? undefined : json['id'],
     name: json['name'] == null ? undefined : json['name'],
+    slug: json['slug'] == null ? undefined : json['slug'],
+    description: json['description'] == null ? undefined : json['description'],
     categoryGroupId:
       json['categoryGroupId'] == null ? undefined : json['categoryGroupId'],
     categoryGroupName:
@@ -91,6 +105,8 @@ export function CategoryResponseToJSONTyped(
   return {
     id: value['id'],
     name: value['name'],
+    slug: value['slug'],
+    description: value['description'],
     categoryGroupId: value['categoryGroupId'],
     categoryGroupName: value['categoryGroupName'],
   };

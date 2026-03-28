@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/Class11UserPostsApi.ts
 apis/Class12UserCategoriesApi.ts
 apis/Class21AdminPostsApi.ts
