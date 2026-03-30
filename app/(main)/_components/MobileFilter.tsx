@@ -14,15 +14,15 @@ import FilterResetIcon from '@/public/icons/filter-reset.svg';
 import FilterIcon from '@/public/icons/list-filter.svg';
 import { CategoryResponse } from '@/types/api';
 import { XIcon } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface Props {
   menu: CategoryResponse[];
   sourceSite: { label: string; value: Site }[];
   site: Site[];
-  selectSite: (value: Site) => void;
+  selectSite: (value: Site | Site[]) => void;
   currentCategory?: string;
 }
 
@@ -34,6 +34,14 @@ const MobileFilter = ({
   currentCategory,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const resetFilter = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push('/');
+    selectSite([]);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -49,7 +57,9 @@ const MobileFilter = ({
           />
           필터
           {(site.length > 0 || currentCategory) && (
-            <FilterResetIcon className="size-16" />
+            <div role="button" onClick={resetFilter}>
+              <FilterResetIcon className="size-16" />
+            </div>
           )}
         </Button>
       </DialogTrigger>
@@ -76,15 +86,22 @@ const MobileFilter = ({
             <div className="grid grid-cols-2 gap-8">
               <Link
                 href="/"
-                className="text-gray_90 border-gray_90 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17"
+                className={cn(
+                  'text-gray_10 border-gray_10 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17',
+                  !currentCategory && 'text-gray_90 border-gray_90'
+                )}
               >
                 전체
               </Link>
               {menu.map((item) => (
                 <Link
-                  href={`/category/${item.id}`}
+                  href={`/category/${item.slug}`}
                   key={item.id}
-                  className="text-gray_10 border-gray_10 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17"
+                  className={cn(
+                    'text-gray_10 border-gray_10 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17 capitalize',
+                    currentCategory === item.slug &&
+                      'text-gray_90 border-gray_90'
+                  )}
                 >
                   {item.name}
                 </Link>

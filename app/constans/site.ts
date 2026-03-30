@@ -16,8 +16,8 @@ export const SITE_MAP = {
     icon: '/icons/site/devsisters-img.svg',
   },
   gaeraeblog: {
-    label: '개발자 블로그',
-    icon: '/icons/site/gaeraeblog-img.svg',
+    label: '개발자스럽다',
+    icon: '/icons/site/gaeraeblog-img.png',
   },
   hyperconnect: {
     label: '하이퍼커넥트',

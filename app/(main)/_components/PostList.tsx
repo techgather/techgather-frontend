@@ -16,12 +16,19 @@ import MobileFilter from './MobileFilter';
 interface Props {
   sourceSite: string[];
   categoryList: CategoryResponse[];
+  categorySlug?: string;
 }
 
-const PostList = ({ sourceSite, categoryList }: Props) => {
+const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
   const [site, setSite] = useState<Site[]>([]);
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    usePostList({ limit: 20, sourceSite: site });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isLoading,
+  } = usePostList({ limit: 20, sourceSite: site, categorySlug });
   const { inView, ref } = useInView();
 
   const postList = useMemo(
@@ -36,10 +43,16 @@ const PostList = ({ sourceSite, categoryList }: Props) => {
     value: item as Site,
   }));
 
-  const handleSiteSelect = (value: Site) => {
-    setSite((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-    );
+  const handleSiteSelect = (value: Site | Site[]) => {
+    if (Array.isArray(value)) {
+      setSite(value);
+    } else {
+      setSite((prev) =>
+        prev.includes(value)
+          ? prev.filter((v) => v !== value)
+          : [...prev, value]
+      );
+    }
   };
 
   useEffect(() => {
@@ -63,6 +76,7 @@ const PostList = ({ sourceSite, categoryList }: Props) => {
             sourceSite={SiteDropdownList}
             selectSite={handleSiteSelect}
             site={site}
+            currentCategory={categorySlug}
           />
         </div>
         <div className="hidden md:block">
@@ -94,14 +108,21 @@ const PostList = ({ sourceSite, categoryList }: Props) => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-2 md:gap-y-48 lg:grid-cols-3 2xl:grid-cols-4">
-        {postList.map((item, index) => (
-          <PostCard post={item} key={index} />
-        ))}
-        {isFetching && (
+        {isLoading || (isFetching && !isFetchingNextPage) ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (
               <PostCardSkeleton key={index} />
             ))}
+          </>
+        ) : (
+          <>
+            {postList.map((item, index) => (
+              <PostCard post={item} key={index} />
+            ))}
+            {isFetchingNextPage &&
+              Array.from({ length: 10 }).map((_, index) => (
+                <PostCardSkeleton key={`next-${index}`} />
+              ))}
           </>
         )}
       </div>

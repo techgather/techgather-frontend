@@ -24,8 +24,14 @@ interface Props {
 const PostList = ({ tab }: Props) => {
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const { language, searchCondition } = useDispatch();
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useAdminPostList({ searchCondition, status: tab, language, limit: 20 });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isFetchingNextPage,
+  } = useAdminPostList({ searchCondition, status: tab, language, limit: 20 });
   const { data: categoryGroup } = useCategoryGroup();
   const [selectStatus, setSelectStats] =
     useState<UpdatePostsRequestStatusEnum>();
@@ -217,7 +223,7 @@ const PostList = ({ tab }: Props) => {
       </div>
       <div className="bg-gray_5 h-1 w-full" />
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
-        {isFetching || isPending ? (
+        {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (
               <PostCardSkeleton key={index} />
@@ -233,6 +239,10 @@ const PostList = ({ tab }: Props) => {
                 checked={checkedList.includes(post?.postId?.toString() ?? '')}
               />
             ))}
+            {isFetchingNextPage &&
+              Array.from({ length: 10 }).map((_, index) => (
+                <PostCardSkeleton key={`next-${index}`} />
+              ))}
           </>
         )}
       </div>

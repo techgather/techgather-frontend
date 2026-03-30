@@ -9,7 +9,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          'inline-block border-gray_5 text-gray_15 [a&]:hover:bg-primary/90 h-18 max-w-121 overflow-hidden text-ellipsis whitespace-nowrap',
+          'inline-block border-gray_5 text-gray_15 [a&]:hover:bg-primary/90 h-18 max-w-121 overflow-hidden text-ellipsis whitespace-nowrap capitalize',
         secondary:
           'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
         destructive:

@@ -1,16 +1,23 @@
+import { getCategory, getPosts, getSourceSite } from '@/app/service/client';
 import { PostResponseList } from '@/types/api';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getCategory, getPosts, getSourceSite } from '../service/client';
-import PostList from './_components/PostList';
-import SideMenu from './_components/SideMenu';
+import PostList from '../../_components/PostList';
+import SideMenu from '../../_components/SideMenu';
 
 const DEFAULT_GROUPID = '292680441089056769';
 
-export default async function Page() {
+interface Props {
+  params: {
+    slug: string;
+  };
+}
+
+async function Page({ params }: Props) {
+  const { slug } = await params;
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
   const sourceSiteList = await getSourceSite();
@@ -19,14 +26,14 @@ export default async function Page() {
     PostResponseList,
     Error,
     PostResponseList,
-    ['posts'],
+    ['posts', string, string[]],
     number | undefined
   >({
-    queryKey: ['posts'],
+    queryKey: ['posts', slug, []],
     initialPageParam: undefined,
     queryFn: ({ pageParam }) =>
       getPosts({
-        searchCondition: {},
+        searchCondition: { categorySlugs: [slug] },
         lastPostId: pageParam,
         limit: 19,
       }),
@@ -37,9 +44,11 @@ export default async function Page() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex justify-center gap-24 pt-24 md:pt-40">
-        <SideMenu menu={categoryList} />
-        <PostList sourceSite={sourceSiteList} categoryList={categoryList} />
+        <SideMenu menu={categoryList} currentCategory={slug} />
+        <PostList sourceSite={sourceSiteList} categoryList={categoryList} categorySlug={slug} />
       </div>
     </HydrationBoundary>
   );
 }
+
+export default Page;

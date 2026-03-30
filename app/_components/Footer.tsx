@@ -13,13 +13,12 @@ const Footer = () => {
               width={66}
               height={30.36}
             />
-            <div className="text-gray_20 text-[14px] leading-16">
+            <div className="text-gray_20 text-[13px] leading-15 font-bold">
               테크 블로그들의 최신 아티클을 현직 개발자가 직접 엄선하여
               게재합니다
             </div>
           </div>
           <div className="flex flex-col gap-8">
-            <div>문의 sj07245@naver.com</div>
             <div className="flex gap-8">
               <Link href={'https://github.com/techgather/techgather-frontend'}>
                 개인정보처리방침
@@ -29,7 +28,10 @@ const Footer = () => {
                 이용약관
               </Link>
             </div>
-            <p>Copyright © 2026 DevPick. All Rights Reserved</p>
+            <div className="flex gap-12 text-[12px] leading-13">
+              <p>© 데브픽 DevPick</p>
+              <p>문의 sj07245@naver.com</p>
+            </div>
           </div>
         </div>
       </div>

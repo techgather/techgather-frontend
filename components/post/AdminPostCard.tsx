@@ -88,7 +88,11 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
             <div
               className={cn(
                 'border-gray_5 flex size-24 items-center justify-center rounded-full border',
-                { 'bg-black': post?.sourceSiteName === 'musinsa' }
+                {
+                  'bg-black':
+                    post?.sourceSiteName === 'musinsa' ||
+                    post?.sourceSiteName === 'gaeraeblog',
+                }
               )}
             >
               <Image

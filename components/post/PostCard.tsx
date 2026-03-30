@@ -24,7 +24,7 @@ const highlightKeyword = (text: string, keyword: string) => {
 
   return text.split(regex).map((part, index) =>
     part.toLowerCase() === keyword.toLowerCase() ? (
-      <span key={index} className="text-main">
+      <span key={index} className="text-main_2">
         {part}
       </span>
     ) : (
@@ -64,7 +64,11 @@ const PostCard = ({ post, keyword }: Props) => {
             <div
               className={cn(
                 'border-gray_5 flex size-24 items-center justify-center rounded-full border',
-                { 'bg-black': post?.sourceSiteName === 'musinsa' }
+                {
+                  'bg-black':
+                    post?.sourceSiteName === 'musinsa' ||
+                    post?.sourceSiteName === 'gaeraeblog',
+                }
               )}
             >
               <Image
