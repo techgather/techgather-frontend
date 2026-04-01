@@ -14,7 +14,7 @@ export default async function ({ searchParams }: PageProps) {
   return (
     <>
       <Header />
-      <div className="flex justify-center gap-24 pt-52">
+      <div className="mb-40 flex justify-center gap-24 pt-52">
         <PostList tab={tab} />
       </div>
     </>

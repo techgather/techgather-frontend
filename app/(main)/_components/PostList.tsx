@@ -107,7 +107,7 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-2 md:gap-y-48 lg:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-14 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
         {isLoading || (isFetching && !isFetchingNextPage) ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (

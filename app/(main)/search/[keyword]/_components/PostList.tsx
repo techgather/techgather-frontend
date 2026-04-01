@@ -41,9 +41,9 @@ const PostList = ({ keyword }: Props) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-1 flex-col items-center">
         {postList.length === 0 ? (
-          <div className="text-gray_15 flex h-[calc(100vh-300px)] flex-col items-center justify-center gap-20 text-[15px]/[18px]">
+          <div className="text-gray_15 flex flex-1 flex-col items-center justify-center gap-20 text-[15px]/[18px]">
             <Image
               src="/icons/search-empty-icon.svg"
               alt="검색 결과 없음 아이콘"
@@ -54,7 +54,7 @@ const PostList = ({ keyword }: Props) => {
           </div>
         ) : (
           <>
-            <div className="gapy-24 grid grid-cols-1 pt-50 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
+            <div className="gapy-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
               {postList.map((item, index) => (
                 <PostCard post={item} key={index} keyword={keyword} />
               ))}

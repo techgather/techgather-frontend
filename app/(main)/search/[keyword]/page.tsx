@@ -39,7 +39,7 @@ async function Page({ params }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-1 flex-col">
         <PostList keyword={decodeKeyword} />
       </div>
     </HydrationBoundary>

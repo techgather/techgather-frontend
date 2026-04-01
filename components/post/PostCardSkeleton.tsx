@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const PostCardSkeleton = () => {
   return (
-    <div className="flex h-fit w-screen flex-col rounded-2xl p-12 sm:w-257 md:h-277">
+    <div className="flex w-screen flex-1 flex-col rounded-2xl p-12 sm:w-257 md:h-277">
       {/* 썸네일 */}
       <div className="relative aspect-video w-full sm:max-w-233">
         <Skeleton className="rounded-12 h-full w-full" />

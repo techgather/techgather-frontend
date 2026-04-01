@@ -14,7 +14,7 @@ export default function Layout({
   return (
     <>
       <Header />
-      <div className="mt-52 w-full max-w-1440">{children}</div>
+      <div className="mt-52 flex flex-1 flex-col w-full max-w-1440">{children}</div>
     </>
   );
 }
