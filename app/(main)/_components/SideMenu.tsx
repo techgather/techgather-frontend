@@ -9,7 +9,7 @@ interface Props {
 
 const SideMenu = ({ menu, currentCategory }: Props) => {
   return (
-    <div className="hidden flex-col gap-8 md:flex">
+    <div className="hidden flex-col gap-8 md:sticky md:top-70 md:flex">
       <Link
         href="/"
         className={cn(

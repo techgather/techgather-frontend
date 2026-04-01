@@ -36,7 +36,7 @@ export default async function Page() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex justify-center gap-24 pt-24 md:pt-40">
+      <div className="flex items-start justify-center gap-24 pt-24 md:pt-40">
         <SideMenu menu={categoryList} />
         <PostList sourceSite={sourceSiteList} categoryList={categoryList} />
       </div>
