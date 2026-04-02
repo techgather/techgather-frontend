@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import FloatScrollButton from '@/components/layout/FloatScrollButton';
 import localFont from 'next/font/local';
 import Footer from './_components/Footer';
 import Providers from './_components/Provider';
@@ -61,10 +62,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${Pretendard.className} custom-scrollbar flex min-h-screen flex-col items-center bg-white antialiased`}
+        className={`${Pretendard.className} custom-scrollbar relative flex min-h-screen flex-col items-center bg-white antialiased`}
       >
         <Providers>
           {children}
+          <FloatScrollButton />
           <Footer />
         </Providers>
       </body>
