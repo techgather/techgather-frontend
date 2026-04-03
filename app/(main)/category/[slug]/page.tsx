@@ -5,6 +5,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { Metadata } from 'next';
 import PostList from '../../_components/PostList';
 import SideMenu from '../../_components/SideMenu';
 
@@ -16,11 +17,36 @@ interface Props {
   };
 }
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const categoryList = await getCategory(DEFAULT_GROUPID);
+  const category = categoryList.find((c) => c.slug === slug);
+  const name = category?.name ?? slug;
+
+  return {
+    title: `${name} 관련 글 모음 | DevPick`,
+    description: `${name} 관련 최신 개발 글과 아티클을 한 곳에서 확인하세요. 다양한 블로그 콘텐츠를 모아 제공합니다.`,
+    alternates: {
+      canonical: `/category/${slug}`,
+    },
+    keywords: [
+      name,
+      `${name} 블로그`,
+      `${name} 아티클`,
+      `${name} 개발`,
+      'DevPick',
+      '데브픽',
+    ],
+  };
+}
+
 async function Page({ params }: Props) {
   const { slug } = await params;
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
   const sourceSiteList = await getSourceSite();
+  const category = categoryList.find((c) => c.slug === slug);
+  const name = category?.name ?? slug;
 
   await queryClient.prefetchInfiniteQuery<
     PostResponseList,
@@ -44,8 +70,13 @@ async function Page({ params }: Props) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex justify-center gap-24 pt-24 md:pt-40">
+        <h1 className="sr-only">{name} 관련 아티클</h1>
         <SideMenu menu={categoryList} currentCategory={slug} />
-        <PostList sourceSite={sourceSiteList} categoryList={categoryList} categorySlug={slug} />
+        <PostList
+          sourceSite={sourceSiteList}
+          categoryList={categoryList}
+          categorySlug={slug}
+        />
       </div>
     </HydrationBoundary>
   );

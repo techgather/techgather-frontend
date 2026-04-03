@@ -33,8 +33,9 @@ const PostList = ({ keyword }: Props) => {
     <>
       <div className="flex w-full px-24 py-33 text-[16px] leading-[1.36]">
         <div className="flex h-24 items-center gap-4">
-          <p className="text-main_2 font-bold">'{keyword}'</p>
-          <p className="font-medium">검색 결과</p>
+          <h2 className="flex gap-4">
+            <span className="text-main_2 font-bold">'{keyword}'</span> 검색 결과
+          </h2>
           <p className="text-gray_15 font-bold">
             {totalCount}
             <span className="font-medium text-black">개</span>
@@ -50,7 +51,7 @@ const PostList = ({ keyword }: Props) => {
               width={88}
               height={88}
             />
-            검색 결과가 없어요.
+            <h2>검색 결과가 없어요.</h2>
           </div>
         ) : (
           <>

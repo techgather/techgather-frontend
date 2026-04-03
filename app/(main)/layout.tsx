@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import Header from '../_components/Header';
 
 export const metadata: Metadata = {
-  title: 'DevPick',
-  description: 'developer blog archive',
+  title: {
+    template: '%s | DevPick',
+    default: '최신 개발 아티클 모음',
+  },
+  keywords: ['DevPick', '데브픽', '최신 개발 글', '테크 블로그 모음'],
 };
 
 export default function Layout({
@@ -14,7 +17,9 @@ export default function Layout({
   return (
     <>
       <Header />
-      <div className="mt-52 flex flex-1 flex-col w-full max-w-1440">{children}</div>
+      <div className="mt-52 flex w-full max-w-1440 flex-1 flex-col">
+        {children}
+      </div>
     </>
   );
 }

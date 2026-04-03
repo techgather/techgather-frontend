@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://dev-pick.com'),
   title: {
     default: 'DevPick',
-    template: '%s | DevPick',
+    template: '%s | DevPick ',
   },
   description:
     '테크 블로그들의 최신 아티클을 현직 개발자가 직접 엄선하여 게재합니다',
@@ -52,6 +52,17 @@ export const metadata: Metadata = {
       '테크 블로그들의 최신 아티클을 현직 개발자가 직접 엄선하여 게재합니다',
     images: ['/images/opengraph-image.png'],
   },
+  alternates: {
+    canonical: '/',
+  },
+  keywords: [
+    '개발자 블로그',
+    '테크 블로그',
+    '개발 아티클',
+    '프로그래밍',
+    'DevPick',
+    '데브픽',
+  ],
 };
 
 export default function RootLayout({

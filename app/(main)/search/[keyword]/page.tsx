@@ -5,11 +5,36 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { Metadata } from 'next';
 import PostList from './_components/PostList';
 
 interface Props {
   params: {
     keyword: string;
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { keyword } = await params;
+  const decodeKeyword = decodeURIComponent(keyword);
+
+  return {
+    title: `'${decodeKeyword}' 검색 결과`,
+    description: `'${decodeKeyword}' 검색 결과 | DevPick`,
+    alternates: {
+      canonical: `/search/${keyword}`,
+    },
+    keywords: [
+      decodeKeyword,
+      `${decodeKeyword} 검색`,
+      `${decodeKeyword} 개발 블로그`,
+      'DevPick',
+      '데브픽',
+    ],
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 
@@ -40,6 +65,7 @@ async function Page({ params }: Props) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex w-full flex-1 flex-col">
+        <h1 className="sr-only">{decodeKeyword} 검색 결과</h1>
         <PostList keyword={decodeKeyword} />
       </div>
     </HydrationBoundary>

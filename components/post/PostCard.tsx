@@ -49,16 +49,16 @@ const PostCard = ({ post, keyword }: Props) => {
       <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
         <Image
           src={imgSrc}
-          alt="thumbnail"
+          alt={`'${post?.title ?? '블로그'}' 포스트 썸네일`}
           fill
           className="rounded-12 object-cover object-center"
           onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">
-        <h2 className="block h-22 truncate text-[15px] font-bold md:h-44 md:text-wrap">
+        <h3 className="block h-22 truncate text-[15px] font-bold md:h-44 md:text-wrap">
           {keyword ? highlightKeyword(post?.title ?? '', keyword) : post?.title}
-        </h2>
+        </h3>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-6">
             <div
@@ -73,7 +73,7 @@ const PostCard = ({ post, keyword }: Props) => {
             >
               <Image
                 src={SITE_MAP[siteName].icon}
-                alt={SITE_MAP[siteName].label}
+                alt={`${SITE_MAP[siteName].label} 아이콘`}
                 width={18}
                 height={18}
               />

@@ -18,7 +18,7 @@ export default function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === 'development' && (
         <TanStackDevtools
           plugins={[
             {
@@ -28,7 +28,7 @@ export default function Providers({ children }: { children: ReactNode }) {
             },
           ]}
         />
-      )} */}
+      )}
       {children}
     </QueryClientProvider>
   );
