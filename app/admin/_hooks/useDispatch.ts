@@ -5,8 +5,8 @@ const useDispatch = () => {
   const [language, setLanguage] = useState<PostResponseLanguageEnum>();
   const [searchCondition, setSearchCondition] = useState<PostSearchCondition>({
     keyword: '',
-    categoryIds: [],
-    sourceSiteName: '',
+    categorySlugs: [],
+    sourceSiteNames: [],
   });
 
   return {
