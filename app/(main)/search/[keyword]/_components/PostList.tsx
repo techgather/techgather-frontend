@@ -55,7 +55,7 @@ const PostList = ({ keyword }: Props) => {
           </div>
         ) : (
           <>
-            <div className="gapy-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-14 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
               {postList.map((item, index) => (
                 <PostCard post={item} key={index} keyword={keyword} />
               ))}

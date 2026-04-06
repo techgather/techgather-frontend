@@ -67,6 +67,10 @@ export const SITE_MAP = {
     label: '직방',
     icon: '/icons/site/zigbang-img.svg',
   },
+  woowahan: {
+    label: '우아한형제들',
+    icon: '/icons/site/woowahan-img.svg',
+  },
 } as const;
 
 export type Site = keyof typeof SITE_MAP;
