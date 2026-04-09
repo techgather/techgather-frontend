@@ -64,7 +64,7 @@ const MobileFilter = ({
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="flex h-screen max-w-screen flex-col gap-28 rounded-none border-none p-20"
+        className="flex h-dvh min-w-screen flex-col gap-28 rounded-none border-none p-20"
         aria-describedby={undefined}
         showCloseButton={false}
       >
