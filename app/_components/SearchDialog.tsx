@@ -42,7 +42,7 @@ const SearchDialog = ({ openState, setOpenState }: Props) => {
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="bg-gray_90 flex h-screen max-w-600 flex-col gap-0 rounded-none border-none p-0"
+        className="bg-gray_90 flex h-dvh max-w-600 flex-col gap-0 rounded-none border-none p-0"
         aria-describedby={undefined}
       >
         <DialogHeader aria-describedby="undefined">
