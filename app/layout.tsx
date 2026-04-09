@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import FloatScrollButton from '@/components/layout/FloatScrollButton';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import localFont from 'next/font/local';
 import Footer from './_components/Footer';
 import Providers from './_components/Provider';
@@ -64,6 +65,11 @@ export const metadata: Metadata = {
     'DevPick',
     '데브픽',
   ],
+  verification: {
+    other: {
+      'naver-site-verification': '926a60a580dfc88918e77316f014963bc011ff12',
+    },
+  },
 };
 
 export default function RootLayout({
@@ -73,6 +79,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <GoogleAnalytics gaId="G-0Q4YCPQZ14" />
+      <GoogleTagManager gtmId="GTM-TQWKW95W" />
       <body
         className={`${Pretendard.className} custom-scrollbar relative flex min-h-screen flex-col items-center bg-white antialiased`}
       >
