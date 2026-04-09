@@ -1,0 +1,20 @@
+name: CD-Dev
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy fe via SSH
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.NOTE_DEV_SERVER_HOST }}
+          username: ubuntu
+          key: ${{ secrets.NOTE_DEV_SERVER_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/app/scripts/
+            ./fe-deploy.sh
