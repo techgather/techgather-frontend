@@ -1,0 +1,89 @@
+name: CI-Dev
+
+on:
+  push:
+    branches:
+      - release/dev
+      - cicd/dev
+    paths-ignore:
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-dev-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
+      ECR_REPOSITORY: tg-dev
+      SERVICE_NAME: tg-fe-dev
+      CONTEXT: .
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Tag from Commit
+        id: get_tag
+        run: |
+          RAW_TAG=$(git tag --points-at HEAD | grep '^v' | head -n 1 || echo "")
+          CLEAN_TAG=${RAW_TAG#v}
+          echo "tag=$CLEAN_TAG" >> "$GITHUB_OUTPUT"
+          echo "Detected Tag: $RAW_TAG (Cleaned: $CLEAN_TAG)"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ env.SERVICE_NAME }}
+          tags: |
+            type=sha
+            type=raw,value=${{ github.sha }}
+            type=raw,value=${{ steps.get_tag.outputs.tag }},enable=${{ steps.get_tag.outputs.tag != '' }}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/release/dev' || github.ref == 'refs/heads/cicd/dev' || github.event_name == 'workflow_dispatch' }}
+
+      - name: Create .env file
+        env:
+          ENV_DEV: ${{ secrets.ENV_DEV }}
+        if: env.ENV_DEV != ''
+        run: echo "$ENV_DEV" > ./.env
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.CONTEXT }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ github.ref_name }}-fe
+          cache-to: type=gha,scope=${{ github.ref_name }}-fe,mode=max
+          provenance: false
+
+  deploy:
+    needs: [build]
+    if: needs.build.result == 'success'
+    uses: ./.github/workflows/cd-dev.yml
+    secrets: inherit
