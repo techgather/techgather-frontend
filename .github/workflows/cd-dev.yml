@@ -12,9 +12,9 @@ jobs:
       - name: Deploy fe via SSH
         uses: appleboy/ssh-action@v1.2.1
         with:
-          host: ${{ secrets.NOTE_DEV_SERVER_HOST }}
+          host: ${{ secrets.TG_DEV_SERVER_IP }}
           username: ubuntu
-          key: ${{ secrets.NOTE_DEV_SERVER_SSH_KEY }}
+          key: ${{ secrets.TG_DEV_SERVER_SSH_KEY }}
           script: |
             cd /home/ubuntu/app/scripts/
             ./fe-deploy.sh
