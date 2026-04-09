@@ -38,16 +38,16 @@ export default async function Page() {
     PostResponseList,
     Error,
     PostResponseList,
-    ['posts'],
+    ['posts', null, string[]],
     number | undefined
   >({
-    queryKey: ['posts'],
+    queryKey: ['posts', null, []],
     initialPageParam: undefined,
     queryFn: ({ pageParam }) =>
       getPosts({
         searchCondition: {},
         lastPostId: pageParam,
-        limit: 19,
+        limit: 12,
       }),
     getNextPageParam: (lastPage: PostResponseList) =>
       lastPage.hasNext ? lastPage.nextPostId : undefined,

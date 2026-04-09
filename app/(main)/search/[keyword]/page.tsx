@@ -56,7 +56,7 @@ async function Page({ params }: Props) {
       getPosts({
         searchCondition: { keyword: decodeKeyword },
         lastPostId: pageParam,
-        limit: 19,
+        limit: 12,
       }),
     getNextPageParam: (lastPage: PostResponseList) =>
       lastPage.hasNext ? lastPage.nextPostId : undefined,

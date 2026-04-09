@@ -28,7 +28,7 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
     isFetching,
     isFetchingNextPage,
     isLoading,
-  } = usePostList({ limit: 20, sourceSite: site, categorySlug });
+  } = usePostList({ limit: 12, sourceSite: site, categorySlug });
   const { inView, ref } = useInView();
 
   const postList = useMemo(
@@ -111,14 +111,14 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
         <h2 className="sr-only">포스트 리스트</h2>
         {isLoading || (isFetching && !isFetchingNextPage) ? (
           <>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: 12 }).map((_, index) => (
               <PostCardSkeleton key={index} />
             ))}
           </>
         ) : (
           <>
             {postList.map((item, index) => (
-              <PostCard post={item} key={index} />
+              <PostCard post={item} key={index} priority={index < 4} />
             ))}
             {isFetchingNextPage &&
               Array.from({ length: 10 }).map((_, index) => (

@@ -13,7 +13,7 @@ interface Props {
 
 const PostList = ({ keyword }: Props) => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useSearchPostList({ keyword, limit: 19 });
+    useSearchPostList({ keyword, limit: 12 });
   const { inView, ref } = useInView();
 
   const postList = useMemo(
@@ -57,7 +57,12 @@ const PostList = ({ keyword }: Props) => {
           <>
             <div className="grid grid-cols-1 gap-x-8 gap-y-14 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
               {postList.map((item, index) => (
-                <PostCard post={item} key={index} keyword={keyword} />
+                <PostCard
+                  post={item}
+                  key={index}
+                  keyword={keyword}
+                  priority={index < 4}
+                />
               ))}
               {isFetching && (
                 <>

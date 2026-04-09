@@ -12,6 +12,7 @@ import { formatDate } from '../../app/utils';
 interface Props {
   post?: PostResponse;
   keyword?: string;
+  priority?: boolean;
 }
 
 const FALLBACK_IMAGE = '/images/thumbnail-default.png';
@@ -33,7 +34,7 @@ const highlightKeyword = (text: string, keyword: string) => {
   );
 };
 
-const PostCard = ({ post, keyword }: Props) => {
+const PostCard = ({ post, keyword, priority = false }: Props) => {
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail ? post.thumbnail : FALLBACK_IMAGE
   );
@@ -52,6 +53,7 @@ const PostCard = ({ post, keyword }: Props) => {
           alt={`'${post?.title ?? '블로그'}' 포스트 썸네일`}
           fill
           className="rounded-12 object-cover object-center"
+          priority={priority}
           onError={() => setImgSrc(FALLBACK_IMAGE)}
         />
       </div>
