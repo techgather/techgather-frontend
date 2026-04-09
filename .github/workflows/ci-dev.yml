@@ -66,8 +66,10 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/release/dev' || github.ref == 'refs/heads/cicd/dev' || github.event_name == 'workflow_dispatch' }}
 
       - name: Create .env file
-        if: secrets.ENV_DEV != ''
-        run: echo "${{ secrets.ENV_DEV }}" > ./.env
+        env:
+          ENV_DEV: ${{ secrets.ENV_DEV }}
+        if: env.ENV_DEV != ''
+        run: echo "$ENV_DEV" > ./.env
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
