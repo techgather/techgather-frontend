@@ -3,8 +3,8 @@ name: CI-Dev
 on:
   push:
     branches:
-      - release/dev
-      - cicd/dev
+      - main
+      - cicd
     paths-ignore:
       - ".github/workflows/**"
   workflow_dispatch:
