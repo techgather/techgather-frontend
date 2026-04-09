@@ -38,3 +38,5 @@ COPY package.json ./
 
 EXPOSE 3000
 CMD ["npm", "run", "start"]
+
+# CI/CD 테스트
