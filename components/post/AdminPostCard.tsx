@@ -17,8 +17,6 @@ interface Props {
   handleCheck: (postId: string) => void;
 }
 
-const FALLBACK_IMAGE = '/images/thumbnail-default.png';
-
 const highlightKeyword = (text: string, keyword: string) => {
   if (!keyword) return text;
 
@@ -37,11 +35,12 @@ const highlightKeyword = (text: string, keyword: string) => {
 };
 
 const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
-  const [imgSrc, setImgSrc] = useState(
-    post?.thumbnail ? post?.thumbnail : FALLBACK_IMAGE
-  );
-
   const siteName = (post?.sourceSiteName ?? '') as Site;
+  const fallbackImage = `/thumbnails/${siteName}.png`;
+
+  const [imgSrc, setImgSrc] = useState(
+    post?.thumbnail && siteName !== 'woowahan' ? post?.thumbnail : fallbackImage
+  );
 
   return (
     <div
@@ -76,7 +75,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
           fill
           draggable={false}
           className="rounded-12 object-cover object-center"
-          onError={() => setImgSrc(FALLBACK_IMAGE)}
+          onError={() => setImgSrc(fallbackImage)}
         />
       </div>
       <div className="flex flex-col gap-8 pt-12 pb-16">

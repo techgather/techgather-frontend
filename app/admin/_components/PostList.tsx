@@ -225,7 +225,7 @@ const PostList = ({ tab }: Props) => {
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: 8 }).map((_, index) => (
               <PostCardSkeleton key={index} />
             ))}
           </>
