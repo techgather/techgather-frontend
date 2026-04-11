@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${name} 관련 글 모음`,
     description: `${name} 관련 최신 개발 글과 아티클을 한 곳에서 확인하세요. 다양한 블로그 콘텐츠를 모아 제공합니다.`,
     alternates: {
-      canonical: `/category/${slug}`,
+      canonical: `https://dev-pick.com/category/${slug}`,
     },
     keywords: [
       name,

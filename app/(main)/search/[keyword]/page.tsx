@@ -20,9 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `'${decodeKeyword}' 검색 결과`,
-    description: `'${decodeKeyword}' 검색 결과 | DevPick`,
+    description: `'${decodeKeyword}' 검색 결과 | DevPick(데브픽)`,
     alternates: {
-      canonical: `/search/${keyword}`,
+      canonical: `https://dev-pick.com/search/${keyword}`,
     },
     keywords: [
       decodeKeyword,

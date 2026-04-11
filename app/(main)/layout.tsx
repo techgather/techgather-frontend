@@ -3,7 +3,7 @@ import Header from '../_components/Header';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | DevPick',
+    template: '%s | DevPick(데브픽)',
     default: '최신 개발 아티클 모음',
   },
   keywords: ['DevPick', '데브픽', '최신 개발 글', '테크 블로그 모음'],
