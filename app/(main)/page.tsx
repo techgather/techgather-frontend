@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '최신 개발 아티클 모음',
     description:
-      '데브픽(Devpick)은 다양한 개발 블로그의 최신 글과 아티클을 한 곳에서 모아볼 수 있는 플랫폼입니다. 웹부터 AI까지 다양한 개발 콘텐츠를 빠르게 확인하세요.',
+      '데브픽(DevPick)은 다양한 개발 블로그의 최신 글과 아티클을 한 곳에서 모아볼 수 있는 플랫폼입니다. 웹부터 AI까지 다양한 개발 콘텐츠를 빠르게 확인하세요.',
     alternates: {
       canonical: 'https://dev-pick.com',
     },

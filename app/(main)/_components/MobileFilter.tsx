@@ -64,13 +64,13 @@ const MobileFilter = ({
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="flex h-dvh min-w-screen flex-col gap-28 rounded-none border-none p-20"
+        className="flex h-dvh min-w-screen flex-col gap-28 rounded-none border-none p-0"
         aria-describedby={undefined}
         showCloseButton={false}
       >
         <DialogHeader
           aria-describedby="undefined"
-          className="flex w-full flex-row items-center justify-between"
+          className="flex w-full flex-row items-center justify-between px-20 pt-20"
         >
           <DialogTitle className="text-[18px] leading-20 font-bold">
             필터
@@ -80,8 +80,8 @@ const MobileFilter = ({
             onClick={() => setIsOpen(false)}
           />
         </DialogHeader>
-        <div className="flex flex-col gap-28 overflow-y-scroll">
-          <div className="flex flex-col gap-12">
+        <div className="custom-scrollbar flex flex-col gap-28 overflow-y-scroll">
+          <div className="flex flex-col gap-12 px-20">
             <div className="text-[16px] leading-18 font-bold">카테고리</div>
             <div className="grid grid-cols-2 gap-8">
               <Link
@@ -108,7 +108,7 @@ const MobileFilter = ({
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-12 px-20 pb-20">
             <div className="text-[16px] leading-18 font-bold">
               테크 블로그 선택
             </div>
