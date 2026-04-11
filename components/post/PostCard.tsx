@@ -44,7 +44,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
     <Link
       href={post?.url ?? ''}
       target="_blank"
-      className="group hover:bg-gray_2 flex h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-colors duration-200 sm:w-257 md:h-277"
+      className="group hover:bg-gray_2 flex h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:w-257 md:h-277"
     >
       <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
         <Image
@@ -88,7 +88,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
           </p>
         </div>
       </div>
-      <div className="relative mb-18 min-h-18">
+      <div className="relative min-h-18">
         {post?.categories && post.categories.length > 0 ? (
           <div className="flex gap-6 overflow-x-hidden">
             {post?.categories?.map((item, index) => (

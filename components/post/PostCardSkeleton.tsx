@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const PostCardSkeleton = () => {
   return (
-    <div className="flex w-screen flex-1 flex-col rounded-2xl p-12 sm:w-257 md:h-277">
+    <div className="flex w-full flex-1 flex-col rounded-2xl p-12 sm:w-257 md:h-277">
       {/* 썸네일 */}
       <div className="relative aspect-video w-full sm:max-w-233">
         <Skeleton className="rounded-12 h-full w-full" />
@@ -13,7 +13,7 @@ const PostCardSkeleton = () => {
         {/* 제목 */}
         <div className="flex flex-col gap-4">
           <Skeleton className="h-20 w-[90%]" />
-          <Skeleton className="h-20 w-[60%]" />
+          <Skeleton className="hidden h-20 w-[60%] sm:block" />
         </div>
 
         {/* 사이트 + 날짜 */}
@@ -27,7 +27,7 @@ const PostCardSkeleton = () => {
       </div>
 
       {/* 카테고리 */}
-      <div className="relative mb-18 min-h-18">
+      <div className="relative min-h-18">
         <div className="flex gap-6 overflow-hidden">
           <Skeleton className="h-18 w-40 rounded-full" />
           <Skeleton className="h-18 w-40 rounded-full" />

@@ -65,9 +65,9 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
   return (
     <div className="flex w-full max-w-1052 flex-col items-center">
       <div className="flex w-full items-center justify-between px-12 py-8">
-        <div className="text-gray_15 flex items-center gap-8 text-[15px] leading-17">
+        <div className="text-gray_15 flex items-center gap-8 text-[15px] leading-16">
           전체
-          <span className="text-gary_10 spac text-[15px] leading-17 font-bold tracking-tight">
+          <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
             {totalCount}
           </span>
         </div>
@@ -108,7 +108,7 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
           />
         </div>
       </div>
-      <div className="grid h-full grid-cols-1 gap-x-8 gap-y-14 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
         <h2 className="sr-only">포스트 리스트</h2>
         {isLoading || (isFetching && !isFetchingNextPage) ? (
           <>

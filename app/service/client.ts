@@ -164,6 +164,30 @@ export const getCategory = async (
   return res.json();
 };
 
+// export const editCategory = async (id: string): Promise<CategoryResponse[]> => {
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${id}`,
+//     {
+//       cache: 'no-store',
+//       method: 'PUT',
+//       body: JSON.stringify({
+//         name: 'java',
+//         slug: 'java',
+//         description: 'Java와 관련된 카테고리입니다.',
+//       }),
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     }
+//   );
+
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch posts');
+//   }
+
+//   return res.json();
+// };
+
 export const createGroup = async (
   body: CreateCategoryGroupRequest
 ): Promise<CategoryGroupResponse> => {

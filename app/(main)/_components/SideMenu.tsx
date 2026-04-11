@@ -9,7 +9,7 @@ interface Props {
 
 const SideMenu = ({ menu, currentCategory }: Props) => {
   return (
-    <div className="hidden flex-col gap-8 md:sticky md:top-70 md:flex">
+    <div className="hidden flex-col gap-8 pl-12 md:sticky md:top-70 md:flex">
       <h2 className="sr-only">카테고리 리스트</h2>
       <Link
         href="/"
