@@ -51,6 +51,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
           src={imgSrc}
           alt={`'${post?.title ?? '블로그'}' 포스트 썸네일`}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 257px"
           className="rounded-12 object-cover object-center"
           priority={priority}
           onError={() => setImgSrc(fallbackImage)}
