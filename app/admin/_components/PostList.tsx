@@ -1,21 +1,25 @@
 'use client';
 
 import { POST_STATUS } from '@/app/constans/dropdown';
-import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import DefaultDropdown from '@/components/dropdown/DefaultDropdown';
 import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
-import { UpdatePostsRequestStatusEnum } from '@/types/api';
+import { CategoryResponse, UpdatePostsRequestStatusEnum } from '@/types/api';
+import { Pencil } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useAdminPostList from '../_hooks/useAdminPostList';
 import useCategory from '../_hooks/useCategory';
-import useCategoryGroup from '../_hooks/useCategoryGroup';
 import useDispatch from '../_hooks/useDispatch';
 import useUpdatePostStatus from '../_hooks/useUpdatePostStatus';
 import CreateCategoryDialog from './CreateCategoryDialog';
+import UpdateCategoryDialog from './UpdateCategoryDialog';
+
+const DEFAULT_GROUPID = '292680441089056769';
+// const DEFAULT_GROUPID = '288314611504713729';
 
 interface Props {
   tab: UpdatePostsRequestStatusEnum;
@@ -32,13 +36,14 @@ const PostList = ({ tab }: Props) => {
     isLoading,
     isFetchingNextPage,
   } = useAdminPostList({ searchCondition, status: tab, language, limit: 20 });
-  const { data: categoryGroup } = useCategoryGroup();
+  // const { data: categoryGroup } = useCategoryGroup();
   const [selectStatus, setSelectStats] =
     useState<UpdatePostsRequestStatusEnum>();
-  const [selectedGroup, setSelectedGroup] = useState<string>();
-  const { data: category } = useCategory(selectedGroup);
+  const { data: category } = useCategory(DEFAULT_GROUPID);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const { mutate, isPending } = useUpdatePostStatus();
+  const [isOpen, setIsOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<CategoryResponse>();
 
   const { inView, ref } = useInView();
 
@@ -47,16 +52,11 @@ const PostList = ({ tab }: Props) => {
     [data]
   );
 
-  const categoryGroupDropdown =
-    categoryGroup?.map((item) => ({
-      label: item.name ?? '',
-      value: item.id ?? '',
-    })) ?? [];
-
   const categoryDropdown =
     category?.map((item) => ({
       label: item.name ?? '',
       value: item.id ?? '',
+      item: item,
     })) ?? [];
 
   const handleCheck = (postId: string) => {
@@ -78,16 +78,19 @@ const PostList = ({ tab }: Props) => {
         onSuccess: () => {
           setCheckedList([]);
           setSelectStats(undefined);
-          setSelectedGroup(undefined);
           setCategoryList([]);
         },
       }
     );
   };
 
+  const handleEditCategory = (category: CategoryResponse) => {
+    setEditTarget(category);
+    setIsOpen(true);
+  };
+
   useEffect(() => {
     setSelectStats(undefined);
-    setSelectedGroup(undefined);
     setCheckedList([]);
     setCategoryList([]);
   }, [tab]);
@@ -100,102 +103,86 @@ const PostList = ({ tab }: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center gap-24">
-      <div className="flex w-full items-center justify-between px-24 pt-12 sm:pt-24">
-        <div className="flex items-end gap-12">
+      <div className="bg-main_2/10 mt-24 flex w-full items-center justify-between rounded-xl p-24 sm:pt-24">
+        <div className="flex w-full justify-between gap-12">
           {/* 포스트 상태 선택 */}
-          <div className="flex flex-col gap-4">
-            <div className="text-gray_70 text-[13px]/[15px]">상태</div>
-            <DefaultDropdown
-              trigger={
-                <Button
-                  variant="dropdown"
-                  className={selectStatus ? 'text-black' : 'text-gray_10'}
-                >
-                  {selectStatus
-                    ? POST_STATUS.find((item) => item.value === selectStatus)
-                        ?.label
-                    : '선택'}
-                  <ChevronIcon className="transition-transform duration-200" />
-                </Button>
-              }
-              dropdownitems={POST_STATUS}
-              onValueChange={(value) => {
-                if (value === selectStatus) {
-                  setSelectStats(undefined);
-                } else {
-                  setSelectStats(value);
-                }
-              }}
-            />
-          </div>
-          {/* 카테고리 그룹 선택 */}
-          <div className="flex flex-col gap-4">
-            <div className="text-gray_70 flex justify-between text-[13px]/[15px]">
-              그룹
-              <CreateCategoryDialog type="group" />
-            </div>
-            <CheckableDropdown
-              trigger={
-                <Button
-                  variant="dropdown"
-                  className={selectedGroup ? 'text-black' : 'text-gray_10'}
-                >
-                  {selectedGroup
-                    ? categoryGroup?.find((item) => item.id === selectedGroup)
-                        ?.name
-                    : '선택'}
-                  <ChevronIcon className="transition-transform duration-200" />
-                </Button>
-              }
-              dropdownitems={categoryGroupDropdown}
-              onValueChange={(value) => {
-                if (value === selectedGroup) {
-                  setSelectedGroup(undefined);
-                } else {
-                  setSelectedGroup(value);
-                }
-              }}
-              selectedValues={[selectedGroup]}
-            />
-          </div>
-          {/* 카테고리 선택 */}
-          {selectedGroup && (
-            <div className="flex flex-col gap-4">
-              <div className="text-gray_70 flex justify-between text-[13px]/[15px]">
-                카테고리
-                <CreateCategoryDialog type="category" groupId={selectedGroup} />
+          <div className="flex flex-col gap-20">
+            <div className="flex flex-col gap-14">
+              <div className="text-gray_70 text-[16px] font-bold">
+                게시물 상태
               </div>
-              <CheckableDropdown
+              <DefaultDropdown
                 trigger={
                   <Button
                     variant="dropdown"
-                    className={
-                      categoryList.length > 0 ? 'text-black' : 'text-gray_10'
-                    }
+                    className={`bg-white ${selectStatus ? 'text-black' : 'text-gray_10'}`}
                   >
-                    {categoryList.length > 0
-                      ? category
-                          ?.filter((item) =>
-                            categoryList.includes(item.id ?? '')
-                          )
-                          .map((item) => item.name)
-                          .join(', ')
+                    {selectStatus
+                      ? POST_STATUS.find((item) => item.value === selectStatus)
+                          ?.label
                       : '선택'}
                     <ChevronIcon className="transition-transform duration-200" />
                   </Button>
                 }
-                dropdownitems={categoryDropdown}
-                selectedValues={categoryList}
+                dropdownitems={POST_STATUS}
                 onValueChange={(value) => {
-                  setCategoryList((prev) =>
-                    prev.includes(value)
-                      ? prev.filter((v) => v !== value)
-                      : [...prev, value]
-                  );
+                  if (value === selectStatus) {
+                    setSelectStats(undefined);
+                  } else {
+                    setSelectStats(value);
+                  }
                 }}
               />
             </div>
-          )}
+            <div className="flex flex-col gap-14">
+              <div className="text-gray_70 text-[16px] font-bold">
+                게시물 카테고리
+              </div>
+              <div className="flex max-w-1000 flex-wrap gap-6">
+                {categoryDropdown.map((item) => (
+                  <Badge
+                    key={item.value}
+                    variant={
+                      categoryList.includes(item.value)
+                        ? 'admin-active'
+                        : 'admin'
+                    }
+                    onClick={() =>
+                      setCategoryList((prev) =>
+                        prev.includes(item.value)
+                          ? prev.filter((v) => v !== item.value)
+                          : [...prev, item.value]
+                      )
+                    }
+                  >
+                    {item.label}
+                    <span
+                      className="pointer-events-auto"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditCategory(item.item);
+                      }}
+                    >
+                      <Pencil size={14} />
+                    </span>
+                  </Badge>
+                ))}
+                <CreateCategoryDialog
+                  type="category"
+                  groupId={DEFAULT_GROUPID}
+                />
+                <UpdateCategoryDialog
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  originName={editTarget?.name ?? ''}
+                  originSlug={editTarget?.slug ?? ''}
+                  originDescription={editTarget?.description}
+                  categoryId={editTarget?.id?.toString() ?? ''}
+                />
+              </div>
+            </div>
+          </div>
+
           <Button
             className="border border-black bg-white px-16 py-8 text-sm leading-18 font-bold text-black"
             disabled={checkedList.length === 0}
@@ -204,22 +191,6 @@ const PostList = ({ tab }: Props) => {
             변경
           </Button>
         </div>
-        {/* <Button
-          color={
-            checkedList.length > 0
-              ? tab === UpdatePostsRequestStatusEnum.Discarded
-                ? 'green'
-                : 'red'
-              : 'gray'
-          }
-          className={cn('px-16 py-4 text-sm leading-18 font-bold')}
-          disabled={checkedList.length === 0}
-          onClick={handlePostStatus}
-        >
-          {tab === UpdatePostsRequestStatusEnum.Discarded
-            ? '글 복원'
-            : '글 삭제'}
-        </Button> */}
       </div>
       <div className="bg-gray_5 h-1 w-full" />
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">

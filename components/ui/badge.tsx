@@ -16,6 +16,10 @@ const badgeVariants = cva(
           'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
+        admin:
+          'border-gray_5 text-gray_15 bg-white cursor-pointer px-10 py-4 text-[13px] leading-15 h-auto gap-10 hover:border-main_2 hover:text-main_2 transition-colors [&>svg]:size-[14px]',
+        'admin-active':
+          'border-main_2 text-white bg-main_2 cursor-pointer px-10 py-4 text-[13px] leading-15 h-auto gap-10 [&>svg]:size-[14px]',
       },
     },
     defaultVariants: {

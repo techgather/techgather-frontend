@@ -6,6 +6,7 @@ import {
   PostResponseLanguageEnum,
   PostResponseList,
   PostSearchCondition,
+  UpdateCategoryRequest,
   UpdatePostsRequest,
   UpdatePostsRequestStatusEnum,
 } from '@/types/api';
@@ -164,29 +165,28 @@ export const getCategory = async (
   return res.json();
 };
 
-// export const editCategory = async (id: string): Promise<CategoryResponse[]> => {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${id}`,
-//     {
-//       cache: 'no-store',
-//       method: 'PUT',
-//       body: JSON.stringify({
-//         name: 'java',
-//         slug: 'java',
-//         description: 'Java와 관련된 카테고리입니다.',
-//       }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     }
-//   );
+export const editCategory = async (
+  id: string,
+  body: UpdateCategoryRequest
+): Promise<CategoryResponse[]> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${id}`,
+    {
+      cache: 'no-store',
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch posts');
-//   }
+  if (!res.ok) {
+    throw new Error('Failed to fetch posts');
+  }
 
-//   return res.json();
-// };
+  return res.json();
+};
 
 export const createGroup = async (
   body: CreateCategoryGroupRequest

@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusIcon } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import useCreateCategory from '../_hooks/useCreateCategory';
 import useCreateGroup from '../_hooks/useCreateGroup';
@@ -29,7 +30,7 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = () => {
-    if (!name || !slug) return;
+    if (!name || !slug || !description) return;
     if (type === 'group') {
       createGroup({ name });
     }
@@ -56,7 +57,13 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <PlusIcon size={14} className="cursor-pointer" color="#00b987" />
+        <Badge
+          variant="admin"
+          className="hover:border-main_2 hover:text-main_2 border-2 border-dotted"
+        >
+          <Plus size={14} />
+          카테고리 추가
+        </Badge>
       </DialogTrigger>
       <DialogContent className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg">
         <DialogHeader aria-describedby="undefined">
@@ -102,8 +109,12 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
                 />
               </div>
               <div className="flex flex-col gap-10">
-                <Label htmlFor="description" className="font-semibold">
+                <Label
+                  htmlFor="description"
+                  className="flex gap-4 font-semibold"
+                >
                   부가 설명
+                  <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   onChange={(value) => setDescription(value.target.value)}
@@ -124,7 +135,7 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
             disabled={!name || !slug}
             color="green"
           >
-            제출하기
+            생성하기
           </Button>
         </div>
       </DialogContent>
