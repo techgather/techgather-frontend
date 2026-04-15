@@ -52,6 +52,8 @@ const PostList = ({ tab }: Props) => {
     [data]
   );
 
+  const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
+
   const categoryDropdown =
     category?.map((item) => ({
       label: item.name ?? '',
@@ -193,6 +195,12 @@ const PostList = ({ tab }: Props) => {
         </div>
       </div>
       <div className="bg-gray_5 h-1 w-full" />
+      <div className="text-gray_15 flex w-full gap-8 px-16 text-[15px] leading-16">
+        전체
+        <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
+          {totalCount}
+        </span>
+      </div>
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
