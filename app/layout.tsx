@@ -77,10 +77,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isProd = process.env.NODE_ENV === 'production';
+
   return (
     <html lang="ko">
-      <GoogleAnalytics gaId="G-0Q4YCPQZ14" />
-      <GoogleTagManager gtmId="GTM-TQWKW95W" />
+      {isProd && <GoogleAnalytics gaId="G-0Q4YCPQZ14" />}
+      {isProd && <GoogleTagManager gtmId="GTM-TQWKW95W" />}
       <body
         className={`${Pretendard.className} custom-scrollbar relative flex min-h-screen flex-col items-center bg-white antialiased`}
       >
