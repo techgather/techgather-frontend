@@ -110,7 +110,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
         </div>
       </div>
 
-      <div className="relative min-h-18">
+      <div className="relative mb-10 h-18">
         {post?.categories && post.categories.length > 0 ? (
           <>
             <div className="flex gap-6 overflow-x-hidden">

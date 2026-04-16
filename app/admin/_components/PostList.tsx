@@ -6,6 +6,7 @@ import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import { CategoryResponse, UpdatePostsRequestStatusEnum } from '@/types/api';
 import { Pencil } from 'lucide-react';
@@ -44,13 +45,16 @@ const PostList = ({ tab }: Props) => {
   const { mutate, isPending } = useUpdatePostStatus();
   const [isOpen, setIsOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<CategoryResponse>();
+  const [filterNoCategory, setFilterNoCategory] = useState(false);
 
   const { inView, ref } = useInView();
 
-  const postList = useMemo(
-    () => data?.pages.flatMap((page) => page.posts) ?? [],
-    [data]
-  );
+  const postList = useMemo(() => {
+    const all = data?.pages.flatMap((page) => page.posts) ?? [];
+    return filterNoCategory
+      ? all.filter((post) => !post?.categories || post.categories.length === 0)
+      : all;
+  }, [data, filterNoCategory]);
 
   const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
 
@@ -195,11 +199,22 @@ const PostList = ({ tab }: Props) => {
         </div>
       </div>
       <div className="bg-gray_5 h-1 w-full" />
-      <div className="text-gray_15 flex w-full gap-8 px-16 text-[15px] leading-16">
-        전체
-        <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
-          {totalCount}
-        </span>
+      <div className="flex w-full justify-between">
+        <div className="text-gray_15 flex gap-8 px-16 text-[15px] leading-16">
+          전체
+          <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
+            {totalCount}
+          </span>
+        </div>
+        <label className="group/filter text-gray_15 flex cursor-pointer items-center gap-8 transition-colors hover:text-black">
+          <Switch
+            id="filter-no-category"
+            checked={filterNoCategory}
+            onCheckedChange={setFilterNoCategory}
+            className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
+          />
+          <span className="text-[13px]">카테고리 없음만 보기</span>
+        </label>
       </div>
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
