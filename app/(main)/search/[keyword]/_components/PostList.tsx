@@ -2,7 +2,7 @@
 
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
-import Image from 'next/image';
+import EmptyIcon from '@/public/icons/search-empty-icon.svg';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useSearchPostList from '../_hooks/usePostList';
@@ -12,8 +12,14 @@ interface Props {
 }
 
 const PostList = ({ keyword }: Props) => {
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useSearchPostList({ keyword, limit: 12 });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isLoading,
+  } = useSearchPostList({ keyword, limit: 12 });
   const { inView, ref } = useInView();
 
   const postList = useMemo(
@@ -30,7 +36,7 @@ const PostList = ({ keyword }: Props) => {
   }, [inView, hasNextPage]);
 
   return (
-    <>
+    <div className="flex w-full flex-col items-center">
       <div className="flex w-full px-24 py-33 text-[16px] leading-[1.36]">
         <div className="flex h-24 items-center gap-4">
           <h2 className="flex gap-4">
@@ -42,43 +48,43 @@ const PostList = ({ keyword }: Props) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-1 flex-col items-center">
-        {postList.length === 0 ? (
-          <div className="text-gray_15 flex flex-1 flex-col items-center justify-center gap-20 text-[15px]/[18px]">
-            <Image
-              src="/icons/search-empty-icon.svg"
-              alt="검색 결과 없음 아이콘"
-              width={88}
-              height={88}
-            />
-            <h2>검색 결과가 없어요.</h2>
+      <div className="max-w-1052">
+        {!isLoading && !isFetching && postList.length === 0 ? (
+          <div className="text-gray_15 flex min-h-400 flex-col items-center justify-center gap-20">
+            <EmptyIcon className="size-80" />
+            <p className="text-[15px]">검색 결과가 없어요.</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 gap-x-8 gap-y-14 px-8 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
-              {postList.map((item, index) => (
-                <PostCard
-                  post={item}
-                  key={index}
-                  keyword={keyword}
-                  priority={index < 4}
-                />
-              ))}
-              {isFetching && (
-                <>
-                  {Array.from({ length: 10 }).map((_, index) => (
-                    <PostCardSkeleton key={index} />
+          <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
+            {isLoading || (isFetching && !isFetchingNextPage) ? (
+              <>
+                {Array.from({ length: 12 }).map((_, index) => (
+                  <PostCardSkeleton key={index} />
+                ))}
+              </>
+            ) : (
+              <>
+                {postList.map((item, index) => (
+                  <PostCard
+                    post={item}
+                    key={index}
+                    keyword={keyword}
+                    priority={index < 4}
+                  />
+                ))}
+                {isFetchingNextPage &&
+                  Array.from({ length: 8 }).map((_, index) => (
+                    <PostCardSkeleton key={`next-${index}`} />
                   ))}
-                </>
-              )}
-            </div>
-            {!isFetching && !isLoading && hasNextPage && (
-              <div ref={ref} className="h-1 min-h-1" />
+              </>
             )}
-          </>
+          </div>
+        )}
+        {!isFetching && !isLoading && hasNextPage && (
+          <div ref={ref} className="h-1 min-h-1" />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
