@@ -108,35 +108,33 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
           />
         </div>
       </div>
-      <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
-        <h2 className="sr-only">포스트 리스트</h2>
-        {isLoading || (isFetching && !isFetchingNextPage) ? (
-          <>
-            {Array.from({ length: 12 }).map((_, index) => (
-              <PostCardSkeleton key={index} />
-            ))}
-          </>
-        ) : (
-          <>
-            {postList.length === 0 ? (
-              <div className="text-gray_15 col-span-full flex flex-col items-center justify-center gap-20">
-                <EmptyIcon className="size-80" />
-                <p className="text-[15px]">아티클이 없어요.</p>
-              </div>
-            ) : (
-              <>
-                {postList.map((item, index) => (
-                  <PostCard post={item} key={index} priority={index < 4} />
+      {!isLoading && !isFetching && postList.length === 0 ? (
+        <div className="text-gray_15 flex min-h-400 flex-col items-center justify-center gap-20">
+          <EmptyIcon className="size-80" />
+          <p className="text-[15px]">아티클이 없어요.</p>
+        </div>
+      ) : (
+        <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
+          <h2 className="sr-only">포스트 리스트</h2>
+          {isLoading || (isFetching && !isFetchingNextPage) ? (
+            <>
+              {Array.from({ length: 12 }).map((_, index) => (
+                <PostCardSkeleton key={index} />
+              ))}
+            </>
+          ) : (
+            <>
+              {postList.map((item, index) => (
+                <PostCard post={item} key={index} priority={index < 4} />
+              ))}
+              {isFetchingNextPage &&
+                Array.from({ length: 8 }).map((_, index) => (
+                  <PostCardSkeleton key={`next-${index}`} />
                 ))}
-                {isFetchingNextPage &&
-                  Array.from({ length: 8 }).map((_, index) => (
-                    <PostCardSkeleton key={`next-${index}`} />
-                  ))}
-              </>
-            )}
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
+      )}
       {!isFetching && !isLoading && hasNextPage && (
         <div ref={ref} className="h-1 min-h-1" />
       )}
