@@ -1,14 +1,12 @@
 'use client';
 
 import { ADMIN_TABS } from '@/app/constans/tab';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import SearchIcon from '@/public/icons/search.svg';
 import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Tab from './Tab';
 
 const Header = () => {
@@ -47,17 +45,6 @@ const Header = () => {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const keyword = formData.get('keyword')?.toString().trim();
-
-    if (!keyword) return;
-
-    router.push(`/search/${keyword}`);
-  };
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -93,22 +80,6 @@ const Header = () => {
           />
           <div className="hidden justify-center md:flex">
             <Tab handleClick={handleAction} currentOption={currentTab} />
-          </div>
-          <div className="hidden items-center justify-end gap-36 md:flex">
-            <form
-              onSubmit={handleSubmit}
-              className="group relative hidden sm:block"
-            >
-              <Input
-                minLength={2}
-                id="keyword"
-                name="keyword"
-                type="text"
-                placeholder="글 제목, 태그명 검색"
-                className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-30 w-240 px-12 py-6 text-[13px] text-white transition ease-in"
-              />
-              <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
-            </form>
           </div>
           <div className="flex items-center justify-end md:hidden">
             <motion.div

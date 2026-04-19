@@ -94,6 +94,25 @@ export const getAdminPosts = async ({
   if (language !== undefined) {
     params.append('language', language);
   }
+  if (searchCondition) {
+    const { keyword, categorySlugs, sourceSiteNames } = searchCondition;
+
+    if (keyword) {
+      params.append('keyword', keyword);
+    }
+
+    if (sourceSiteNames) {
+      sourceSiteNames.forEach((site) => {
+        params.append('sourceSiteNames', site);
+      });
+    }
+
+    if (categorySlugs?.length) {
+      categorySlugs.forEach((slug) => {
+        params.append('categorySlugs', slug);
+      });
+    }
+  }
   params.append('limit', String(limit));
 
   const res = await fetch(

@@ -6,8 +6,10 @@ import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
+import SearchIcon from '@/public/icons/search.svg';
 import { CategoryResponse, UpdatePostsRequestStatusEnum } from '@/types/api';
 import { Pencil } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -28,7 +30,7 @@ interface Props {
 
 const PostList = ({ tab }: Props) => {
   const [checkedList, setCheckedList] = useState<string[]>([]);
-  const { language, searchCondition } = useDispatch();
+  const { language, searchCondition, setSearchCondition } = useDispatch();
   const {
     data,
     fetchNextPage,
@@ -46,6 +48,7 @@ const PostList = ({ tab }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<CategoryResponse>();
   const [filterNoCategory, setFilterNoCategory] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
   const { inView, ref } = useInView();
 
@@ -96,6 +99,19 @@ const PostList = ({ tab }: Props) => {
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      const trimmed = keyword.trim();
+      if (trimmed.length === 0 || trimmed.length >= 2) {
+        setSearchCondition((prev) => ({
+          ...prev,
+          keyword: trimmed || undefined,
+        }));
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
+  useEffect(() => {
     setSelectStats(undefined);
     setCheckedList([]);
     setCategoryList([]);
@@ -108,8 +124,39 @@ const PostList = ({ tab }: Props) => {
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="flex w-full flex-col items-center gap-24">
-      <div className="bg-main_2/10 mt-24 flex w-full items-center justify-between rounded-xl p-24 sm:pt-24">
+    <div className="mx-12 flex w-full flex-col items-center gap-24">
+      <div className="mt-24 flex w-full justify-between">
+        <div className="text-gray_15 flex items-center gap-8 px-16 text-[15px] leading-16">
+          전체
+          <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
+            {totalCount}
+          </span>
+        </div>
+        <div className="flex flex-col gap-10 sm:flex-row sm:gap-20">
+          <label className="group/filter text-gray_15 flex cursor-pointer items-center gap-8 transition-colors hover:text-black">
+            <Switch
+              id="filter-no-category"
+              checked={filterNoCategory}
+              onCheckedChange={setFilterNoCategory}
+              className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
+            />
+            <span className="text-[13px]">카테고리 없음만 보기</span>
+          </label>
+          <div className="group relative">
+            <Input
+              id="keyword"
+              name="keyword"
+              type="text"
+              placeholder="글 제목, 태그명 검색"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="border-gray_5 focus-visible:ring-none h-30 w-240 px-12 py-6 text-[13px] text-black transition ease-in focus-visible:border-black"
+            />
+            <SearchIcon className="stroke-gray_5 absolute top-1/2 right-12 size-16 -translate-y-1/2 transition ease-in group-focus-within:stroke-black" />
+          </div>
+        </div>
+      </div>
+      <div className="border-gray_5 sticky top-65 z-50 flex w-full items-center justify-between rounded-xl border bg-[#e6faf5]/80 p-20 backdrop-blur-sm">
         <div className="flex w-full justify-between gap-12">
           {/* 포스트 상태 선택 */}
           <div className="flex flex-col gap-20">
@@ -199,27 +246,10 @@ const PostList = ({ tab }: Props) => {
         </div>
       </div>
       <div className="bg-gray_5 h-1 w-full" />
-      <div className="flex w-full justify-between">
-        <div className="text-gray_15 flex gap-8 px-16 text-[15px] leading-16">
-          전체
-          <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
-            {totalCount}
-          </span>
-        </div>
-        <label className="group/filter text-gray_15 flex cursor-pointer items-center gap-8 transition-colors hover:text-black">
-          <Switch
-            id="filter-no-category"
-            checked={filterNoCategory}
-            onCheckedChange={setFilterNoCategory}
-            className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
-          />
-          <span className="text-[13px]">카테고리 없음만 보기</span>
-        </label>
-      </div>
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
-            {Array.from({ length: 8 }).map((_, index) => (
+            {Array.from({ length: 10 }).map((_, index) => (
               <PostCardSkeleton key={index} />
             ))}
           </>
@@ -231,6 +261,7 @@ const PostList = ({ tab }: Props) => {
                 key={post?.postId}
                 handleCheck={handleCheck}
                 checked={checkedList.includes(post?.postId?.toString() ?? '')}
+                keyword={searchCondition.keyword}
               />
             ))}
             {isFetchingNextPage &&
