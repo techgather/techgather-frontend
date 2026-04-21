@@ -58,7 +58,10 @@ const UpdateCategoryDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg">
+      <DialogContent
+        aria-describedby={undefined}
+        className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg"
+      >
         <DialogHeader aria-describedby="undefined">
           <DialogTitle className="flex w-full justify-center text-xl/[136%] font-bold">
             카테고리 수정

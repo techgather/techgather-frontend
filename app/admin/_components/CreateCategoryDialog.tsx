@@ -65,7 +65,10 @@ const CreateCategoryDialog = ({ type, groupId }: Props) => {
           카테고리 추가
         </Badge>
       </DialogTrigger>
-      <DialogContent className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg">
+      <DialogContent
+        aria-describedby={undefined}
+        className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg"
+      >
         <DialogHeader aria-describedby="undefined">
           <DialogTitle className="flex w-full justify-center text-xl/[136%] font-bold">
             {type === 'group' ? '그룹 생성' : '카테고리 생성'}

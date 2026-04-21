@@ -192,101 +192,116 @@ const PostList = ({ tab }: Props) => {
           </div>
         </div>
       </div>
-      <div className="border-gray_5 sticky top-65 z-50 flex w-full items-center justify-between rounded-xl border bg-[#e6faf5]/80 p-20 backdrop-blur-sm">
-        <div className="flex w-full justify-between gap-12">
-          {/* 포스트 상태 선택 */}
-          <div className="flex flex-col gap-20">
-            <div className="flex flex-col gap-14">
-              <div className="text-gray_70 text-[16px] font-bold">
-                게시물 상태
-              </div>
-              <DefaultDropdown
-                trigger={
-                  <Button
-                    variant="dropdown"
-                    className={`bg-white ${selectStatus ? 'text-black' : 'text-gray_10'}`}
-                  >
-                    {selectStatus
-                      ? POST_STATUS.find((item) => item.value === selectStatus)
-                          ?.label
-                      : '선택'}
-                    <ChevronIcon className="transition-transform duration-200" />
-                  </Button>
-                }
-                dropdownitems={POST_STATUS}
-                onValueChange={(value) => {
-                  if (value === selectStatus) {
-                    setSelectStats(undefined);
-                  } else {
-                    setSelectStats(value);
-                  }
-                }}
-              />
-            </div>
-            <div className="flex flex-col gap-14">
-              <div className="text-gray_70 text-[16px] font-bold">
-                게시물 카테고리
-              </div>
-              <div className="flex max-w-1000 flex-wrap gap-6">
-                {categoryDropdown.map((item) => (
-                  <Badge
-                    key={item.value}
-                    variant={
-                      categoryList.includes(item.value)
-                        ? 'admin-active'
-                        : 'admin'
-                    }
-                    onClick={() =>
-                      setCategoryList((prev) =>
-                        prev.includes(item.value)
-                          ? prev.filter((v) => v !== item.value)
-                          : [...prev, item.value]
-                      )
-                    }
-                  >
-                    {item.label}
-                    <span
-                      className="pointer-events-auto"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditCategory(item.item);
-                      }}
+      {checkedList.length > 0 && (
+        <div className="border-gray_5 animate-in fade-in slide-in-from-top-2 fixed right-12 bottom-15 left-12 z-50 flex w-auto items-center justify-between rounded-xl border bg-[#e6faf5]/80 p-20 backdrop-blur-sm duration-200">
+          <div className="flex w-full items-center justify-between gap-12">
+            {/* 포스트 상태 선택 */}
+            <div className="flex gap-20">
+              <div className="flex items-center gap-14">
+                <div className="text-gray_70 text-[14px] font-bold">상태</div>
+                <DefaultDropdown
+                  trigger={
+                    <Button
+                      variant="dropdown"
+                      className={`bg-white ${selectStatus ? 'text-black' : 'text-gray_10'}`}
                     >
-                      <Pencil size={14} />
-                    </span>
-                  </Badge>
-                ))}
-                <Badge
-                  variant={categoryList.length === 0 ? 'admin-active' : 'admin'}
-                  onClick={() => setCategoryList([])}
-                >
-                  카테고리 없음
-                </Badge>
-                <CreateCategoryDialog
-                  type="category"
-                  groupId={DEFAULT_GROUPID}
-                />
-                <UpdateCategoryDialog
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                  originName={editTarget?.name ?? ''}
-                  originSlug={editTarget?.slug ?? ''}
-                  originDescription={editTarget?.description}
-                  categoryId={editTarget?.id?.toString() ?? ''}
+                      {selectStatus
+                        ? POST_STATUS.find(
+                            (item) => item.value === selectStatus
+                          )?.label
+                        : '선택'}
+                      <ChevronIcon className="transition-transform duration-200" />
+                    </Button>
+                  }
+                  dropdownitems={POST_STATUS}
+                  onValueChange={(value) => {
+                    if (value === selectStatus) {
+                      setSelectStats(undefined);
+                    } else {
+                      setSelectStats(value);
+                    }
+                  }}
                 />
               </div>
+              <div className="flex items-center gap-14">
+                <div className="text-gray_70 text-[14px] font-bold">
+                  카테고리
+                </div>
+                <div className="relative max-w-700">
+                  <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-[#e6faf5] to-transparent" />
+                  <div className="flex gap-6 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    <Badge
+                      variant={
+                        categoryList.length === 0 ? 'admin-active' : 'admin'
+                      }
+                      onClick={() => setCategoryList([])}
+                    >
+                      카테고리 없음
+                    </Badge>
+                    {categoryDropdown.map((item) => (
+                      <Badge
+                        key={item.value}
+                        variant={
+                          categoryList.includes(item.value)
+                            ? 'admin-active'
+                            : 'admin'
+                        }
+                        onClick={() =>
+                          setCategoryList((prev) =>
+                            prev.includes(item.value)
+                              ? prev.filter((v) => v !== item.value)
+                              : [...prev, item.value]
+                          )
+                        }
+                      >
+                        {item.label}
+                        <span
+                          className="pointer-events-auto"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditCategory(item.item);
+                          }}
+                        >
+                          <Pencil size={14} />
+                        </span>
+                      </Badge>
+                    ))}
+
+                    <CreateCategoryDialog
+                      type="category"
+                      groupId={DEFAULT_GROUPID}
+                    />
+                    <UpdateCategoryDialog
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      originName={editTarget?.name ?? ''}
+                      originSlug={editTarget?.slug ?? ''}
+                      originDescription={editTarget?.description}
+                      categoryId={editTarget?.id?.toString() ?? ''}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-8">
+              <Button
+                className="border-gray_10 w-100 border bg-red-400 px-16 py-8 text-sm leading-18 font-bold text-white hover:bg-red-400/80 hover:text-white"
+                onClick={() => setCheckedList([])}
+              >
+                초기화
+              </Button>
+              <Button
+                className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
+                disabled={checkedList.length === 0}
+                onClick={handleUpdate}
+              >
+                {checkedList.length}개 수정
+              </Button>
             </div>
           </div>
-
-          <Button
-            className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
-            disabled={checkedList.length === 0}
-            onClick={handleUpdate}
-          >
-            {checkedList.length}개 수정
-          </Button>
         </div>
-      </div>
+      )}
       <div className="bg-gray_5 h-1 w-full" />
       <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
