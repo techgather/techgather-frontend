@@ -18,6 +18,7 @@ interface Props<T> {
   selectedValues: T[];
   onValueChange: (value: T) => void;
   trigger: React.ReactNode;
+  disabled?: boolean;
 }
 
 const CheckableDropdown = <T,>({
@@ -25,10 +26,13 @@ const CheckableDropdown = <T,>({
   selectedValues,
   onValueChange,
   trigger,
+  disabled,
 }: Props<T>) => {
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild disabled={disabled}>
+        {trigger}
+      </DropdownMenuTrigger>
 
       <DropdownMenuContent
         className="custom-scrollbar max-h-400 w-(--radix-dropdown-menu-trigger-width)"

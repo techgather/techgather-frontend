@@ -1,6 +1,7 @@
 'use client';
 
 import { POST_STATUS } from '@/app/constans/dropdown';
+import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import DefaultDropdown from '@/components/dropdown/DefaultDropdown';
 import AdminPostCard from '@/components/post/AdminPostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
@@ -66,6 +67,12 @@ const PostList = ({ tab }: Props) => {
       label: item.name ?? '',
       value: item.id ?? '',
       item: item,
+    })) ?? [];
+
+  const categoryFilterDropdown =
+    category?.map((item) => ({
+      label: item.name ?? '',
+      value: item.slug ?? '',
     })) ?? [];
 
   const handleCheck = (postId: string) => {
@@ -135,6 +142,10 @@ const PostList = ({ tab }: Props) => {
         <div className="flex flex-col gap-10 sm:flex-row sm:gap-20">
           <label className="group/filter text-gray_15 flex cursor-pointer items-center gap-8 transition-colors hover:text-black">
             <Switch
+              disabled={
+                searchCondition.categorySlugs &&
+                searchCondition.categorySlugs.length > 0
+              }
               id="filter-no-category"
               checked={filterNoCategory}
               onCheckedChange={setFilterNoCategory}
@@ -142,6 +153,31 @@ const PostList = ({ tab }: Props) => {
             />
             <span className="text-[13px]">카테고리 없음만 보기</span>
           </label>
+          <CheckableDropdown
+            trigger={
+              <Button
+                variant="dropdown"
+                className={`bg-white ${searchCondition.categorySlugs && searchCondition.categorySlugs.length > 0 ? 'text-black' : 'text-gray_10'}`}
+                disabled={filterNoCategory}
+              >
+                {searchCondition.categorySlugs &&
+                searchCondition.categorySlugs.length > 0
+                  ? `${searchCondition.categorySlugs.length}개 선택됨`
+                  : '카테고리 선택'}
+                <ChevronIcon className="transition-transform duration-200" />
+              </Button>
+            }
+            dropdownitems={categoryFilterDropdown}
+            selectedValues={searchCondition.categorySlugs ?? []}
+            onValueChange={(value) =>
+              setSearchCondition((prev) => ({
+                ...prev,
+                categorySlugs: prev.categorySlugs?.includes(value)
+                  ? prev.categorySlugs.filter((s) => s !== value)
+                  : [...(prev.categorySlugs ?? []), value],
+              }))
+            }
+          />
           <div className="group relative">
             <Input
               id="keyword"
@@ -150,7 +186,7 @@ const PostList = ({ tab }: Props) => {
               placeholder="글 제목, 태그명 검색"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="border-gray_5 focus-visible:ring-none h-30 w-240 px-12 py-6 text-[13px] text-black transition ease-in focus-visible:border-black"
+              className="border-gray_5 focus-visible:ring-none h-36 w-240 px-12 py-6 text-[13px] text-black transition ease-in focus-visible:border-black"
             />
             <SearchIcon className="stroke-gray_5 absolute top-1/2 right-12 size-16 -translate-y-1/2 transition ease-in group-focus-within:stroke-black" />
           </div>
@@ -220,6 +256,12 @@ const PostList = ({ tab }: Props) => {
                     </span>
                   </Badge>
                 ))}
+                <Badge
+                  variant={categoryList.length === 0 ? 'admin-active' : 'admin'}
+                  onClick={() => setCategoryList([])}
+                >
+                  카테고리 없음
+                </Badge>
                 <CreateCategoryDialog
                   type="category"
                   groupId={DEFAULT_GROUPID}
@@ -237,11 +279,11 @@ const PostList = ({ tab }: Props) => {
           </div>
 
           <Button
-            className="border border-black bg-white px-16 py-8 text-sm leading-18 font-bold text-black"
+            className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
             disabled={checkedList.length === 0}
             onClick={handleUpdate}
           >
-            변경
+            {checkedList.length}개 수정
           </Button>
         </div>
       </div>
