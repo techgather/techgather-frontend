@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import EmptyIcon from '@/public/icons/empty-icon.svg';
-import { CategoryResponse } from '@/types/api';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
@@ -16,11 +15,10 @@ import MobileFilter from './MobileFilter';
 
 interface Props {
   sourceSite: string[];
-  categoryList: CategoryResponse[];
   categorySlug?: string;
 }
 
-const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
+const PostList = ({ sourceSite, categorySlug }: Props) => {
   const [site, setSite] = useState<Site[]>([]);
   const {
     data,
@@ -73,7 +71,6 @@ const PostList = ({ sourceSite, categoryList, categorySlug }: Props) => {
         </div>
         <div className="block md:hidden">
           <MobileFilter
-            menu={categoryList}
             sourceSite={SiteDropdownList}
             selectSite={handleSiteSelect}
             site={site}

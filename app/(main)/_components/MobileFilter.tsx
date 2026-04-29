@@ -12,14 +12,11 @@ import {
 import { cn } from '@/lib/utils';
 import FilterResetIcon from '@/public/icons/filter-reset.svg';
 import FilterIcon from '@/public/icons/list-filter.svg';
-import { CategoryResponse } from '@/types/api';
 import { XIcon } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
-  menu: CategoryResponse[];
   sourceSite: { label: string; value: Site }[];
   site: Site[];
   selectSite: (value: Site | Site[]) => void;
@@ -27,13 +24,13 @@ interface Props {
 }
 
 const MobileFilter = ({
-  menu,
   sourceSite,
   selectSite,
   site,
   currentCategory,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedSites, setSelectedSites] = useState<Site[]>(site);
   const router = useRouter();
 
   const resetFilter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,6 +39,15 @@ const MobileFilter = ({
     router.push('/');
     selectSite([]);
   };
+
+  const handleApply = () => {
+    selectSite(selectedSites);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    setSelectedSites(site);
+  }, [site]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -81,7 +87,7 @@ const MobileFilter = ({
           />
         </DialogHeader>
         <div className="custom-scrollbar flex flex-col gap-28 overflow-y-scroll">
-          <div className="flex flex-col gap-12 px-20">
+          {/* <div className="flex flex-col gap-12 px-20">
             <div className="text-[16px] leading-18 font-bold">카테고리</div>
             <div className="grid grid-cols-2 gap-8">
               <Link
@@ -107,7 +113,7 @@ const MobileFilter = ({
                 </Link>
               ))}
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-col gap-12 px-20 pb-20">
             <div className="text-[16px] leading-18 font-bold">
               테크 블로그 선택
@@ -115,15 +121,34 @@ const MobileFilter = ({
             <div className="grid grid-cols-2 gap-8">
               {sourceSite.map((item) => (
                 <div
-                  onClick={() => selectSite(item.value)}
+                  onClick={() => {
+                    const isSelected = selectedSites.includes(item.value);
+                    if (isSelected) {
+                      setSelectedSites(
+                        selectedSites.filter((v) => v !== item.value)
+                      );
+                    } else {
+                      setSelectedSites([...selectedSites, item.value]);
+                    }
+                  }}
                   key={item.value}
-                  className={` ${site.find((value) => value === item.value) ? 'border-gray_90 text-gray_90' : 'border-gray_10 text-gray_10'} flex-1 cursor-pointer rounded-[6px] border py-12 text-center text-[16px] leading-17`}
+                  className={` ${selectedSites.find((value) => value === item.value) ? 'border-gray_90 text-gray_90' : 'border-gray_10 text-gray_10'} flex-1 cursor-pointer rounded-[6px] border py-12 text-center text-[16px] leading-17`}
                 >
                   {item.label}
                 </div>
               ))}
             </div>
           </div>
+          {selectedSites.length > 0 && (
+            <div className="border-gray_5 fixed bottom-0 left-0 w-full border border-t bg-white p-20">
+              <Button
+                onClick={handleApply}
+                className="bg-gray_90 hover:bg-gray_70 w-full"
+              >
+                적용
+              </Button>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
