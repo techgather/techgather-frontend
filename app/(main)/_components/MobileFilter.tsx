@@ -33,6 +33,10 @@ const MobileFilter = ({
   const [selectedSites, setSelectedSites] = useState<Site[]>(site);
   const router = useRouter();
 
+  const isChanged =
+    selectedSites.length !== site.length ||
+    !selectedSites.every((value) => site.includes(value));
+
   const resetFilter = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -48,6 +52,12 @@ const MobileFilter = ({
   useEffect(() => {
     setSelectedSites(site);
   }, [site]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedSites(site);
+    }
+  }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -139,8 +149,8 @@ const MobileFilter = ({
               ))}
             </div>
           </div>
-          {selectedSites.length > 0 && (
-            <div className="border-gray_5 fixed bottom-0 left-0 w-full border border-t bg-white p-20">
+          {isChanged && (
+            <div className="border-gray_5 animate-in fade-in fixed bottom-0 left-0 w-full border border-t bg-white p-20 duration-200">
               <Button
                 onClick={handleApply}
                 className="bg-gray_90 hover:bg-gray_70 w-full"
