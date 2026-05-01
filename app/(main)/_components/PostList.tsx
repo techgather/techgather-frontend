@@ -111,7 +111,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
           <p className="text-[15px]">아티클이 없어요.</p>
         </div>
       ) : (
-        <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid h-full w-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:w-auto sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
           <h2 className="sr-only">포스트 리스트</h2>
           {isLoading || (isFetching && !isFetchingNextPage) ? (
             <>
@@ -122,7 +122,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
           ) : (
             <>
               {postList.map((item, index) => (
-                <PostCard post={item} key={index} priority={index < 4} />
+                <PostCard post={item} key={item?.postId} priority={index < 4} />
               ))}
               {isFetchingNextPage &&
                 Array.from({ length: 8 }).map((_, index) => (

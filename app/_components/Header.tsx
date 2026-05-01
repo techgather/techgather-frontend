@@ -3,13 +3,30 @@
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SearchIcon from '@/public/icons/search.svg';
+import { CategoryResponse } from '@/types/api';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
+import { getCategory } from '../service/client';
+
+const DEFAULT_GROUPID = '292680441089056769';
 
 const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [categoryList, setCategoryList] = useState<CategoryResponse[]>([]);
+
+  const currentSlug = pathname.startsWith('/category/')
+    ? pathname.split('/category/')[1]
+    : null;
+
+  useEffect(() => {
+    getCategory(DEFAULT_GROUPID).then(setCategoryList);
+  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,7 +41,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen || isCategoryOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -33,7 +50,7 @@ const Header = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen, isCategoryOpen]);
 
   return (
     <>
@@ -59,7 +76,7 @@ const Header = () => {
           <div className="flex items-center gap-20 md:gap-36">
             <form
               onSubmit={handleSubmit}
-              className="group relative hidden sm:block"
+              className="group relative hidden md:block"
             >
               <Input
                 minLength={2}
@@ -72,7 +89,30 @@ const Header = () => {
               <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
             </form>
             {!isOpen && (
-              <div className="block sm:hidden">
+              <div className="flex items-center justify-end md:hidden">
+                <motion.div
+                  key={isCategoryOpen ? 'close' : 'open'}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Image
+                    src={
+                      isCategoryOpen
+                        ? '/icons/x.svg'
+                        : '/icons/hamburger-icon.svg'
+                    }
+                    alt="모바일 메뉴 아이콘"
+                    width={24}
+                    height={24}
+                    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                    className="cursor-pointer"
+                  />
+                </motion.div>
+              </div>
+            )}
+            {!isOpen && !isCategoryOpen && (
+              <div className="block md:hidden">
                 <SearchIcon
                   className="size-24 cursor-pointer stroke-white transition ease-in"
                   onClick={() => setIsOpen((prev) => !prev)}
@@ -103,6 +143,43 @@ const Header = () => {
               <SearchIcon className="stroke-gray_30 absolute top-1/2 right-12 size-20 -translate-y-1/2 transition ease-in group-focus-within:stroke-white" />
             </form>
           </div>
+        </div>
+        <div
+          className={cn(
+            'bg-gray_90 h-dvh w-full overflow-hidden transition-all duration-250 ease-in',
+            isCategoryOpen
+              ? 'pointer-events-auto translate-y-0 opacity-100'
+              : 'pointer-events-none max-h-0 -translate-y-2 opacity-0'
+          )}
+        >
+          <ul className="flex flex-col gap-8 px-24 pt-12 pb-24">
+            <li>
+              <Link
+                href="/"
+                onClick={() => setIsCategoryOpen(false)}
+                className={cn(
+                  'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',
+                  !currentSlug && 'bg-gray_70 font-bold'
+                )}
+              >
+                전체
+              </Link>
+            </li>
+            {categoryList.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/category/${item.slug}`}
+                  onClick={() => setIsCategoryOpen(false)}
+                  className={cn(
+                    'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',
+                    currentSlug === item.slug && 'bg-gray_70 font-bold'
+                  )}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </header>
     </>

@@ -66,13 +66,11 @@ const MobileFilter = ({
           <FilterIcon
             className={cn(
               'size-16 transition ease-in',
-              site.length > 0 || currentCategory
-                ? 'stroke-gray_90'
-                : 'stroke-gray_10'
+              site.length > 0 ? 'stroke-gray_90' : 'stroke-gray_10'
             )}
           />
           필터
-          {(site.length > 0 || currentCategory) && (
+          {site.length > 0 && (
             <div role="button" onClick={resetFilter}>
               <FilterResetIcon className="size-16" />
             </div>
