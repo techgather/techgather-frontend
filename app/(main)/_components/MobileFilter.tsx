@@ -20,15 +20,9 @@ interface Props {
   sourceSite: { label: string; value: Site }[];
   site: Site[];
   selectSite: (value: Site | Site[]) => void;
-  currentCategory?: string;
 }
 
-const MobileFilter = ({
-  sourceSite,
-  selectSite,
-  site,
-  currentCategory,
-}: Props) => {
+const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState<Site[]>(site);
   const router = useRouter();

@@ -74,7 +74,6 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
             sourceSite={SiteDropdownList}
             selectSite={handleSiteSelect}
             site={site}
-            currentCategory={categorySlug}
           />
         </div>
         <div className="hidden md:block">

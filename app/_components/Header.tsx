@@ -3,13 +3,12 @@
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SearchIcon from '@/public/icons/search.svg';
-import { CategoryResponse } from '@/types/api';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
-import { getCategory } from '../service/client';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import useCategory from '../admin/_hooks/useCategory';
 
 const DEFAULT_GROUPID = '292680441089056769';
 
@@ -18,15 +17,12 @@ const Header = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [categoryList, setCategoryList] = useState<CategoryResponse[]>([]);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
+  const { data } = useCategory(DEFAULT_GROUPID);
 
   const currentSlug = pathname.startsWith('/category/')
     ? pathname.split('/category/')[1]
     : null;
-
-  useEffect(() => {
-    getCategory(DEFAULT_GROUPID).then(setCategoryList);
-  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +35,13 @@ const Header = () => {
     setIsOpen(false);
     router.push(`/search/${keyword}`);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => mobileInputRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen || isCategoryOpen) {
@@ -132,15 +135,20 @@ const Header = () => {
           <div className="px-24 py-12">
             <form onSubmit={handleSubmit} className="group relative w-full">
               <Input
+                ref={mobileInputRef}
                 minLength={2}
                 id="keyword-mobile"
                 name="keyword"
                 type="text"
                 placeholder="글 제목, 태그명 검색"
-                autoFocus={isOpen}
                 className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-46 w-full px-12 py-6 text-[13px] text-white transition ease-in"
               />
-              <SearchIcon className="stroke-gray_30 absolute top-1/2 right-12 size-20 -translate-y-1/2 transition ease-in group-focus-within:stroke-white" />
+              <button
+                type="submit"
+                className="absolute top-1/2 right-12 -translate-y-1/2"
+              >
+                <SearchIcon className="stroke-gray_30 size-20 transition ease-in group-focus-within:stroke-white" />
+              </button>
             </form>
           </div>
         </div>
@@ -165,7 +173,7 @@ const Header = () => {
                 전체
               </Link>
             </li>
-            {categoryList.map((item) => (
+            {data?.map((item) => (
               <li key={item.id}>
                 <Link
                   href={`/category/${item.slug}`}
