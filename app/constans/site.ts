@@ -71,6 +71,10 @@ export const SITE_MAP = {
     label: '우아한형제들',
     icon: '/icons/site/woowahan-img.svg',
   },
+  'kakao-pay': {
+    label: '카카오페이',
+    icon: '/icons/site/kakao-img.svg',
+  },
 } as const;
 
 export type Site = keyof typeof SITE_MAP;
