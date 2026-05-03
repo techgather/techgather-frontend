@@ -73,7 +73,15 @@ export const SITE_MAP = {
   },
   'kakao-pay': {
     label: '카카오페이',
-    icon: '/icons/site/kakao-img.svg',
+    icon: '/icons/site/kakaopay-img.svg',
+  },
+  gccompany: {
+    label: '여기어때',
+    icon: '/icons/site/yeogi-img.svg',
+  },
+  oliveyoung: {
+    label: '올리브영',
+    icon: '/icons/site/olive-img.svg',
   },
 } as const;
 

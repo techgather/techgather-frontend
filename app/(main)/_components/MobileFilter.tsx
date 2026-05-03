@@ -116,7 +116,9 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
               ))}
             </div>
           </div> */}
-          <div className="flex flex-col gap-12 px-20 pb-20">
+          <div
+            className={`flex flex-col gap-12 px-20 ${isChanged ? 'pb-90' : 'pb-20'}`}
+          >
             <div className="text-[16px] leading-18 font-bold">
               테크 블로그 선택
             </div>
