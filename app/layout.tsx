@@ -82,7 +82,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       {isProd && <GoogleAnalytics gaId="G-0Q4YCPQZ14" />}
-      {isProd && <GoogleTagManager gtmId="GTM-TQWKW95W" />}
+      {isProd && <GoogleTagManager gtmId="GTM-T55FZ9RK" />}
       <body
         className={`${Pretendard.className} custom-scrollbar relative flex min-h-screen flex-col items-center bg-white antialiased`}
       >
