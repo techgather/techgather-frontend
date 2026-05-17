@@ -3,6 +3,7 @@ import './globals.css';
 import FloatScrollButton from '@/components/layout/FloatScrollButton';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import localFont from 'next/font/local';
+import Script from 'next/script';
 import Footer from './_components/Footer';
 import Providers from './_components/Provider';
 
@@ -82,7 +83,22 @@ export default function RootLayout({
   return (
     <html lang="ko">
       {isProd && <GoogleAnalytics gaId="G-0Q4YCPQZ14" />}
-      {isProd && <GoogleTagManager gtmId="GTM-T55FZ9RK" />}
+      {isProd && <GoogleTagManager gtmId="GTM-TQWKW95W" />}
+      {isProd && (
+        <Script
+          id="clarity"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window,document,"clarity","script","w90baxnqxn");
+            `,
+          }}
+        />
+      )}
       <body
         className={`${Pretendard.className} custom-scrollbar relative flex min-h-screen flex-col items-center bg-white antialiased`}
       >
