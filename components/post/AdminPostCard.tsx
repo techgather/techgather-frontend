@@ -37,9 +37,12 @@ const highlightKeyword = (text: string, keyword: string) => {
 const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const fallbackImage = `/thumbnails/${siteName}.png`;
+  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay'];
 
   const [imgSrc, setImgSrc] = useState(
-    post?.thumbnail && siteName !== 'woowahan' ? post?.thumbnail : fallbackImage
+    post?.thumbnail && !fallbackImageList.includes(siteName)
+      ? post.thumbnail
+      : fallbackImage
   );
 
   return (
