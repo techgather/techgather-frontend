@@ -86,3 +86,12 @@ export const SITE_MAP = {
 } as const;
 
 export type Site = keyof typeof SITE_MAP;
+
+const FALLBACK_SITE_INFO = {
+  label: '알 수 없음',
+  icon: '/icons/site/default-img.svg',
+};
+
+export const getSiteInfo = (name: string) =>
+  (SITE_MAP as Record<string, { label: string; icon: string }>)[name] ??
+  FALLBACK_SITE_INFO;

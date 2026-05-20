@@ -1,6 +1,6 @@
 'use client';
 
-import { Site, SITE_MAP } from '@/app/constans/site';
+import { getSiteInfo, Site } from '@/app/constans/site';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
@@ -98,14 +98,14 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
               )}
             >
               <Image
-                src={SITE_MAP[siteName].icon}
-                alt={SITE_MAP[siteName].label}
+                src={getSiteInfo(siteName).icon}
+                alt={getSiteInfo(siteName).label}
                 width={18}
                 height={18}
               />
             </div>
 
-            <p className="text-[13px]">{SITE_MAP[siteName].label}</p>
+            <p className="text-[13px]">{getSiteInfo(siteName).label}</p>
           </div>
           <p className="text-gray_15 text-[11px]">
             {formatDate(post?.pubDate?.toString() ?? '')}

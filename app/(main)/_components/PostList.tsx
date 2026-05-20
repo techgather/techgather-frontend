@@ -1,6 +1,6 @@
 'use client';
 
-import { Site, SITE_MAP } from '@/app/constans/site';
+import { getSiteInfo, Site } from '@/app/constans/site';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
@@ -38,7 +38,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
   const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
 
   const SiteDropdownList = sourceSite.map((item) => ({
-    label: SITE_MAP[item as Site].label as string,
+    label: getSiteInfo(item).label,
     value: item as Site,
   }));
 
@@ -90,7 +90,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
                   {sourceSite.length > 0 && site.length > 0
                     ? site
                         .filter((item) => sourceSite.includes(item ?? ''))
-                        .map((item) => SITE_MAP[item as Site].label)
+                        .map((item) => getSiteInfo(item).label)
                         .join(', ')
                     : '테크 블로그 선택'}
                 </div>
