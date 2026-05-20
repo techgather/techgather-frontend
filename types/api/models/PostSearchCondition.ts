@@ -31,7 +31,7 @@ export interface PostSearchCondition {
    * @type {Array<string>}
    * @memberof PostSearchCondition
    */
-  categorySlugs?: Array<string>;
+  categorySlugs?: Array<string> | null;
   /**
    *
    * @type {Array<string>}

@@ -107,10 +107,14 @@ export const getAdminPosts = async ({
       });
     }
 
-    if (categorySlugs?.length) {
-      categorySlugs.forEach((slug) => {
-        params.append('categorySlugs', slug);
-      });
+    if (Array.isArray(categorySlugs)) {
+      if (categorySlugs.length === 0) {
+        params.append('categorySlugs', '');
+      } else {
+        categorySlugs.forEach((slug) => {
+          params.append('categorySlugs', slug);
+        });
+      }
     }
   }
   params.append('limit', String(limit));

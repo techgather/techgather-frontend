@@ -55,10 +55,8 @@ const PostList = ({ tab }: Props) => {
 
   const postList = useMemo(() => {
     const all = data?.pages.flatMap((page) => page.posts) ?? [];
-    return filterNoCategory
-      ? all.filter((post) => !post?.categories || post.categories.length === 0)
-      : all;
-  }, [data, filterNoCategory]);
+    return all;
+  }, [data]);
 
   const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
 
@@ -80,6 +78,22 @@ const PostList = ({ tab }: Props) => {
       setCheckedList(checkedList.filter((id) => id !== postId));
     } else {
       setCheckedList([...checkedList, postId]);
+    }
+  };
+
+  const handleToggle = (value: boolean) => {
+    setFilterNoCategory(value);
+    console.log(value);
+    if (value) {
+      setSearchCondition((prev) => ({
+        ...prev,
+        categorySlugs: null,
+      }));
+    } else {
+      setSearchCondition((prev) => ({
+        ...prev,
+        categorySlugs: [],
+      }));
     }
   };
 
@@ -142,13 +156,10 @@ const PostList = ({ tab }: Props) => {
         <div className="flex flex-col gap-10 sm:flex-row sm:gap-20">
           <label className="group/filter text-gray_15 flex cursor-pointer items-center gap-8 transition-colors hover:text-black">
             <Switch
-              disabled={
-                searchCondition.categorySlugs &&
-                searchCondition.categorySlugs.length > 0
-              }
+              disabled={(searchCondition.categorySlugs?.length ?? 0) > 0}
               id="filter-no-category"
               checked={filterNoCategory}
-              onCheckedChange={setFilterNoCategory}
+              onCheckedChange={handleToggle}
               className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
             />
             <span className="text-[13px]">카테고리 없음만 보기</span>
@@ -303,7 +314,7 @@ const PostList = ({ tab }: Props) => {
         </div>
       )}
       <div className="bg-gray_5 h-1 w-full" />
-      <div className="grid grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid w-full grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-4 2xl:grid-cols-5">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (

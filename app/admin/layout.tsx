@@ -3,5 +3,5 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="relative">{children}</div>;
+  return <div className="relative w-full">{children}</div>;
 }
