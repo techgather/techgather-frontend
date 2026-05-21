@@ -240,7 +240,7 @@ const PostList = ({ tab }: Props) => {
                 </div>
                 <div className="relative max-w-700">
                   <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-[#e6faf5] to-transparent" />
-                  <div className="flex gap-6 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <div className="flex gap-6 overflow-x-auto">
                     <Badge
                       variant={
                         categoryList.length === 0 ? 'admin-active' : 'admin'
