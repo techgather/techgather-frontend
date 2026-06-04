@@ -64,7 +64,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
     <div className="flex w-full max-w-1052 flex-col items-center">
       <div className="flex w-full items-center justify-between px-20 py-8 sm:px-12 sm:pt-0">
         <div className="text-gray_15 flex items-center gap-8 text-[15px] leading-16">
-          전체
+          글 목록
           <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
             {totalCount}
           </span>

@@ -3,7 +3,6 @@
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SearchIcon from '@/public/icons/search.svg';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -91,29 +90,6 @@ const Header = () => {
               />
               <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
             </form>
-            {!isOpen && (
-              <div className="flex items-center justify-end md:hidden">
-                <motion.div
-                  key={isCategoryOpen ? 'close' : 'open'}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <Image
-                    src={
-                      isCategoryOpen
-                        ? '/icons/x.svg'
-                        : '/icons/hamburger-icon.svg'
-                    }
-                    alt="모바일 메뉴 아이콘"
-                    width={24}
-                    height={24}
-                    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                    className="cursor-pointer"
-                  />
-                </motion.div>
-              </div>
-            )}
             {!isOpen && !isCategoryOpen && (
               <div className="block md:hidden">
                 <SearchIcon

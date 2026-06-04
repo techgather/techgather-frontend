@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import CheckboxIcon from '@/public/icons/checkbox.svg';
 import FilterResetIcon from '@/public/icons/filter-reset.svg';
 import FilterIcon from '@/public/icons/list-filter.svg';
 import { XIcon } from 'lucide-react';
@@ -117,12 +118,15 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
             </div>
           </div> */}
           <div
-            className={`flex flex-col gap-12 px-20 ${isChanged ? 'pb-90' : 'pb-20'}`}
+            className={cn(
+              'flex flex-col gap-12 px-20',
+              isChanged ? 'pb-90' : 'pb-20'
+            )}
           >
             <div className="text-[16px] leading-18 font-bold">
               테크 블로그 선택
             </div>
-            <div className="grid grid-cols-2 gap-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-12">
               {sourceSite.map((item) => (
                 <div
                   onClick={() => {
@@ -136,8 +140,21 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
                     }
                   }}
                   key={item.value}
-                  className={` ${selectedSites.find((value) => value === item.value) ? 'border-gray_90 text-gray_90' : 'border-gray_10 text-gray_10'} flex-1 cursor-pointer rounded-[6px] border py-12 text-center text-[16px] leading-17`}
+                  className={cn(
+                    'border-gray_3 flex w-fit cursor-pointer items-center gap-4 rounded-full border px-12 py-6 text-center text-[15px] leading-17 font-semibold text-nowrap',
+                    selectedSites.find((value) => value === item.value)
+                      ? 'border-gray_90 text-gray_90 bg-gray_3'
+                      : 'border-gray_10 text-gray_10'
+                  )}
                 >
+                  <CheckboxIcon
+                    className={cn(
+                      'size-18 fill-white',
+                      selectedSites.find((value) => value === item.value)
+                        ? 'fill-gray_90 stroke-white'
+                        : 'stroke-gray_5'
+                    )}
+                  />
                   {item.label}
                 </div>
               ))}
