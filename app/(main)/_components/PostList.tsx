@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import EmptyIcon from '@/public/icons/empty-icon.svg';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
+import useSiteFilter from '../_hooks/useSiteFilter';
 import MobileFilter from './MobileFilter';
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const PostList = ({ sourceSite, categorySlug }: Props) => {
-  const [site, setSite] = useState<Site[]>([]);
+  const { site, handleSiteSelect } = useSiteFilter();
   const {
     data,
     fetchNextPage,
@@ -42,18 +43,6 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
     value: item as Site,
   }));
 
-  const handleSiteSelect = (value: Site | Site[]) => {
-    if (Array.isArray(value)) {
-      setSite(value);
-    } else {
-      setSite((prev) =>
-        prev.includes(value)
-          ? prev.filter((v) => v !== value)
-          : [...prev, value]
-      );
-    }
-  };
-
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
@@ -63,9 +52,9 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
   return (
     <div className="flex w-full max-w-1052 flex-col items-center">
       <div className="flex w-full items-center justify-between px-20 py-8 sm:px-12 sm:pt-0">
-        <div className="text-gray_15 flex items-center gap-8 text-[15px] leading-16">
+        <div className="text-gray_15 flex items-center gap-8 text-[14px] leading-16">
           글 목록
-          <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
+          <span className="text-gary_10 text-[14px] leading-16 font-bold tracking-tight">
             {totalCount}
           </span>
         </div>
