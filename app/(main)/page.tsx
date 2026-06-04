@@ -55,10 +55,10 @@ export default async function Page() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="mb-40 flex items-start justify-center gap-24 pt-24 md:pt-40">
+      <div className="mb-40 flex items-start justify-center gap-24 pt-16 md:pt-40">
         <h1 className="sr-only">전체 아티클</h1>
         <SideMenu menu={categoryList} />
-        <PostList sourceSite={sourceSiteList} />
+        <PostList sourceSite={sourceSiteList} categoryList={categoryList} />
       </div>
     </HydrationBoundary>
   );

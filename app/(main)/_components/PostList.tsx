@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import EmptyIcon from '@/public/icons/empty-icon.svg';
+import { CategoryResponse } from '@/types/api';
+import Link from 'next/link';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
@@ -17,9 +19,10 @@ import MobileFilter from './MobileFilter';
 interface Props {
   sourceSite: string[];
   categorySlug?: string;
+  categoryList: CategoryResponse[];
 }
 
-const PostList = ({ sourceSite, categorySlug }: Props) => {
+const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
   const { site, handleSiteSelect } = useSiteFilter();
   const {
     data,
@@ -51,7 +54,7 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
 
   return (
     <div className="flex w-full max-w-1052 flex-col items-center">
-      <div className="flex w-full items-center justify-between px-20 py-8 sm:px-12 sm:pt-0">
+      <div className="flex w-full items-center justify-between px-20 sm:px-12 sm:pt-0">
         <div className="text-gray_15 flex items-center gap-8 text-[14px] leading-16">
           글 목록
           <span className="text-gary_10 text-[14px] leading-16 font-bold tracking-tight">
@@ -63,6 +66,8 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
             sourceSite={SiteDropdownList}
             selectSite={handleSiteSelect}
             site={site}
+            categoryList={categoryList}
+            categorySlug={categorySlug}
           />
         </div>
         <div className="hidden md:block">
@@ -93,13 +98,38 @@ const PostList = ({ sourceSite, categorySlug }: Props) => {
           />
         </div>
       </div>
+      <div className="scrollbar-hide flex w-full items-center gap-4 overflow-x-auto px-20 pt-12 md:hidden">
+        <Link
+          href="/"
+          className={cn(
+            'rounded-full px-12 py-6 text-[15px] leading-17 whitespace-nowrap',
+            !categorySlug ? 'bg-gray_90 text-white' : 'text-gray_15'
+          )}
+        >
+          전체
+        </Link>
+        {categoryList.map((category) => (
+          <Link
+            key={category.id}
+            href={`/category/${category.slug}`}
+            className={cn(
+              'rounded-full px-12 py-6 text-[15px] leading-17 whitespace-nowrap',
+              categorySlug === category.slug
+                ? 'bg-gray_3 border-gray_90 text-gray_90 border'
+                : 'text-gray_15 border-gray_3 border'
+            )}
+          >
+            {category.name}
+          </Link>
+        ))}
+      </div>
       {!isLoading && !isFetching && postList.length === 0 ? (
         <div className="text-gray_15 flex min-h-400 flex-col items-center justify-center gap-20">
           <EmptyIcon className="size-80" />
           <p className="text-[15px]">아티클이 없어요.</p>
         </div>
       ) : (
-        <div className="grid h-full w-full grid-cols-1 gap-x-8 gap-y-16 px-20 pb-16 sm:w-auto sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid h-full w-full grid-cols-1 gap-x-8 gap-y-16 px-20 py-24 sm:w-auto sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
           <h2 className="sr-only">포스트 리스트</h2>
           {isLoading || (isFetching && !isFetchingNextPage) ? (
             <>

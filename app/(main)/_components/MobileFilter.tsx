@@ -13,6 +13,8 @@ import { cn } from '@/lib/utils';
 import CheckboxIcon from '@/public/icons/checkbox.svg';
 import FilterResetIcon from '@/public/icons/filter-reset.svg';
 import FilterIcon from '@/public/icons/list-filter.svg';
+import ResetIcon from '@/public/icons/reset.svg';
+import { CategoryResponse } from '@/types/api';
 import { XIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -21,26 +23,42 @@ interface Props {
   sourceSite: { label: string; value: Site }[];
   site: Site[];
   selectSite: (value: Site | Site[]) => void;
+  categoryList: CategoryResponse[];
+  categorySlug?: string;
 }
 
-const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
+const MobileFilter = ({
+  sourceSite,
+  selectSite,
+  site,
+  categoryList,
+  categorySlug,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState<Site[]>(site);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+    categorySlug
+  );
   const router = useRouter();
 
   const isChanged =
     selectedSites.length !== site.length ||
-    !selectedSites.every((value) => site.includes(value));
+    !selectedSites.every((value) => site.includes(value)) ||
+    selectedCategory !== categorySlug;
 
   const resetFilter = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push('/');
     selectSite([]);
+    router.push('/');
   };
 
   const handleApply = () => {
-    selectSite(selectedSites);
+    const params = new URLSearchParams();
+    selectedSites.forEach((v) => params.append('site', v));
+    const query = params.toString();
+    const path = selectedCategory ? `/category/${selectedCategory}` : '/';
+    router.push(query ? `${path}?${query}` : path);
     setIsOpen(false);
   };
 
@@ -51,6 +69,7 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
   useEffect(() => {
     if (!isOpen) {
       setSelectedSites(site);
+      setSelectedCategory(categorySlug);
     }
   }, [isOpen]);
 
@@ -89,40 +108,43 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
             onClick={() => setIsOpen(false)}
           />
         </DialogHeader>
-        <div className="custom-scrollbar flex flex-col gap-28 overflow-y-scroll">
-          {/* <div className="flex flex-col gap-12 px-20">
-            <div className="text-[16px] leading-18 font-bold">카테고리</div>
-            <div className="grid grid-cols-2 gap-8">
-              <Link
-                href="/"
+        <div
+          className={cn(
+            'custom-scrollbar flex flex-col gap-40 overflow-y-scroll',
+            isChanged ? 'pb-90' : 'pb-20'
+          )}
+        >
+          <div className="flex flex-col gap-12 px-20">
+            <div className="text-[16px] leading-18 font-bold">글 주제</div>
+            <div className="flex flex-wrap gap-8">
+              <div
+                onClick={() => setSelectedCategory(undefined)}
                 className={cn(
-                  'text-gray_10 border-gray_10 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17',
-                  !currentCategory && 'text-gray_90 border-gray_90'
+                  'cursor-pointer rounded-full border px-12 py-6 text-center text-[15px] leading-17',
+                  !selectedCategory
+                    ? 'border-gray_90 text-gray_90 bg-gray_3'
+                    : 'border-gray_10 text-gray_10'
                 )}
               >
                 전체
-              </Link>
-              {menu.map((item) => (
-                <Link
-                  href={`/category/${item.slug}`}
+              </div>
+              {categoryList.map((item) => (
+                <div
                   key={item.id}
+                  onClick={() => setSelectedCategory(item.slug)}
                   className={cn(
-                    'text-gray_10 border-gray_10 flex-1 rounded-[6px] border py-12 text-center text-[16px] leading-17 capitalize',
-                    currentCategory === item.slug &&
-                      'text-gray_90 border-gray_90'
+                    'cursor-pointer rounded-full border px-12 py-6 text-center text-[15px] leading-17',
+                    selectedCategory === item.slug
+                      ? 'border-gray_90 text-gray_90 bg-gray_3'
+                      : 'border-gray_10 text-gray_10'
                   )}
                 >
                   {item.name}
-                </Link>
+                </div>
               ))}
             </div>
-          </div> */}
-          <div
-            className={cn(
-              'flex flex-col gap-12 px-20',
-              isChanged ? 'pb-90' : 'pb-20'
-            )}
-          >
+          </div>
+          <div className="flex flex-col gap-12 px-20 pb-40">
             <div className="text-[16px] leading-18 font-bold">
               테크 블로그 선택
             </div>
@@ -160,17 +182,30 @@ const MobileFilter = ({ sourceSite, selectSite, site }: Props) => {
               ))}
             </div>
           </div>
-          {isChanged && (
-            <div className="border-gray_5 animate-in fade-in fixed bottom-0 left-0 w-full border border-t bg-white p-20 duration-200">
+        </div>
+        {isChanged && (
+          <div className="border-gray_5 animate-in fade-in fixed bottom-0 left-0 w-full border border-t bg-white p-20 duration-200">
+            <div className="flex flex-col gap-13">
               <Button
                 onClick={handleApply}
                 className="bg-gray_90 hover:bg-gray_70 w-full"
               >
                 적용
               </Button>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setSelectedSites([]);
+                  setSelectedCategory(undefined);
+                }}
+                className="text-gray_70 flex h-fit w-full items-center gap-2 p-0! font-semibold"
+              >
+                <ResetIcon />
+                선택 초기화
+              </Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
