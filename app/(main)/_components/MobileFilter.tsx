@@ -133,7 +133,7 @@ const MobileFilter = ({
                   key={item.id}
                   onClick={() => setSelectedCategory(item.slug)}
                   className={cn(
-                    'cursor-pointer rounded-full border px-12 py-6 text-center text-[15px] leading-17',
+                    'cursor-pointer rounded-full border px-12 py-6 text-center text-[15px] leading-17 capitalize',
                     selectedCategory === item.slug
                       ? 'border-gray_90 text-gray_90 bg-gray_3'
                       : 'border-gray_10 text-gray_10'

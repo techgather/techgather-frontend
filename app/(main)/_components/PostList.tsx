@@ -10,6 +10,7 @@ import ChevronIcon from '@/public/icons/chevron-down.svg';
 import EmptyIcon from '@/public/icons/empty-icon.svg';
 import { CategoryResponse } from '@/types/api';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import usePostList from '../_hooks/usePostList';
@@ -24,6 +25,16 @@ interface Props {
 
 const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
   const { site, handleSiteSelect } = useSiteFilter();
+  const searchParams = useSearchParams();
+
+  const buildCategoryHref = (slug?: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('site');
+    site.forEach((v) => params.append('site', v));
+    const query = params.toString();
+    const path = slug ? `/category/${slug}` : '/';
+    return query ? `${path}?${query}` : path;
+  };
   const {
     data,
     fetchNextPage,
@@ -100,10 +111,12 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
       </div>
       <div className="scrollbar-hide flex w-full items-center gap-4 overflow-x-auto px-20 pt-12 md:hidden">
         <Link
-          href="/"
+          href={buildCategoryHref()}
           className={cn(
             'rounded-full px-12 py-6 text-[15px] leading-17 whitespace-nowrap',
-            !categorySlug ? 'bg-gray_90 text-white' : 'text-gray_15'
+            !categorySlug
+              ? 'bg-gray_3 border-gray_90 text-gray_90 border'
+              : 'text-gray_15 border-gray_3 border'
           )}
         >
           전체
@@ -111,7 +124,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
         {categoryList.map((category) => (
           <Link
             key={category.id}
-            href={`/category/${category.slug}`}
+            href={buildCategoryHref(category.slug)}
             className={cn(
               'rounded-full px-12 py-6 text-[15px] leading-17 whitespace-nowrap',
               categorySlug === category.slug
