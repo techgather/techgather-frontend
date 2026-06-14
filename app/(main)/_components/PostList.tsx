@@ -1,6 +1,7 @@
 'use client';
 
 import { getSiteInfo, Site } from '@/app/constans/site';
+import { getLanguageParam } from '@/app/utils/language';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
@@ -26,6 +27,7 @@ interface Props {
 const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
   const { site, handleSiteSelect } = useSiteFilter();
   const searchParams = useSearchParams();
+  const language = getLanguageParam(searchParams.get('language'));
 
   const buildCategoryHref = (slug?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -42,7 +44,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
     isFetching,
     isFetchingNextPage,
     isLoading,
-  } = usePostList({ limit: 12, sourceSite: site, categorySlug });
+  } = usePostList({ limit: 12, sourceSite: site, categorySlug, language });
   const { inView, ref } = useInView();
 
   const postList = useMemo(

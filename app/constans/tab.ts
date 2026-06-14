@@ -4,7 +4,6 @@ import {
 } from '@/types/api';
 
 export const SelectOptionType = {
-  All: 'all',
   Domestic: 'domestic',
   Global: 'global',
 } as const;

@@ -1,12 +1,15 @@
 'use client';
 
+import { getLanguageParam } from '@/app/utils/language';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import SearchIcon from '@/public/icons/search.svg';
+import { PostResponseLanguageEnum } from '@/types/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useEffect, useRef, useState } from 'react';
+import Tab from '../(main)/_components/Tab';
 import useCategory from '../admin/_hooks/useCategory';
 
 const DEFAULT_GROUPID = '292680441089056769';
@@ -14,6 +17,7 @@ const DEFAULT_GROUPID = '292680441089056769';
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const mobileInputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +26,19 @@ const Header = () => {
   const currentSlug = pathname.startsWith('/category/')
     ? pathname.split('/category/')[1]
     : null;
+  const currentLanguage = getLanguageParam(searchParams.get('language'));
+
+  const buildHref = (path: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const query = params.toString();
+    return query ? `${path}?${query}` : path;
+  };
+
+  const handleLanguageChange = (option: PostResponseLanguageEnum) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('language', option);
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,7 +83,7 @@ const Header = () => {
         onClick={() => setIsOpen(false)}
       />
       <header className="bg-gray_90 fixed top-0 z-50 flex w-full flex-col items-center justify-center">
-        <div className="bg-gray_90 flex h-52 w-full max-w-1440 items-center justify-between px-24 py-10">
+        <div className="bg-gray_90 relative flex h-52 w-full max-w-1440 items-center justify-between px-24 py-10">
           <Image
             alt="header logo"
             src="/icons/logo.svg"
@@ -75,6 +92,13 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <Tab
+              currentOption={currentLanguage}
+              handleClick={handleLanguageChange}
+            />
+          </div>
+
           <div className="flex items-center gap-20 md:gap-36">
             <form
               onSubmit={handleSubmit}
@@ -139,7 +163,7 @@ const Header = () => {
           <ul className="flex flex-col gap-8 px-24 pt-12 pb-24">
             <li>
               <Link
-                href="/"
+                href={buildHref('/')}
                 onClick={() => setIsCategoryOpen(false)}
                 className={cn(
                   'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',
@@ -152,7 +176,7 @@ const Header = () => {
             {data?.map((item) => (
               <li key={item.id}>
                 <Link
-                  href={`/category/${item.slug}`}
+                  href={buildHref(`/category/${item.slug}`)}
                   onClick={() => setIsCategoryOpen(false)}
                   className={cn(
                     'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',

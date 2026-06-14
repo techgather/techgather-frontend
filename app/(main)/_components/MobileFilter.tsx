@@ -1,6 +1,7 @@
 'use client';
 
 import { Site } from '@/app/constans/site';
+import { getLanguageParam } from '@/app/utils/language';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,7 +17,7 @@ import FilterIcon from '@/public/icons/list-filter.svg';
 import ResetIcon from '@/public/icons/reset.svg';
 import { CategoryResponse } from '@/types/api';
 import { XIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -40,6 +41,8 @@ const MobileFilter = ({
     categorySlug
   );
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const language = getLanguageParam(searchParams.get('language'));
 
   const isChanged =
     selectedSites.length !== site.length ||
@@ -50,11 +53,12 @@ const MobileFilter = ({
     e.preventDefault();
     e.stopPropagation();
     selectSite([]);
-    router.push('/');
+    router.push(`/?language=${language}`);
   };
 
   const handleApply = () => {
     const params = new URLSearchParams();
+    params.set('language', language);
     selectedSites.forEach((v) => params.append('site', v));
     const query = params.toString();
     const path = selectedCategory ? `/category/${selectedCategory}` : '/';

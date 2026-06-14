@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import { Metadata } from 'next';
 import { getCategory, getPosts, getSourceSite } from '../service/client';
+import { getLanguageParam } from '../utils/language';
 import PostList from './_components/PostList';
 import SideMenu from './_components/SideMenu';
 
@@ -29,7 +30,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page() {
+interface Props {
+  searchParams: {
+    language?: string;
+  };
+}
+
+export default async function Page({ searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+  const language = getLanguageParam(resolvedSearchParams.language);
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
   const sourceSiteList = await getSourceSite();
@@ -38,16 +47,17 @@ export default async function Page() {
     PostResponseList,
     Error,
     PostResponseList,
-    ['posts', null, string[]],
+    ['posts', null, string[], typeof language],
     number | undefined
   >({
-    queryKey: ['posts', null, []],
+    queryKey: ['posts', null, [], language],
     initialPageParam: undefined,
     queryFn: ({ pageParam }) =>
       getPosts({
         searchCondition: {},
         lastPostId: pageParam,
         limit: 12,
+        language,
       }),
     getNextPageParam: (lastPage: PostResponseList) =>
       lastPage.hasNext ? lastPage.nextPostId : undefined,

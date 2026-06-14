@@ -1,6 +1,9 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { CategoryResponse } from '@/types/api';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 interface Props {
   menu: CategoryResponse[];
@@ -8,11 +11,19 @@ interface Props {
 }
 
 const SideMenu = ({ menu, currentCategory }: Props) => {
+  const searchParams = useSearchParams();
+
+  const buildHref = (path: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const query = params.toString();
+    return query ? `${path}?${query}` : path;
+  };
+
   return (
     <div className="hidden flex-col gap-8 pl-12 md:sticky md:top-70 md:flex">
       <h2 className="sr-only">카테고리 리스트</h2>
       <Link
-        href="/"
+        href={buildHref('/')}
         className={cn(
           'text-gray_10 hover:bg-gray_2 hover:text-gray_40 flex h-40 w-220 cursor-pointer rounded-full px-20 py-8 text-base leading-24 capitalize transition-all duration-100 hover:font-semibold',
           !currentCategory && 'bg-gray_2 text-gray_40 font-semibold'
@@ -22,7 +33,7 @@ const SideMenu = ({ menu, currentCategory }: Props) => {
       </Link>
       {menu.map((item) => (
         <Link
-          href={`/category/${item.slug}`}
+          href={buildHref(`/category/${item.slug}`)}
           key={item.id}
           className={cn(
             'text-gray_10 hover:bg-gray_2 hover:text-gray_40 flex h-40 w-220 cursor-pointer rounded-full px-20 py-8 text-base leading-24 capitalize transition-all duration-100 hover:font-semibold',

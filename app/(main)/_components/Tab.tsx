@@ -1,20 +1,20 @@
 'use client';
 
+import { TABS } from '@/app/constans/tab';
 import { cn } from '@/lib/utils';
 import { PostResponseLanguageEnum } from '@/types/api';
 import { motion } from 'framer-motion';
-import { TABS } from '../constans/tab';
 
 interface Props {
-  currentOption?: PostResponseLanguageEnum;
-  handleClick: (option?: PostResponseLanguageEnum) => void;
+  currentOption: PostResponseLanguageEnum;
+  handleClick: (option: PostResponseLanguageEnum) => void;
 }
 
-const SelectOption = ({ currentOption, handleClick }: Props) => {
+const Tab = ({ currentOption, handleClick }: Props) => {
   return (
     <div
       role="tablist"
-      className="bg-gray_3 relative flex gap-8 rounded-md p-4"
+      className="bg-gray_70 relative inline-flex h-30 rounded-md p-4"
     >
       {TABS.map((item) => {
         const isActive = currentOption === item.value;
@@ -26,15 +26,14 @@ const SelectOption = ({ currentOption, handleClick }: Props) => {
             aria-selected={isActive}
             onClick={() => handleClick(item.value)}
             className={cn(
-              'text-14 relative z-10 flex-1 cursor-pointer rounded-sm px-12 py-4 transition-colors duration-200',
-              'text-gray_10 hover:text-gray_20',
-              isActive && 'text-gray_30'
+              'text-gray_10 relative z-10 flex h-full w-45 cursor-pointer items-center justify-center rounded-sm px-12 text-sm leading-18 text-nowrap transition-colors duration-200 sm:w-65',
+              isActive && 'font-bold text-white'
             )}
           >
             {isActive && (
               <motion.div
-                layoutId="option-tab-indicator"
-                className="absolute inset-0 z-0 rounded-sm bg-white shadow-sm"
+                layoutId="admin-tab-indicator"
+                className="bg-gray_40 absolute inset-0 z-0 rounded-sm shadow-sm"
                 transition={{
                   type: 'spring',
                   stiffness: 500,
@@ -51,4 +50,4 @@ const SelectOption = ({ currentOption, handleClick }: Props) => {
   );
 };
 
-export default SelectOption;
+export default Tab;

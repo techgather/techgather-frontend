@@ -1,4 +1,5 @@
 import { getCategory, getPosts, getSourceSite } from '@/app/service/client';
+import { getLanguageParam } from '@/app/utils/language';
 import { PostResponseList } from '@/types/api';
 import {
   dehydrate,
@@ -14,6 +15,9 @@ const DEFAULT_GROUPID = '292680441089056769';
 interface Props {
   params: {
     slug: string;
+  };
+  searchParams: {
+    language?: string;
   };
 }
 
@@ -40,8 +44,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-async function Page({ params }: Props) {
+async function Page({ params, searchParams }: Props) {
   const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+  const language = getLanguageParam(resolvedSearchParams.language);
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
   const sourceSiteList = await getSourceSite();
@@ -52,16 +58,17 @@ async function Page({ params }: Props) {
     PostResponseList,
     Error,
     PostResponseList,
-    ['posts', string, string[]],
+    ['posts', string, string[], typeof language],
     number | undefined
   >({
-    queryKey: ['posts', slug, []],
+    queryKey: ['posts', slug, [], language],
     initialPageParam: undefined,
     queryFn: ({ pageParam }) =>
       getPosts({
         searchCondition: { categorySlugs: [slug] },
         lastPostId: pageParam,
         limit: 12,
+        language,
       }),
     getNextPageParam: (lastPage: PostResponseList) =>
       lastPage.hasNext ? lastPage.nextPostId : undefined,
