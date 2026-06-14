@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { cn } from '@/lib/utils';
 import { CategoryResponse } from '@/types/api';
 import Link from 'next/link';
@@ -12,6 +13,7 @@ interface Props {
 
 const SideMenu = ({ menu, currentCategory }: Props) => {
   const searchParams = useSearchParams();
+  const { t } = useI18n();
 
   const buildHref = (path: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -21,7 +23,7 @@ const SideMenu = ({ menu, currentCategory }: Props) => {
 
   return (
     <div className="hidden flex-col gap-8 pl-12 md:sticky md:top-70 md:flex">
-      <h2 className="sr-only">카테고리 리스트</h2>
+      <h2 className="sr-only">{t('sideMenu.srTitle')}</h2>
       <Link
         href={buildHref('/')}
         className={cn(
@@ -29,7 +31,7 @@ const SideMenu = ({ menu, currentCategory }: Props) => {
           !currentCategory && 'bg-gray_2 text-gray_40 font-semibold'
         )}
       >
-        전체
+        {t('postList.all')}
       </Link>
       {menu.map((item) => (
         <Link

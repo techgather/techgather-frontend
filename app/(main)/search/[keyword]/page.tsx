@@ -1,3 +1,5 @@
+import { getDictionary } from '@/app/i18n/dictionaries';
+import { getServerLocale } from '@/app/i18n/server';
 import { getPosts } from '@/app/service/client';
 import { PostResponseList } from '@/types/api';
 import {
@@ -15,19 +17,21 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
   const { keyword } = await params;
   const decodeKeyword = decodeURIComponent(keyword);
 
   return {
-    title: `'${decodeKeyword}' 검색 결과`,
-    description: `'${decodeKeyword}' 검색 결과 | DevPick(데브픽)`,
+    title: `'${decodeKeyword}' ${dictionary['search.metadata.titleSuffix']}`,
+    description: `'${decodeKeyword}' ${dictionary['search.metadata.descriptionSuffix']}`,
     alternates: {
       canonical: `https://dev-pick.com/search/${keyword}`,
     },
     keywords: [
       decodeKeyword,
-      `${decodeKeyword} 검색`,
-      `${decodeKeyword} 개발 블로그`,
+      `${decodeKeyword} ${dictionary['search.metadata.keywordSuffix']}`,
+      `${decodeKeyword} ${dictionary['search.metadata.blogSuffix']}`,
       'DevPick',
       '데브픽',
     ],
@@ -39,6 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function Page({ params }: Props) {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
   const { keyword } = await params;
   const queryClient = new QueryClient();
   const decodeKeyword = decodeURIComponent(keyword);
@@ -65,7 +71,9 @@ async function Page({ params }: Props) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex w-full flex-1 flex-col">
-        <h1 className="sr-only">{decodeKeyword} 검색 결과</h1>
+        <h1 className="sr-only">
+          {decodeKeyword} {dictionary['search.headingSuffix']}
+        </h1>
         <PostList keyword={decodeKeyword} />
       </div>
     </HydrationBoundary>

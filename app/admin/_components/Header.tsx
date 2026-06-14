@@ -1,6 +1,7 @@
 'use client';
 
 import { ADMIN_TABS } from '@/app/constans/tab';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { cn } from '@/lib/utils';
 import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { motion } from 'framer-motion';
@@ -13,6 +14,7 @@ const Header = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const { t } = useI18n();
 
   const [isOpen, setIsOpen] = useState(false);
   const currentTab =
@@ -90,7 +92,7 @@ const Header = () => {
             >
               <Image
                 src={isOpen ? '/icons/x.svg' : '/icons/hamburger-icon.svg'}
-                alt="모바일 메뉴 아이콘"
+                alt={t('image.mobileMenuAlt')}
                 width={24}
                 height={24}
                 onClick={() => setIsOpen(!isOpen)}
@@ -117,7 +119,7 @@ const Header = () => {
                 )}
                 onClick={() => handleAction(item.value)}
               >
-                {item.label}
+                {t(item.labelKey)}
               </li>
             ))}
           </ul>

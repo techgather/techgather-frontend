@@ -1,6 +1,7 @@
 'use client';
 
 import { getSiteInfo, Site } from '@/app/constans/site';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
@@ -33,6 +34,7 @@ const highlightKeyword = (text: string, keyword: string) => {
 };
 
 const PostCard = ({ post, keyword, priority = false }: Props) => {
+  const { t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const fallbackImage = `/thumbnails/${siteName}.png`;
   const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay'];
@@ -53,7 +55,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
         <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
           <Image
             src={imgSrc}
-            alt={`'${post?.title ?? '블로그'}' 포스트 썸네일`}
+            alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 257px"
             className="rounded-12 object-cover object-center"
@@ -81,7 +83,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               >
                 <Image
                   src={getSiteInfo(siteName).icon}
-                  alt={`${getSiteInfo(siteName).label} 아이콘`}
+                  alt={`${getSiteInfo(siteName).label} ${t('image.siteIconAlt')}`}
                   width={18}
                   height={18}
                 />
@@ -103,7 +105,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               ))}
             </div>
           ) : (
-            <Badge>카테고리 없음</Badge>
+            <Badge>{t('common.noCategory')}</Badge>
           )}
         </div>
       </Link>
@@ -134,7 +136,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
                     ))}
                   </div>
                 ) : (
-                  <Badge>카테고리 없음</Badge>
+                  <Badge>{t('common.noCategory')}</Badge>
                 )}
               </div>
             </div>
@@ -151,7 +153,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
           >
             <Image
               src={getSiteInfo(siteName).icon}
-              alt={`'${post?.title ?? '블로그'}' 포스트 썸네일`}
+              alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
               fill
               sizes="72px"
               className="rounded-12 object-contain object-center p-10"

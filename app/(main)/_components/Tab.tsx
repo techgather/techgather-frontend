@@ -1,6 +1,7 @@
 'use client';
 
 import { TABS } from '@/app/constans/tab';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { cn } from '@/lib/utils';
 import { PostResponseLanguageEnum } from '@/types/api';
 import { motion } from 'framer-motion';
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const Tab = ({ currentOption, handleClick }: Props) => {
+  const { t, locale } = useI18n();
+
   return (
     <div
       role="tablist"
@@ -27,7 +30,8 @@ const Tab = ({ currentOption, handleClick }: Props) => {
             onClick={() => handleClick(item.value)}
             className={cn(
               'text-gray_10 relative z-10 flex h-full w-45 cursor-pointer items-center justify-center rounded-sm px-12 text-sm leading-18 text-nowrap transition-colors duration-200 sm:w-65',
-              isActive && 'font-bold text-white'
+              isActive && 'font-bold text-white',
+              locale === 'en' && 'w-80 sm:w-100'
             )}
           >
             {isActive && (
@@ -42,7 +46,7 @@ const Tab = ({ currentOption, handleClick }: Props) => {
               />
             )}
 
-            <span className="relative z-10">{item.label}</span>
+            <span className="relative z-10">{t(item.labelKey)}</span>
           </button>
         );
       })}

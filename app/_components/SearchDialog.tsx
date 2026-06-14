@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import {
   Dialog,
   DialogContent,
@@ -21,6 +22,7 @@ interface Props {
 
 const SearchDialog = ({ openState, setOpenState }: Props) => {
   const router = useRouter();
+  const { t } = useI18n();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,7 +72,7 @@ const SearchDialog = ({ openState, setOpenState }: Props) => {
               id="keyword"
               name="keyword"
               type="text"
-              placeholder="글 제목, 태그명 검색"
+              placeholder={t('header.searchPlaceholder')}
               className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-46 w-full px-12 py-6 text-[13px] text-white transition ease-in"
             />
             <SearchIcon className="stroke-gray_30 absolute top-1/2 right-12 size-20 -translate-y-1/2 transition ease-in group-focus-within:stroke-white" />

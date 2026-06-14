@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { cn } from '@/lib/utils';
 import { PostResponseLanguageEnum } from '@/types/api';
 import { motion } from 'framer-motion';
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const SelectOption = ({ currentOption, handleClick }: Props) => {
+  const { t } = useI18n();
+
   return (
     <div
       role="tablist"
@@ -43,7 +46,7 @@ const SelectOption = ({ currentOption, handleClick }: Props) => {
               />
             )}
 
-            <span className="relative z-10">{item.label}</span>
+            <span className="relative z-10">{t(item.labelKey)}</span>
           </button>
         );
       })}

@@ -1,8 +1,11 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { getLanguageParam } from '@/app/utils/language';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import LanguageIcon from '@/public/icons/language.svg';
 import SearchIcon from '@/public/icons/search.svg';
 import { PostResponseLanguageEnum } from '@/types/api';
 import Image from 'next/image';
@@ -22,6 +25,7 @@ const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { data } = useCategory(DEFAULT_GROUPID);
+  const { locale, setLocale, t } = useI18n();
 
   const currentSlug = pathname.startsWith('/category/')
     ? pathname.split('/category/')[1]
@@ -38,6 +42,11 @@ const Header = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('language', option);
     router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleUiLocaleChange = () => {
+    setLocale(locale === 'ko' ? 'en' : 'ko');
+    router.refresh();
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -99,29 +108,40 @@ const Header = () => {
             />
           </div>
 
-          <div className="flex items-center gap-20 md:gap-36">
-            <form
-              onSubmit={handleSubmit}
-              className="group relative hidden md:block"
-            >
-              <Input
-                minLength={2}
-                id="keyword"
-                name="keyword"
-                type="text"
-                placeholder="글 제목, 태그명 검색"
-                className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-30 w-240 px-12 py-6 text-[13px] text-white transition ease-in"
-              />
-              <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
-            </form>
-            {!isOpen && !isCategoryOpen && (
-              <div className="block md:hidden">
-                <SearchIcon
-                  className="size-24 cursor-pointer stroke-white transition ease-in"
-                  onClick={() => setIsOpen((prev) => !prev)}
+          <div className="flex items-center gap-16">
+            <div className="flex items-center gap-20 md:gap-36">
+              <form
+                onSubmit={handleSubmit}
+                className="group relative hidden md:block"
+              >
+                <Input
+                  minLength={2}
+                  id="keyword"
+                  name="keyword"
+                  type="text"
+                  placeholder={t('header.searchPlaceholder')}
+                  className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-30 w-240 px-12 py-6 text-[13px] text-white transition ease-in"
                 />
-              </div>
-            )}
+                <SearchIcon className="sm:stroke-gray_30 absolute top-1/2 right-0 size-24 -translate-y-1/2 stroke-white transition ease-in group-focus-within:stroke-white sm:right-12 sm:size-16" />
+              </form>
+              {!isOpen && !isCategoryOpen && (
+                <div className="block md:hidden">
+                  <SearchIcon
+                    className="size-24 cursor-pointer stroke-white transition ease-in"
+                    onClick={() => setIsOpen((prev) => !prev)}
+                  />
+                </div>
+              )}
+            </div>
+            <Button
+              type="button"
+              aria-label={t('header.changeLocale')}
+              onClick={handleUiLocaleChange}
+              className="bg-gray_50 hover:bg-gray_60 flex h-32 items-center gap-2 py-6 text-[13px]"
+            >
+              <LanguageIcon />
+              {t(locale === 'ko' ? 'locale.ko' : 'locale.en')}
+            </Button>
           </div>
         </div>
         <div
@@ -140,7 +160,7 @@ const Header = () => {
                 id="keyword-mobile"
                 name="keyword"
                 type="text"
-                placeholder="글 제목, 태그명 검색"
+                placeholder={t('header.searchPlaceholder')}
                 className="border-gray_30 focus-visible:ring-none focus-visible:border-main h-46 w-full px-12 py-6 text-[13px] text-white transition ease-in"
               />
               <button
@@ -170,7 +190,7 @@ const Header = () => {
                   !currentSlug && 'bg-gray_70 font-bold'
                 )}
               >
-                전체
+                {t('postList.all')}
               </Link>
             </li>
             {data?.map((item) => (

@@ -1,12 +1,17 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getDictionary } from './i18n/dictionaries';
+import { getServerLocale } from './i18n/server';
 
 export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default function NotFound() {
+export default async function NotFound() {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
+
   return (
     <>
       <header className="bg-gray_90 fixed top-0 z-50 flex w-full items-center justify-center">
@@ -24,8 +29,8 @@ export default function NotFound() {
       </header>
       <div className="flex-1 pt-52">
         <h2>404 not found</h2>
-        <p>잘못된 접근입니다</p>
-        <Link href="/">메인으로 이동</Link>
+        <p>{dictionary['notFound.message']}</p>
+        <Link href="/">{dictionary['notFound.home']}</Link>
       </div>
     </>
   );

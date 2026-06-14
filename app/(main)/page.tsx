@@ -1,3 +1,5 @@
+import { getDictionary } from '@/app/i18n/dictionaries';
+import { getServerLocale } from '@/app/i18n/server';
 import { PostResponseList } from '@/types/api';
 import {
   dehydrate,
@@ -13,17 +15,19 @@ import SideMenu from './_components/SideMenu';
 const DEFAULT_GROUPID = '292680441089056769';
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
+
   return {
-    title: '최신 개발 아티클 모음',
-    description:
-      '데브픽(DevPick)은 다양한 개발 블로그의 최신 글과 아티클을 한 곳에서 모아볼 수 있는 플랫폼입니다. 웹부터 AI까지 다양한 개발 콘텐츠를 빠르게 확인하세요.',
+    title: dictionary['main.metadata.title'],
+    description: dictionary['main.metadata.description'],
     alternates: {
       canonical: 'https://dev-pick.com',
     },
     keywords: [
-      '전체 아티클',
-      '최신 개발 글',
-      '테크 블로그 모음',
+      dictionary['main.heading'],
+      dictionary['main.metadata.title'],
+      dictionary['postList.sitePlaceholder'],
       'DevPick',
       '데브픽',
     ],
@@ -37,6 +41,8 @@ interface Props {
 }
 
 export default async function Page({ searchParams }: Props) {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
   const resolvedSearchParams = await searchParams;
   const language = getLanguageParam(resolvedSearchParams.language);
   const queryClient = new QueryClient();
@@ -66,7 +72,7 @@ export default async function Page({ searchParams }: Props) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="mb-40 flex items-start justify-center gap-24 pt-16 md:pt-40">
-        <h1 className="sr-only">전체 아티클</h1>
+        <h1 className="sr-only">{dictionary['main.heading']}</h1>
         <SideMenu menu={categoryList} />
         <PostList sourceSite={sourceSiteList} categoryList={categoryList} />
       </div>

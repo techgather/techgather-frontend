@@ -1,6 +1,7 @@
 'use client';
 
 import { Site } from '@/app/constans/site';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { getLanguageParam } from '@/app/utils/language';
 import { Button } from '@/components/ui/button';
 import {
@@ -43,6 +44,7 @@ const MobileFilter = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = getLanguageParam(searchParams.get('language'));
+  const { t } = useI18n();
 
   const isChanged =
     selectedSites.length !== site.length ||
@@ -87,7 +89,7 @@ const MobileFilter = ({
               site.length > 0 ? 'stroke-gray_90' : 'stroke-gray_10'
             )}
           />
-          필터
+          {t('filter.title')}
           {site.length > 0 && (
             <div role="button" onClick={resetFilter}>
               <FilterResetIcon className="size-16" />
@@ -105,7 +107,7 @@ const MobileFilter = ({
           className="flex w-full flex-row items-center justify-between px-20 pt-20"
         >
           <DialogTitle className="text-[18px] leading-20 font-bold">
-            필터
+            {t('filter.title')}
           </DialogTitle>
           <XIcon
             className="size-26 cursor-pointer"
@@ -119,7 +121,9 @@ const MobileFilter = ({
           )}
         >
           <div className="flex flex-col gap-12 px-20">
-            <div className="text-[16px] leading-18 font-bold">글 주제</div>
+            <div className="text-[16px] leading-18 font-bold">
+              {t('filter.topic')}
+            </div>
             <div className="flex flex-wrap gap-8">
               <div
                 onClick={() => setSelectedCategory(undefined)}
@@ -130,7 +134,7 @@ const MobileFilter = ({
                     : 'border-gray_10 text-gray_10'
                 )}
               >
-                전체
+                {t('postList.all')}
               </div>
               {categoryList.map((item) => (
                 <div
@@ -150,7 +154,7 @@ const MobileFilter = ({
           </div>
           <div className="flex flex-col gap-12 px-20 pb-40">
             <div className="text-[16px] leading-18 font-bold">
-              테크 블로그 선택
+              {t('filter.site')}
             </div>
             <div className="flex flex-wrap gap-x-8 gap-y-12">
               {sourceSite.map((item) => (
@@ -194,7 +198,7 @@ const MobileFilter = ({
                 onClick={handleApply}
                 className="bg-gray_90 hover:bg-gray_70 w-full"
               >
-                적용
+                {t('filter.apply')}
               </Button>
               <Button
                 variant="ghost"
@@ -205,7 +209,7 @@ const MobileFilter = ({
                 className="text-gray_70 flex h-fit w-full items-center gap-2 p-0! font-semibold"
               >
                 <ResetIcon />
-                선택 초기화
+                {t('filter.reset')}
               </Button>
             </div>
           </div>

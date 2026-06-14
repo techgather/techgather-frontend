@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,6 +13,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const LoginDialog = () => {
+  const { t } = useI18n();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -19,13 +22,13 @@ const LoginDialog = () => {
           className="bg-main hover:bg-main/90 h-30 border-none px-12 py-6 text-sm font-bold"
           variant="outline"
         >
-          로그인
+          {t('login.title')}
         </Button>
       </DialogTrigger>
       <DialogContent className="h-screen max-w-600 rounded-none px-24 py-48 sm:h-auto sm:rounded-lg">
         <DialogHeader aria-describedby="undefined">
           <DialogTitle className="flex w-full justify-center text-xl/[136%] font-bold">
-            로그인
+            {t('login.title')}
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-40 pt-32">
@@ -36,13 +39,13 @@ const LoginDialog = () => {
                 src="/icons/google-icon.svg"
                 width={20}
                 height={20}
-                alt="구글 로그인 버튼 아이콘"
+                alt={t('login.googleIconAlt')}
               />
-              구글 계정으로 계속하기
+              {t('login.google')}
             </Button>
             <div className="text-gray_15 flex gap-20 text-[13px]/[136%]">
-              <Link href={''}>개인정보 처리방침</Link>
-              <Link href={''}>이용약관</Link>
+              <Link href={''}>{t('common.privacyPolicy')}</Link>
+              <Link href={''}>{t('common.terms')}</Link>
             </div>
           </div>
         </div>

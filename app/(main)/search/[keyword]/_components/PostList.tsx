@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import EmptyIcon from '@/public/icons/search-empty-icon.svg';
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const PostList = ({ keyword }: Props) => {
+  const { t } = useI18n();
   const {
     data,
     fetchNextPage,
@@ -40,11 +42,14 @@ const PostList = ({ keyword }: Props) => {
       <div className="flex w-full px-24 py-33 text-[16px] leading-[1.36]">
         <div className="flex h-24 items-center gap-4">
           <h2 className="flex gap-4">
-            <span className="text-main_2 font-bold">'{keyword}'</span> 검색 결과
+            <span className="text-main_2 font-bold">'{keyword}'</span>
+            {t('search.headingSuffix')}
           </h2>
           <p className="text-gray_15 font-bold">
             {totalCount}
-            <span className="font-medium text-black">개</span>
+            <span className="font-medium text-black">
+              {t('common.countUnit')}
+            </span>
           </p>
         </div>
       </div>
@@ -52,7 +57,7 @@ const PostList = ({ keyword }: Props) => {
         {!isLoading && !isFetching && postList.length === 0 ? (
           <div className="text-gray_15 flex min-h-400 flex-col items-center justify-center gap-20">
             <EmptyIcon className="size-80" />
-            <p className="text-[15px]">검색 결과가 없어요.</p>
+            <p className="text-[15px]">{t('search.empty')}</p>
           </div>
         ) : (
           <div className="grid h-full grid-cols-1 gap-x-8 gap-y-16 px-8 pb-16 sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">

@@ -1,6 +1,8 @@
 'use client';
 
 import { POST_STATUS } from '@/app/constans/dropdown';
+import { TranslationKey } from '@/app/i18n/dictionaries';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import DefaultDropdown from '@/components/dropdown/DefaultDropdown';
 import AdminPostCard from '@/components/post/AdminPostCard';
@@ -25,11 +27,20 @@ import UpdateCategoryDialog from './UpdateCategoryDialog';
 const DEFAULT_GROUPID = '292680441089056769';
 // const DEFAULT_GROUPID = '288314611504713729';
 
+const statusLabelKeyMap: Record<UpdatePostsRequestStatusEnum, TranslationKey> =
+  {
+    [UpdatePostsRequestStatusEnum.NotPublished]: 'admin.status.notPublished',
+    [UpdatePostsRequestStatusEnum.Published]: 'admin.status.published',
+    [UpdatePostsRequestStatusEnum.OnHold]: 'admin.status.onHold',
+    [UpdatePostsRequestStatusEnum.Discarded]: 'admin.status.discarded',
+  };
+
 interface Props {
   tab: UpdatePostsRequestStatusEnum;
 }
 
 const PostList = ({ tab }: Props) => {
+  const { t } = useI18n();
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const { language, searchCondition, setSearchCondition } = useDispatch();
   const {
@@ -72,6 +83,15 @@ const PostList = ({ tab }: Props) => {
       label: item.name ?? '',
       value: item.slug ?? '',
     })) ?? [];
+
+  const postStatusDropdown = useMemo(
+    () =>
+      POST_STATUS.map((item) => ({
+        ...item,
+        label: t(statusLabelKeyMap[item.value]),
+      })),
+    [t]
+  );
 
   const handleCheck = (postId: string) => {
     if (checkedList.includes(postId)) {
@@ -148,7 +168,7 @@ const PostList = ({ tab }: Props) => {
     <div className="mx-12 flex w-full flex-col items-center gap-24">
       <div className="mt-24 flex w-full justify-between">
         <div className="text-gray_15 flex items-center gap-8 px-16 text-[15px] leading-16">
-          전체
+          {t('admin.all')}
           <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
             {totalCount}
           </span>
@@ -162,7 +182,7 @@ const PostList = ({ tab }: Props) => {
               onCheckedChange={handleToggle}
               className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
             />
-            <span className="text-[13px]">카테고리 없음만 보기</span>
+            <span className="text-[13px]">{t('admin.noCategoryOnly')}</span>
           </label>
           <CheckableDropdown
             trigger={
@@ -173,8 +193,8 @@ const PostList = ({ tab }: Props) => {
               >
                 {searchCondition.categorySlugs &&
                 searchCondition.categorySlugs.length > 0
-                  ? `${searchCondition.categorySlugs.length}개 선택됨`
-                  : '카테고리 선택'}
+                  ? `${searchCondition.categorySlugs.length}${t('admin.selectedCountSuffix')}`
+                  : t('admin.categorySelect')}
                 <ChevronIcon className="transition-transform duration-200" />
               </Button>
             }
@@ -194,7 +214,7 @@ const PostList = ({ tab }: Props) => {
               id="keyword"
               name="keyword"
               type="text"
-              placeholder="글 제목, 태그명 검색"
+              placeholder={t('header.searchPlaceholder')}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               className="border-gray_5 focus-visible:ring-none h-36 w-240 px-12 py-6 text-[13px] text-black transition ease-in focus-visible:border-black"
@@ -206,10 +226,11 @@ const PostList = ({ tab }: Props) => {
       {checkedList.length > 0 && (
         <div className="border-gray_5 animate-in fade-in slide-in-from-top-2 fixed right-12 bottom-15 left-12 z-50 flex w-auto items-center justify-between rounded-xl border bg-[#e6faf5]/80 p-20 backdrop-blur-sm duration-200">
           <div className="flex w-full items-center justify-between gap-12">
-            {/* 포스트 상태 선택 */}
             <div className="flex gap-20">
               <div className="flex items-center gap-14">
-                <div className="text-gray_70 text-[14px] font-bold">상태</div>
+                <div className="text-gray_70 text-[14px] font-bold">
+                  {t('admin.status')}
+                </div>
                 <DefaultDropdown
                   trigger={
                     <Button
@@ -217,14 +238,12 @@ const PostList = ({ tab }: Props) => {
                       className={`bg-white ${selectStatus ? 'text-black' : 'text-gray_10'}`}
                     >
                       {selectStatus
-                        ? POST_STATUS.find(
-                            (item) => item.value === selectStatus
-                          )?.label
-                        : '선택'}
+                        ? t(statusLabelKeyMap[selectStatus])
+                        : t('admin.select')}
                       <ChevronIcon className="transition-transform duration-200" />
                     </Button>
                   }
-                  dropdownitems={POST_STATUS}
+                  dropdownitems={postStatusDropdown}
                   onValueChange={(value) => {
                     if (value === selectStatus) {
                       setSelectStats(undefined);
@@ -236,7 +255,7 @@ const PostList = ({ tab }: Props) => {
               </div>
               <div className="flex items-center gap-14">
                 <div className="text-gray_70 text-[14px] font-bold">
-                  카테고리
+                  {t('admin.category')}
                 </div>
                 <div className="relative max-w-700">
                   <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-[#e6faf5] to-transparent" />
@@ -247,7 +266,7 @@ const PostList = ({ tab }: Props) => {
                       }
                       onClick={() => setCategoryList([])}
                     >
-                      카테고리 없음
+                      {t('common.noCategory')}
                     </Badge>
                     {categoryDropdown.map((item) => (
                       <Badge
@@ -300,14 +319,15 @@ const PostList = ({ tab }: Props) => {
                 className="border-gray_10 w-100 border bg-red-400 px-16 py-8 text-sm leading-18 font-bold text-white hover:bg-red-400/80 hover:text-white"
                 onClick={() => setCheckedList([])}
               >
-                초기화
+                {t('admin.reset')}
               </Button>
               <Button
                 className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
                 disabled={checkedList.length === 0}
                 onClick={handleUpdate}
               >
-                {checkedList.length}개 수정
+                {checkedList.length}
+                {t('admin.updateCountSuffix')}
               </Button>
             </div>
           </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/app/i18n/I18nProvider';
 import {
   Drawer,
   DrawerClose,
@@ -12,16 +13,17 @@ import {
 } from '@/components/ui/drawer';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Button } from '../ui/button';
 
 const MobileMenu = () => {
   const router = useRouter();
+  const { t } = useI18n();
+
   return (
     <Drawer direction="top">
       <DrawerTrigger>
         <Image
           src="/icons/hamburger-icon.svg"
-          alt="모바일 메뉴 아이콘"
+          alt={t('image.mobileMenuAlt')}
           width={24}
           height={24}
         />

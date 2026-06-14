@@ -1,6 +1,7 @@
 'use client';
 
 import { getSiteInfo, Site } from '@/app/constans/site';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { getLanguageParam } from '@/app/utils/language';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import PostCard from '@/components/post/PostCard';
@@ -28,6 +29,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
   const { site, handleSiteSelect } = useSiteFilter();
   const searchParams = useSearchParams();
   const language = getLanguageParam(searchParams.get('language'));
+  const { t } = useI18n();
 
   const buildCategoryHref = (slug?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -69,7 +71,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
     <div className="flex w-full max-w-1052 flex-col items-center">
       <div className="flex w-full items-center justify-between px-20 sm:px-12 sm:pt-0">
         <div className="text-gray_15 flex items-center gap-8 text-[14px] leading-16">
-          글 목록
+          {t('postList.title')}
           <span className="text-gary_10 text-[14px] leading-16 font-bold tracking-tight">
             {totalCount}
           </span>
@@ -99,7 +101,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
                         .filter((item) => sourceSite.includes(item ?? ''))
                         .map((item) => getSiteInfo(item).label)
                         .join(', ')
-                    : '테크 블로그 선택'}
+                    : t('postList.sitePlaceholder')}
                 </div>
 
                 <ChevronIcon className="right-0 transition-transform duration-200" />
@@ -121,7 +123,7 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
               : 'text-gray_15 border-gray_3 border'
           )}
         >
-          전체
+          {t('postList.all')}
         </Link>
         {categoryList.map((category) => (
           <Link
@@ -141,11 +143,11 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
       {!isLoading && !isFetching && postList.length === 0 ? (
         <div className="text-gray_15 flex min-h-400 flex-col items-center justify-center gap-20">
           <EmptyIcon className="size-80" />
-          <p className="text-[15px]">아티클이 없어요.</p>
+          <p className="text-[15px]">{t('postList.empty')}</p>
         </div>
       ) : (
         <div className="grid h-full w-full grid-cols-1 gap-x-8 gap-y-16 px-20 py-24 sm:w-auto sm:grid-cols-2 sm:px-0 md:grid-cols-2 md:gap-y-24 lg:grid-cols-3 2xl:grid-cols-4">
-          <h2 className="sr-only">포스트 리스트</h2>
+          <h2 className="sr-only">{t('postList.srTitle')}</h2>
           {isLoading || (isFetching && !isFetchingNextPage) ? (
             <>
               {Array.from({ length: 12 }).map((_, index) => (

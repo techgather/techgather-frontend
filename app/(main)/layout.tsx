@@ -1,13 +1,23 @@
 import type { Metadata } from 'next';
 import Header from '../_components/Header';
+import { getDictionary } from '../i18n/dictionaries';
+import { getServerLocale } from '../i18n/server';
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | DevPick(데브픽)',
-    default: '최신 개발 아티클 모음',
-  },
-  keywords: ['DevPick', '데브픽', '최신 개발 글', '테크 블로그 모음'],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
+
+  return {
+    title: {
+      template: `%s | ${dictionary['common.brand']}`,
+      default: dictionary['main.metadata.title'],
+    },
+    keywords:
+      locale === 'ko'
+        ? ['DevPick', '데브픽', '최신 개발 글', '테크 블로그 모음']
+        : ['DevPick', 'latest developer articles', 'tech blog collection'],
+  };
+}
 
 export default function Layout({
   children,

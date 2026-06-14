@@ -1,6 +1,7 @@
 'use client';
 
 import { ADMIN_TABS } from '@/app/constans/tab';
+import { useI18n } from '@/app/i18n/I18nProvider';
 import { cn } from '@/lib/utils';
 import { UpdatePostsRequestStatusEnum } from '@/types/api';
 import { motion } from 'framer-motion';
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const Tab = ({ currentOption, handleClick }: Props) => {
+  const { t } = useI18n();
+
   return (
     <div role="tablist" className="relative inline-flex rounded-md p-4">
       {ADMIN_TABS.map((item) => {
@@ -40,7 +43,7 @@ const Tab = ({ currentOption, handleClick }: Props) => {
               />
             )}
 
-            <span className="relative z-10">{item.label}</span>
+            <span className="relative z-10">{t(item.labelKey)}</span>
           </button>
         );
       })}

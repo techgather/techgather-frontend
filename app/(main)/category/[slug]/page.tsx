@@ -1,3 +1,5 @@
+import { getDictionary } from '@/app/i18n/dictionaries';
+import { getServerLocale } from '@/app/i18n/server';
 import { getCategory, getPosts, getSourceSite } from '@/app/service/client';
 import { getLanguageParam } from '@/app/utils/language';
 import { PostResponseList } from '@/types/api';
@@ -22,22 +24,24 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
   const { slug } = await params;
   const categoryList = await getCategory(DEFAULT_GROUPID);
   const category = categoryList.find((c) => c.slug === slug);
   const name = category?.name ?? slug;
 
   return {
-    title: `${name} 관련 글 모음`,
-    description: `${name} 관련 최신 개발 글과 아티클을 한 곳에서 확인하세요. 다양한 블로그 콘텐츠를 모아 제공합니다.`,
+    title: `${name} ${dictionary['category.metadata.titleSuffix']}`,
+    description: `${name} ${dictionary['category.metadata.descriptionPrefix']}`,
     alternates: {
       canonical: `https://dev-pick.com/category/${slug}`,
     },
     keywords: [
       name,
-      `${name} 블로그`,
-      `${name} 아티클`,
-      `${name} 개발`,
+      `${name} blog`,
+      `${name} articles`,
+      `${name} development`,
       'DevPick',
       '데브픽',
     ],
@@ -45,6 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function Page({ params, searchParams }: Props) {
+  const locale = await getServerLocale();
+  const dictionary = getDictionary(locale);
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
   const language = getLanguageParam(resolvedSearchParams.language);
@@ -77,7 +83,9 @@ async function Page({ params, searchParams }: Props) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="mb-40 flex items-start justify-center gap-24 pt-24 md:pt-40">
-        <h1 className="sr-only">{name} 관련 아티클</h1>
+        <h1 className="sr-only">
+          {name} {dictionary['category.headingSuffix']}
+        </h1>
         <SideMenu menu={categoryList} currentCategory={slug} />
         <PostList
           sourceSite={sourceSiteList}
