@@ -1,6 +1,9 @@
 'use client';
 
+import { resolveLocale } from '@/app/i18n/config';
 import { useI18n } from '@/app/i18n/I18nProvider';
+import { resolvePostRegion } from '@/app/utils/postRegion';
+import { mainPath, searchPath } from '@/app/utils/routes';
 import {
   Dialog,
   DialogContent,
@@ -12,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import SearchIcon from '@/public/icons/search.svg';
 import { XIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
 interface Props {
@@ -22,7 +25,10 @@ interface Props {
 
 const SearchDialog = ({ openState, setOpenState }: Props) => {
   const router = useRouter();
+  const params = useParams<{ locale?: string; postRegion?: string }>();
   const { t } = useI18n();
+  const locale = resolveLocale(params.locale);
+  const postRegion = resolvePostRegion(params.postRegion);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +40,7 @@ const SearchDialog = ({ openState, setOpenState }: Props) => {
 
     setOpenState(false);
 
-    router.push(`/search/${keyword}`);
+    router.push(searchPath(locale, postRegion, keyword));
   };
 
   return (
@@ -55,7 +61,7 @@ const SearchDialog = ({ openState, setOpenState }: Props) => {
                 src="/icons/logo.svg"
                 width={60}
                 height={27.6}
-                onClick={() => router.push('/')}
+                onClick={() => router.push(mainPath(locale, postRegion))}
                 className="cursor-pointer"
               />
               <XIcon

@@ -1,8 +1,10 @@
 'use client';
 
 import { getSiteInfo, Site } from '@/app/constans/site';
+import { Locale } from '@/app/i18n/config';
 import { useI18n } from '@/app/i18n/I18nProvider';
-import { getLanguageParam } from '@/app/utils/language';
+import { PostRegion } from '@/app/utils/postRegion';
+import { categoryPath, mainPath } from '@/app/utils/routes';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
@@ -10,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import EmptyIcon from '@/public/icons/empty-icon.svg';
-import { CategoryResponse } from '@/types/api';
+import { CategoryResponse, PostResponseLanguageEnum } from '@/types/api';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
@@ -23,12 +25,21 @@ interface Props {
   sourceSite: string[];
   categorySlug?: string;
   categoryList: CategoryResponse[];
+  language: PostResponseLanguageEnum;
+  locale: Locale;
+  postRegion: PostRegion;
 }
 
-const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
+const PostList = ({
+  sourceSite,
+  categorySlug,
+  categoryList,
+  language,
+  locale,
+  postRegion,
+}: Props) => {
   const { site, handleSiteSelect } = useSiteFilter();
   const searchParams = useSearchParams();
-  const language = getLanguageParam(searchParams.get('language'));
   const { t } = useI18n();
 
   const buildCategoryHref = (slug?: string) => {
@@ -36,8 +47,9 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
     params.delete('site');
     site.forEach((v) => params.append('site', v));
     const query = params.toString();
-    const path = slug ? `/category/${slug}` : '/';
-    return query ? `${path}?${query}` : path;
+    return slug
+      ? categoryPath(locale, postRegion, slug, query)
+      : mainPath(locale, postRegion, query);
   };
   const {
     data,
@@ -83,6 +95,8 @@ const PostList = ({ sourceSite, categorySlug, categoryList }: Props) => {
             site={site}
             categoryList={categoryList}
             categorySlug={categorySlug}
+            locale={locale}
+            postRegion={postRegion}
           />
         </div>
         <div className="hidden md:block">

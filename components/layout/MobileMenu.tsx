@@ -1,6 +1,9 @@
 'use client';
 
+import { resolveLocale } from '@/app/i18n/config';
 import { useI18n } from '@/app/i18n/I18nProvider';
+import { resolvePostRegion } from '@/app/utils/postRegion';
+import { mainPath } from '@/app/utils/routes';
 import {
   Drawer,
   DrawerClose,
@@ -12,11 +15,14 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const MobileMenu = () => {
   const router = useRouter();
+  const params = useParams<{ locale?: string; postRegion?: string }>();
   const { t } = useI18n();
+  const locale = resolveLocale(params.locale);
+  const postRegion = resolvePostRegion(params.postRegion);
 
   return (
     <Drawer direction="top">
@@ -37,7 +43,7 @@ const MobileMenu = () => {
                 src="/icons/logo.svg"
                 width={60}
                 height={27.6}
-                onClick={() => router.push('/')}
+                onClick={() => router.push(mainPath(locale, postRegion))}
                 className="cursor-pointer"
               />
             </div>

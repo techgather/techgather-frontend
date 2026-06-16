@@ -1,0 +1,101 @@
+import { resolveLocale } from '@/app/i18n/config';
+import { getDictionary } from '@/app/i18n/dictionaries';
+import { getPosts } from '@/app/service/client';
+import {
+  postRegionLanguageMap,
+  resolvePostRegion,
+} from '@/app/utils/postRegion';
+import { PostResponseList } from '@/types/api';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { Metadata } from 'next';
+import PostList from '../../../../(main)/search/[keyword]/_components/PostList';
+
+interface Props {
+  params: Promise<{
+    locale: string;
+    postRegion: string;
+    keyword: string;
+  }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const {
+    locale: localeParam,
+    postRegion: postRegionParam,
+    keyword,
+  } = await params;
+  const locale = resolveLocale(localeParam);
+  const postRegion = resolvePostRegion(postRegionParam);
+  const dictionary = getDictionary(locale);
+  const decodeKeyword = decodeURIComponent(keyword);
+
+  return {
+    title: `'${decodeKeyword}' ${dictionary['search.metadata.titleSuffix']}`,
+    description: `'${decodeKeyword}' ${dictionary['search.metadata.descriptionSuffix']}`,
+    alternates: {
+      canonical: `https://dev-pick.com/${locale}/${postRegion}/search/${keyword}`,
+    },
+    keywords: [
+      decodeKeyword,
+      `${decodeKeyword} ${dictionary['search.metadata.keywordSuffix']}`,
+      `${decodeKeyword} ${dictionary['search.metadata.blogSuffix']}`,
+      'DevPick',
+      '데브픽',
+    ],
+    robots: {
+      index: false,
+      follow: true,
+    },
+  };
+}
+
+async function Page({ params }: Props) {
+  const {
+    locale: localeParam,
+    postRegion: postRegionParam,
+    keyword,
+  } = await params;
+  const locale = resolveLocale(localeParam);
+  const postRegion = resolvePostRegion(postRegionParam);
+  const dictionary = getDictionary(locale);
+  const language = postRegionLanguageMap[postRegion];
+  const queryClient = new QueryClient();
+  const decodeKeyword = decodeURIComponent(keyword);
+
+  await queryClient.prefetchInfiniteQuery<
+    PostResponseList,
+    Error,
+    PostResponseList,
+    ['posts', string, typeof language],
+    number | undefined
+  >({
+    queryKey: ['posts', decodeKeyword, language],
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) =>
+      getPosts({
+        searchCondition: { keyword: decodeKeyword },
+        lastPostId: pageParam,
+        limit: 12,
+        language,
+      }),
+    getNextPageParam: (lastPage: PostResponseList) =>
+      lastPage.hasNext ? lastPage.nextPostId : undefined,
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex w-full flex-1 flex-col">
+        <h1 className="sr-only">
+          {decodeKeyword} {dictionary['search.headingSuffix']}
+        </h1>
+        <PostList keyword={decodeKeyword} language={language} />
+      </div>
+    </HydrationBoundary>
+  );
+}
+
+export default Page;

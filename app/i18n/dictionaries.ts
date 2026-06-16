@@ -122,8 +122,8 @@ export const dictionaries = {
     'locale.ko': 'Korean',
     'locale.en': 'English',
 
-    'postLanguage.domestic': 'Domestic',
-    'postLanguage.global': 'Overseas',
+    'postLanguage.domestic': 'Korea',
+    'postLanguage.global': 'Global',
 
     'main.metadata.title': 'Latest Developer Articles',
     'main.metadata.description':

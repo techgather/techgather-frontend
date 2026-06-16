@@ -1,100 +1,28 @@
-import { getDictionary } from '@/app/i18n/dictionaries';
 import { getServerLocale } from '@/app/i18n/server';
-import { getCategory, getPosts, getSourceSite } from '@/app/service/client';
 import { getLanguageParam } from '@/app/utils/language';
-import { PostResponseList } from '@/types/api';
 import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
-import { Metadata } from 'next';
-import PostList from '../../_components/PostList';
-import SideMenu from '../../_components/SideMenu';
-
-const DEFAULT_GROUPID = '292680441089056769';
+  DEFAULT_POST_REGION,
+  languagePostRegionMap,
+} from '@/app/utils/postRegion';
+import { categoryPath } from '@/app/utils/routes';
+import { redirect } from 'next/navigation';
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     language?: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export default async function Page({ params, searchParams }: Props) {
   const locale = await getServerLocale();
-  const dictionary = getDictionary(locale);
-  const { slug } = await params;
-  const categoryList = await getCategory(DEFAULT_GROUPID);
-  const category = categoryList.find((c) => c.slug === slug);
-  const name = category?.name ?? slug;
-
-  return {
-    title: `${name} ${dictionary['category.metadata.titleSuffix']}`,
-    description: `${name} ${dictionary['category.metadata.descriptionPrefix']}`,
-    alternates: {
-      canonical: `https://dev-pick.com/category/${slug}`,
-    },
-    keywords: [
-      name,
-      `${name} blog`,
-      `${name} articles`,
-      `${name} development`,
-      'DevPick',
-      '데브픽',
-    ],
-  };
-}
-
-async function Page({ params, searchParams }: Props) {
-  const locale = await getServerLocale();
-  const dictionary = getDictionary(locale);
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const language = getLanguageParam(resolvedSearchParams.language);
-  const queryClient = new QueryClient();
-  const categoryList = await getCategory(DEFAULT_GROUPID);
-  const sourceSiteList = await getSourceSite();
-  const category = categoryList.find((c) => c.slug === slug);
-  const name = category?.name ?? slug;
+  const postRegion = resolvedSearchParams.language
+    ? languagePostRegionMap[getLanguageParam(resolvedSearchParams.language)]
+    : DEFAULT_POST_REGION;
 
-  await queryClient.prefetchInfiniteQuery<
-    PostResponseList,
-    Error,
-    PostResponseList,
-    ['posts', string, string[], typeof language],
-    number | undefined
-  >({
-    queryKey: ['posts', slug, [], language],
-    initialPageParam: undefined,
-    queryFn: ({ pageParam }) =>
-      getPosts({
-        searchCondition: { categorySlugs: [slug] },
-        lastPostId: pageParam,
-        limit: 12,
-        language,
-      }),
-    getNextPageParam: (lastPage: PostResponseList) =>
-      lastPage.hasNext ? lastPage.nextPostId : undefined,
-  });
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="mb-40 flex items-start justify-center gap-24 pt-24 md:pt-40">
-        <h1 className="sr-only">
-          {name} {dictionary['category.headingSuffix']}
-        </h1>
-        <SideMenu menu={categoryList} currentCategory={slug} />
-        <PostList
-          sourceSite={sourceSiteList}
-          categorySlug={slug}
-          categoryList={categoryList}
-        />
-      </div>
-    </HydrationBoundary>
-  );
+  redirect(categoryPath(locale, postRegion, slug));
 }
-
-export default Page;

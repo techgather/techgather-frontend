@@ -4,15 +4,17 @@ import { useI18n } from '@/app/i18n/I18nProvider';
 import PostCard from '@/components/post/PostCard';
 import PostCardSkeleton from '@/components/post/PostCardSkeleton';
 import EmptyIcon from '@/public/icons/search-empty-icon.svg';
+import { PostResponseLanguageEnum } from '@/types/api';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useSearchPostList from '../_hooks/usePostList';
 
 interface Props {
   keyword: string;
+  language: PostResponseLanguageEnum;
 }
 
-const PostList = ({ keyword }: Props) => {
+const PostList = ({ keyword, language }: Props) => {
   const { t } = useI18n();
   const {
     data,
@@ -21,7 +23,7 @@ const PostList = ({ keyword }: Props) => {
     isFetching,
     isFetchingNextPage,
     isLoading,
-  } = useSearchPostList({ keyword, limit: 12 });
+  } = useSearchPostList({ keyword, limit: 12, language });
   const { inView, ref } = useInView();
 
   const postList = useMemo(

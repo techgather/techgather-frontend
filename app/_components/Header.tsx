@@ -1,7 +1,13 @@
 'use client';
 
+import { Locale } from '@/app/i18n/config';
 import { useI18n } from '@/app/i18n/I18nProvider';
-import { getLanguageParam } from '@/app/utils/language';
+import {
+  languagePostRegionMap,
+  PostRegion,
+  postRegionLanguageMap,
+} from '@/app/utils/postRegion';
+import { categoryPath, mainPath, searchPath } from '@/app/utils/routes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -17,7 +23,12 @@ import useCategory from '../admin/_hooks/useCategory';
 
 const DEFAULT_GROUPID = '292680441089056769';
 
-const Header = () => {
+interface Props {
+  locale: Locale;
+  postRegion: PostRegion;
+}
+
+const Header = ({ locale, postRegion }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,28 +36,40 @@ const Header = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { data } = useCategory(DEFAULT_GROUPID);
-  const { locale, setLocale, t } = useI18n();
+  const { setLocale, t } = useI18n();
 
-  const currentSlug = pathname.startsWith('/category/')
+  const currentSlug = pathname.includes('/category/')
     ? pathname.split('/category/')[1]
     : null;
-  const currentLanguage = getLanguageParam(searchParams.get('language'));
+  const currentLanguage = postRegionLanguageMap[postRegion];
 
-  const buildHref = (path: string) => {
+  const buildHref = (slug?: string) => {
     const params = new URLSearchParams(searchParams.toString());
     const query = params.toString();
-    return query ? `${path}?${query}` : path;
+    return slug
+      ? categoryPath(locale, postRegion, slug, query)
+      : mainPath(locale, postRegion, query);
   };
 
   const handleLanguageChange = (option: PostResponseLanguageEnum) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('language', option);
-    router.push(`${pathname}?${params.toString()}`);
+    const nextPostRegion = languagePostRegionMap[option];
+    const query = searchParams.toString();
+    const nextPath = pathname.replace(
+      `/${locale}/${postRegion}`,
+      `/${locale}/${nextPostRegion}`
+    );
+    router.push(query ? `${nextPath}?${query}` : nextPath);
   };
 
   const handleUiLocaleChange = () => {
-    setLocale(locale === 'ko' ? 'en' : 'ko');
-    router.refresh();
+    const nextLocale = locale === 'ko' ? 'en' : 'ko';
+    const query = searchParams.toString();
+    const nextPath = pathname.replace(
+      `/${locale}/${postRegion}`,
+      `/${nextLocale}/${postRegion}`
+    );
+    setLocale(nextLocale);
+    router.push(query ? `${nextPath}?${query}` : nextPath);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -58,7 +81,7 @@ const Header = () => {
     if (!keyword) return;
 
     setIsOpen(false);
-    router.push(`/search/${keyword}`);
+    router.push(searchPath(locale, postRegion, keyword));
   };
 
   useEffect(() => {
@@ -98,7 +121,7 @@ const Header = () => {
             src="/icons/logo.svg"
             width={60}
             height={27.6}
-            onClick={() => router.push('/')}
+            onClick={() => router.push(mainPath(locale, postRegion))}
             className="cursor-pointer"
           />
           <div className="absolute left-1/2 -translate-x-1/2">
@@ -183,7 +206,7 @@ const Header = () => {
           <ul className="flex flex-col gap-8 px-24 pt-12 pb-24">
             <li>
               <Link
-                href={buildHref('/')}
+                href={buildHref()}
                 onClick={() => setIsCategoryOpen(false)}
                 className={cn(
                   'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',
@@ -196,7 +219,7 @@ const Header = () => {
             {data?.map((item) => (
               <li key={item.id}>
                 <Link
-                  href={buildHref(`/category/${item.slug}`)}
+                  href={buildHref(item.slug)}
                   onClick={() => setIsCategoryOpen(false)}
                   className={cn(
                     'text-gray_5 hover:bg-gray_80 block cursor-pointer rounded-lg p-12 text-[16px] leading-22 transition-colors duration-150',

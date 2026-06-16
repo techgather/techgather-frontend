@@ -1,8 +1,10 @@
 'use client';
 
 import { Site } from '@/app/constans/site';
+import { Locale } from '@/app/i18n/config';
 import { useI18n } from '@/app/i18n/I18nProvider';
-import { getLanguageParam } from '@/app/utils/language';
+import { PostRegion } from '@/app/utils/postRegion';
+import { categoryPath, mainPath } from '@/app/utils/routes';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -27,6 +29,8 @@ interface Props {
   selectSite: (value: Site | Site[]) => void;
   categoryList: CategoryResponse[];
   categorySlug?: string;
+  locale: Locale;
+  postRegion: PostRegion;
 }
 
 const MobileFilter = ({
@@ -35,6 +39,8 @@ const MobileFilter = ({
   site,
   categoryList,
   categorySlug,
+  locale,
+  postRegion,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState<Site[]>(site);
@@ -42,8 +48,6 @@ const MobileFilter = ({
     categorySlug
   );
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const language = getLanguageParam(searchParams.get('language'));
   const { t } = useI18n();
 
   const isChanged =
@@ -55,16 +59,17 @@ const MobileFilter = ({
     e.preventDefault();
     e.stopPropagation();
     selectSite([]);
-    router.push(`/?language=${language}`);
+    router.push(mainPath(locale, postRegion));
   };
 
   const handleApply = () => {
     const params = new URLSearchParams();
-    params.set('language', language);
     selectedSites.forEach((v) => params.append('site', v));
     const query = params.toString();
-    const path = selectedCategory ? `/category/${selectedCategory}` : '/';
-    router.push(query ? `${path}?${query}` : path);
+    const nextPath = selectedCategory
+      ? categoryPath(locale, postRegion, selectedCategory, query)
+      : mainPath(locale, postRegion, query);
+    router.push(nextPath);
     setIsOpen(false);
   };
 
