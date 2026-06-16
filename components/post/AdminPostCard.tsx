@@ -1,7 +1,6 @@
 'use client';
 
 import { getSiteInfo, Site } from '@/app/constans/site';
-import { useI18n } from '@/app/i18n/I18nProvider';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
@@ -36,7 +35,6 @@ const highlightKeyword = (text: string, keyword: string) => {
 };
 
 const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
-  const { t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const fallbackImage = `/thumbnails/${siteName}.png`;
   const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay'];
@@ -60,14 +58,14 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
           {checked ? (
             <Image
               src="/icons/admin-check-active.svg"
-              alt={t('image.checkedAlt')}
+              alt="체크 아이콘"
               width={20}
               height={20}
             />
           ) : (
             <Image
               src="/icons/admin-check.svg"
-              alt={t('image.uncheckedAlt')}
+              alt="체크 전 아이콘"
               width={20}
               height={20}
             />
@@ -76,7 +74,7 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
 
         <Image
           src={imgSrc}
-          alt={t('image.thumbnailAlt')}
+          alt="썸네일"
           fill
           draggable={false}
           className="rounded-12 object-cover object-center"
@@ -126,12 +124,12 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
             <div className="pointer-events-none absolute top-0 right-0 h-full w-40 bg-linear-to-l from-white to-transparent transition-colors duration-200 group-hover:from-[#E3FDF5]" />
           </>
         ) : (
-          <Badge>{t('common.noCategory')}</Badge>
+          <Badge>카테고리 없음</Badge>
         )}
       </div>
       <Link href={post?.url ?? ''} target="_blank">
         <Button className="text-gray_20 border-gray_5 hover:bg-gray_2 w-full border bg-white">
-          {t('admin.openPost')}
+          바로가기
         </Button>
       </Link>
     </div>

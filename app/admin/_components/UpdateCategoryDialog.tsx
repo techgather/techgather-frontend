@@ -1,6 +1,5 @@
 'use client';
 
-import { useI18n } from '@/app/i18n/I18nProvider';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -30,7 +29,6 @@ const UpdateCategoryDialog = ({
   isOpen,
   setIsOpen,
 }: Props) => {
-  const { t } = useI18n();
   const { mutate } = useUpdateCategory();
   const [name, setName] = useState(originName);
   const [slug, setSlug] = useState(originSlug);
@@ -66,13 +64,13 @@ const UpdateCategoryDialog = ({
       >
         <DialogHeader aria-describedby="undefined">
           <DialogTitle className="flex w-full justify-center text-xl/[136%] font-bold">
-            {t('admin.categoryUpdate')}
+            카테고리 수정
           </DialogTitle>
         </DialogHeader>
         <div className="group relative flex w-full flex-col gap-20">
           <div className="flex flex-col gap-10">
             <Label htmlFor="keyword" className="flex gap-4 font-semibold">
-              {t('admin.categoryName')}
+              카테고리 이름
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -82,13 +80,13 @@ const UpdateCategoryDialog = ({
               minLength={2}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t('admin.categoryNamePlaceholder')}
+              placeholder="카테고리를 이름을 입력해주세요"
               className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
             />
           </div>
           <div className="flex flex-col gap-10">
             <Label htmlFor="slug" className="flex gap-4 font-semibold">
-              {t('admin.slug')}
+              경로
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -98,13 +96,13 @@ const UpdateCategoryDialog = ({
               id="slug"
               name="slug"
               type="text"
-              placeholder={t('admin.slugPlaceholder')}
+              placeholder="경로를 이름을 입력해주세요"
               className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
             />
           </div>
           <div className="flex flex-col gap-10">
             <Label htmlFor="description" className="flex gap-4 font-semibold">
-              {t('admin.description')}
+              부가 설명
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -114,7 +112,7 @@ const UpdateCategoryDialog = ({
               id="description"
               name="description"
               type="text"
-              placeholder={t('admin.descriptionPlaceholder')}
+              placeholder="부가 설명을 이름을 입력해주세요"
               className="border-gray_5 focus-visible:ring-none focus-visible:border-gray_90 h-46 w-full px-12 py-6 text-[13px] transition ease-in"
             />
           </div>
@@ -125,7 +123,7 @@ const UpdateCategoryDialog = ({
             disabled={!name || !slug}
             color="green"
           >
-            {t('admin.update')}
+            수정하기
           </Button>
         </div>
       </DialogContent>

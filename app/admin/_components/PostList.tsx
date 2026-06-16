@@ -1,8 +1,8 @@
 'use client';
 
 import { POST_STATUS } from '@/app/constans/dropdown';
-import { TranslationKey } from '@/app/i18n/dictionaries';
-import { useI18n } from '@/app/i18n/I18nProvider';
+import { getSiteInfo, Site } from '@/app/constans/site';
+import { getSourceSite } from '@/app/service/client';
 import CheckableDropdown from '@/components/dropdown/CheckableDropdown';
 import DefaultDropdown from '@/components/dropdown/DefaultDropdown';
 import AdminPostCard from '@/components/post/AdminPostCard';
@@ -13,7 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import ChevronIcon from '@/public/icons/chevron-down.svg';
 import SearchIcon from '@/public/icons/search.svg';
-import { CategoryResponse, UpdatePostsRequestStatusEnum } from '@/types/api';
+import {
+  CategoryResponse,
+  PostResponseLanguageEnum,
+  UpdatePostsRequestStatusEnum,
+} from '@/types/api';
 import { Pencil } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -27,22 +31,26 @@ import UpdateCategoryDialog from './UpdateCategoryDialog';
 const DEFAULT_GROUPID = '292680441089056769';
 // const DEFAULT_GROUPID = '288314611504713729';
 
-const statusLabelKeyMap: Record<UpdatePostsRequestStatusEnum, TranslationKey> =
-  {
-    [UpdatePostsRequestStatusEnum.NotPublished]: 'admin.status.notPublished',
-    [UpdatePostsRequestStatusEnum.Published]: 'admin.status.published',
-    [UpdatePostsRequestStatusEnum.OnHold]: 'admin.status.onHold',
-    [UpdatePostsRequestStatusEnum.Discarded]: 'admin.status.discarded',
-  };
+const LANGUAGE_OPTIONS = [
+  { label: '국내', value: PostResponseLanguageEnum.Ko },
+  { label: '해외', value: PostResponseLanguageEnum.En },
+] as const;
+
+const statusLabelMap: Record<UpdatePostsRequestStatusEnum, string> = {
+  [UpdatePostsRequestStatusEnum.NotPublished]: '수집됨',
+  [UpdatePostsRequestStatusEnum.Published]: '승인됨',
+  [UpdatePostsRequestStatusEnum.OnHold]: '보류됨',
+  [UpdatePostsRequestStatusEnum.Discarded]: '삭제됨',
+};
 
 interface Props {
   tab: UpdatePostsRequestStatusEnum;
 }
 
 const PostList = ({ tab }: Props) => {
-  const { t } = useI18n();
   const [checkedList, setCheckedList] = useState<string[]>([]);
-  const { language, searchCondition, setSearchCondition } = useDispatch();
+  const { language, setLanguage, searchCondition, setSearchCondition } =
+    useDispatch();
   const {
     data,
     fetchNextPage,
@@ -61,6 +69,7 @@ const PostList = ({ tab }: Props) => {
   const [editTarget, setEditTarget] = useState<CategoryResponse>();
   const [filterNoCategory, setFilterNoCategory] = useState(false);
   const [keyword, setKeyword] = useState('');
+  const [sourceSiteList, setSourceSiteList] = useState<string[]>([]);
 
   const { inView, ref } = useInView();
 
@@ -88,10 +97,30 @@ const PostList = ({ tab }: Props) => {
     () =>
       POST_STATUS.map((item) => ({
         ...item,
-        label: t(statusLabelKeyMap[item.value]),
+        label: statusLabelMap[item.value],
       })),
-    [t]
+    []
   );
+
+  const sourceSiteDropdown = useMemo(
+    () =>
+      sourceSiteList.map((item) => ({
+        label: getSiteInfo(item).label,
+        value: item as Site,
+      })),
+    [sourceSiteList]
+  );
+
+  const selectedSourceSiteNames =
+    (searchCondition.sourceSiteNames as Site[] | undefined) ?? [];
+
+  const handleLanguageSelect = (value: PostResponseLanguageEnum) => {
+    setLanguage(value);
+    setSearchCondition((prev) => ({
+      ...prev,
+      sourceSiteNames: [],
+    }));
+  };
 
   const handleCheck = (postId: string) => {
     if (checkedList.includes(postId)) {
@@ -159,6 +188,15 @@ const PostList = ({ tab }: Props) => {
   }, [tab]);
 
   useEffect(() => {
+    const fetchSourceSite = async () => {
+      const result = await getSourceSite(language);
+      setSourceSiteList(result);
+    };
+
+    fetchSourceSite();
+  }, [language]);
+
+  useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
@@ -168,7 +206,7 @@ const PostList = ({ tab }: Props) => {
     <div className="mx-12 flex w-full flex-col items-center gap-24">
       <div className="mt-24 flex w-full justify-between">
         <div className="text-gray_15 flex items-center gap-8 px-16 text-[15px] leading-16">
-          {t('admin.all')}
+          전체
           <span className="text-gary_10 text-[15px] leading-17 font-bold tracking-tight">
             {totalCount}
           </span>
@@ -182,8 +220,62 @@ const PostList = ({ tab }: Props) => {
               onCheckedChange={handleToggle}
               className="cursor-pointer transition-colors group-hover/filter:data-[state=unchecked]:bg-black/30"
             />
-            <span className="text-[13px]">{t('admin.noCategoryOnly')}</span>
+            <span className="text-[13px]">카테고리 없음만 보기</span>
           </label>
+          <div className="border-gray_5 flex h-36 overflow-hidden rounded-md border bg-white">
+            {LANGUAGE_OPTIONS.map((item) => {
+              const isActive = language === item.value;
+
+              return (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => handleLanguageSelect(item.value)}
+                  className={`h-full px-12 text-[13px] font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-gray_90 text-white'
+                      : 'text-gray_10 hover:bg-gray_2 hover:text-black'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+          <CheckableDropdown
+            trigger={
+              <Button
+                variant="dropdown"
+                className={`bg-white ${selectedSourceSiteNames.length > 0 ? 'text-black' : 'text-gray_10'}`}
+              >
+                <div className="max-w-160 overflow-hidden text-ellipsis whitespace-nowrap">
+                  {selectedSourceSiteNames.length > 0
+                    ? selectedSourceSiteNames
+                        .filter((item) => sourceSiteList.includes(item))
+                        .map((item) => getSiteInfo(item).label)
+                        .join(', ')
+                    : '사이트 선택'}
+                </div>
+                <ChevronIcon className="transition-transform duration-200" />
+              </Button>
+            }
+            dropdownitems={sourceSiteDropdown}
+            selectedValues={selectedSourceSiteNames}
+            onValueChange={(value) =>
+              setSearchCondition((prev) => {
+                const current =
+                  (prev.sourceSiteNames as Site[] | undefined) ?? [];
+                const next = current.includes(value)
+                  ? current.filter((site) => site !== value)
+                  : [...current, value];
+
+                return {
+                  ...prev,
+                  sourceSiteNames: next,
+                };
+              })
+            }
+          />
           <CheckableDropdown
             trigger={
               <Button
@@ -193,8 +285,8 @@ const PostList = ({ tab }: Props) => {
               >
                 {searchCondition.categorySlugs &&
                 searchCondition.categorySlugs.length > 0
-                  ? `${searchCondition.categorySlugs.length}${t('admin.selectedCountSuffix')}`
-                  : t('admin.categorySelect')}
+                  ? `${searchCondition.categorySlugs.length}개 선택됨`
+                  : '카테고리 선택'}
                 <ChevronIcon className="transition-transform duration-200" />
               </Button>
             }
@@ -214,7 +306,7 @@ const PostList = ({ tab }: Props) => {
               id="keyword"
               name="keyword"
               type="text"
-              placeholder={t('header.searchPlaceholder')}
+              placeholder="글 제목, 태그명 검색"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               className="border-gray_5 focus-visible:ring-none h-36 w-240 px-12 py-6 text-[13px] text-black transition ease-in focus-visible:border-black"
@@ -228,18 +320,14 @@ const PostList = ({ tab }: Props) => {
           <div className="flex w-full items-center justify-between gap-12">
             <div className="flex gap-20">
               <div className="flex items-center gap-14">
-                <div className="text-gray_70 text-[14px] font-bold">
-                  {t('admin.status')}
-                </div>
+                <div className="text-gray_70 text-[14px] font-bold">상태</div>
                 <DefaultDropdown
                   trigger={
                     <Button
                       variant="dropdown"
                       className={`bg-white ${selectStatus ? 'text-black' : 'text-gray_10'}`}
                     >
-                      {selectStatus
-                        ? t(statusLabelKeyMap[selectStatus])
-                        : t('admin.select')}
+                      {selectStatus ? statusLabelMap[selectStatus] : '선택'}
                       <ChevronIcon className="transition-transform duration-200" />
                     </Button>
                   }
@@ -255,7 +343,7 @@ const PostList = ({ tab }: Props) => {
               </div>
               <div className="flex items-center gap-14">
                 <div className="text-gray_70 text-[14px] font-bold">
-                  {t('admin.category')}
+                  카테고리
                 </div>
                 <div className="relative max-w-700">
                   <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-linear-to-l from-[#e6faf5] to-transparent" />
@@ -266,7 +354,7 @@ const PostList = ({ tab }: Props) => {
                       }
                       onClick={() => setCategoryList([])}
                     >
-                      {t('common.noCategory')}
+                      카테고리 없음
                     </Badge>
                     {categoryDropdown.map((item) => (
                       <Badge
@@ -319,15 +407,14 @@ const PostList = ({ tab }: Props) => {
                 className="border-gray_10 w-100 border bg-red-400 px-16 py-8 text-sm leading-18 font-bold text-white hover:bg-red-400/80 hover:text-white"
                 onClick={() => setCheckedList([])}
               >
-                {t('admin.reset')}
+                초기화
               </Button>
               <Button
                 className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
                 disabled={checkedList.length === 0}
                 onClick={handleUpdate}
               >
-                {checkedList.length}
-                {t('admin.updateCountSuffix')}
+                {checkedList.length}개 수정
               </Button>
             </div>
           </div>
