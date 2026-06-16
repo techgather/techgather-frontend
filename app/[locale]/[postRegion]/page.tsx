@@ -54,7 +54,7 @@ export default async function Page({ params }: Props) {
   const language = postRegionLanguageMap[postRegion];
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
-  const sourceSiteList = await getSourceSite();
+  const sourceSiteList = await getSourceSite(language);
 
   await queryClient.prefetchInfiniteQuery<
     PostResponseList,

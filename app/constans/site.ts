@@ -83,6 +83,42 @@ export const SITE_MAP = {
     label: '올리브영',
     icon: '/icons/site/olive-img.svg',
   },
+  aws: {
+    label: 'AWS',
+    icon: '/icons/site/default-img.svg',
+  },
+  cloudflare: {
+    label: 'Cloudflare',
+    icon: '/icons/site/default-img.svg',
+  },
+  discord: {
+    label: 'Discord',
+    icon: '/icons/site/default-img.svg',
+  },
+  figma: {
+    label: 'Figma',
+    icon: '/icons/site/default-img.svg',
+  },
+  github: {
+    label: 'GitHub',
+    icon: '/icons/site/default-img.svg',
+  },
+  meta: {
+    label: 'Meta',
+    icon: '/icons/site/default-img.svg',
+  },
+  netflix: {
+    label: 'Netflix',
+    icon: '/icons/site/default-img.svg',
+  },
+  slack: {
+    label: 'Slack',
+    icon: '/icons/site/default-img.svg',
+  },
+  stripe: {
+    label: 'Stripe',
+    icon: '/icons/site/default-img.svg',
+  },
 } as const;
 
 export type Site = keyof typeof SITE_MAP;

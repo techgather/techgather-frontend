@@ -147,9 +147,16 @@ export const updatePostStatus = async (body: UpdatePostsRequest) => {
   return res.text();
 };
 
-export const getSourceSite = async () => {
+export const getSourceSite = async (language?: PostResponseLanguageEnum) => {
+  const params = new URLSearchParams();
+
+  if (language) {
+    params.append('language', language);
+  }
+
+  const query = params.toString();
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/posts/source-sites`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/posts/source-sites${query ? `?${query}` : ''}`,
     { cache: 'no-store' }
   );
 

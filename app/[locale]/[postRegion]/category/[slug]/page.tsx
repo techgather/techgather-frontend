@@ -67,7 +67,7 @@ async function Page({ params }: Props) {
   const language = postRegionLanguageMap[postRegion];
   const queryClient = new QueryClient();
   const categoryList = await getCategory(DEFAULT_GROUPID);
-  const sourceSiteList = await getSourceSite();
+  const sourceSiteList = await getSourceSite(language);
   const category = categoryList.find((c) => c.slug === slug);
   const name = category?.name ?? slug;
 
