@@ -1,18 +1,10 @@
 import { resolveLocale } from '@/app/i18n/config';
 import { getDictionary } from '@/app/i18n/dictionaries';
-import { getPosts } from '@/app/service/client';
-import {
-  postRegionLanguageMap,
-  resolvePostRegion,
-} from '@/app/utils/postRegion';
-import { PostResponseList } from '@/types/api';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import { resolvePostRegion } from '@/app/utils/postRegion';
 import { Metadata } from 'next';
-import PostList from '../../../../(main)/search/[keyword]/_components/PostList';
+import { Suspense } from 'react';
+import SearchPostListFallback from './_components/SearchPostListFallback';
+import SearchPostListSection from './_components/SearchPostListSection';
 
 interface Props {
   params: Promise<{
@@ -61,40 +53,15 @@ async function Page({ params }: Props) {
   } = await params;
   const locale = resolveLocale(localeParam);
   const postRegion = resolvePostRegion(postRegionParam);
-  const dictionary = getDictionary(locale);
-  const language = postRegionLanguageMap[postRegion];
-  const queryClient = new QueryClient();
-  const decodeKeyword = decodeURIComponent(keyword);
-
-  await queryClient.prefetchInfiniteQuery<
-    PostResponseList,
-    Error,
-    PostResponseList,
-    ['posts', string, typeof language],
-    number | undefined
-  >({
-    queryKey: ['posts', decodeKeyword, language],
-    initialPageParam: undefined,
-    queryFn: ({ pageParam }) =>
-      getPosts({
-        searchCondition: { keyword: decodeKeyword },
-        lastPostId: pageParam,
-        limit: 12,
-        language,
-      }),
-    getNextPageParam: (lastPage: PostResponseList) =>
-      lastPage.hasNext ? lastPage.nextPostId : undefined,
-  });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex w-full flex-1 flex-col">
-        <h1 className="sr-only">
-          {decodeKeyword} {dictionary['search.headingSuffix']}
-        </h1>
-        <PostList keyword={decodeKeyword} language={language} />
-      </div>
-    </HydrationBoundary>
+    <Suspense fallback={<SearchPostListFallback />}>
+      <SearchPostListSection
+        keyword={keyword}
+        locale={locale}
+        postRegion={postRegion}
+      />
+    </Suspense>
   );
 }
 
