@@ -1,123 +1,123 @@
 export const SITE_MAP = {
   banksalad: {
     label: '뱅크샐러드',
-    icon: '/icons/site/banksalad-img.svg',
+    icon: '/icons/site/banksalad.png',
   },
   coupang: {
     label: '쿠팡',
-    icon: '/icons/site/coupang-img.svg',
+    icon: '/icons/site/coupang.png',
   },
   daangn: {
     label: '당근',
-    icon: '/icons/site/daangn-img.svg',
+    icon: '/icons/site/daangn.png',
   },
   devsisters: {
     label: '데브시스터즈',
-    icon: '/icons/site/devsisters-img.svg',
+    icon: '/icons/site/devsisters.png',
   },
   gaeraeblog: {
     label: '개발자스럽다',
-    icon: '/icons/site/gaeraeblog-img.png',
+    icon: '/icons/site/gaeraeblog.png',
   },
   hyperconnect: {
     label: '하이퍼커넥트',
-    icon: '/icons/site/hyperconnect-img.webp',
+    icon: '/icons/site/hyperconnect.png',
   },
   kakao: {
     label: '카카오',
-    icon: '/icons/site/kakao-img.svg',
+    icon: '/icons/site/kakao.png',
   },
   kurly: {
     label: '컬리',
-    icon: '/icons/site/kurly-img.svg',
+    icon: '/icons/site/kurly.png',
   },
   line: {
     label: '라인',
-    icon: '/icons/site/line-img.svg',
+    icon: '/icons/site/line.png',
   },
   musinsa: {
     label: '무신사',
-    icon: '/icons/site/musinsa-img.svg',
+    icon: '/icons/site/musinsa.png',
   },
   naver: {
     label: '네이버',
-    icon: '/icons/site/naver-img.svg',
+    icon: '/icons/site/naver.png',
   },
   nhn: {
     label: 'NHN',
-    icon: '/icons/site/nhn-img.svg',
+    icon: '/icons/site/nhn.png',
   },
   socar: {
     label: '쏘카',
-    icon: '/icons/site/socar-img.svg',
+    icon: '/icons/site/socar.png',
   },
   toss: {
     label: '토스',
-    icon: '/icons/site/toss-img.svg',
+    icon: '/icons/site/toss.png',
   },
   watcha: {
     label: '왓챠',
-    icon: '/icons/site/watcha-img.svg',
+    icon: '/icons/site/watcha.png',
   },
   yogiyo: {
     label: '요기요',
-    icon: '/icons/site/yogiyo-img.svg',
+    icon: '/icons/site/yogiyo.png',
   },
   zigbang: {
     label: '직방',
-    icon: '/icons/site/zigbang-img.svg',
+    icon: '/icons/site/zigbang.png',
   },
   woowahan: {
     label: '우아한형제들',
-    icon: '/icons/site/woowahan-img.svg',
+    icon: '/icons/site/woowahan.png',
   },
   'kakao-pay': {
     label: '카카오페이',
-    icon: '/icons/site/kakaopay-img.svg',
+    icon: '/thumbnails/kakao-pay.png',
   },
   gccompany: {
     label: '여기어때',
-    icon: '/icons/site/yeogi-img.svg',
+    icon: '/icons/site/yeogi.png',
   },
   oliveyoung: {
     label: '올리브영',
-    icon: '/icons/site/olive-img.svg',
+    icon: '/icons/site/olive.svg',
   },
   aws: {
     label: 'AWS',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/aws.png',
   },
   cloudflare: {
     label: 'Cloudflare',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/cloudflare.png',
   },
   discord: {
     label: 'Discord',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/discord.png',
   },
   figma: {
     label: 'Figma',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/figma.png',
   },
   github: {
     label: 'GitHub',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/github.png',
   },
   meta: {
     label: 'Meta',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/meta.png',
   },
   netflix: {
     label: 'Netflix',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/netflix.png',
   },
   slack: {
     label: 'Slack',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/slack.png',
   },
   stripe: {
     label: 'Stripe',
-    icon: '/icons/site/default-img.svg',
+    icon: '/icons/site/stripe.png',
   },
 } as const;
 
@@ -125,7 +125,7 @@ export type Site = keyof typeof SITE_MAP;
 
 const FALLBACK_SITE_INFO = {
   label: '알 수 없음',
-  icon: '/icons/site/default-img.svg',
+  icon: '/images/thumbnail-default.png',
 };
 
 export const getSiteInfo = (name: string) =>

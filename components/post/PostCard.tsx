@@ -37,7 +37,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
   const { t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const fallbackImage = `/thumbnails/${siteName}.png`;
-  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay'];
+  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay', 'stripe'];
 
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail && !fallbackImageList.includes(siteName)
@@ -84,8 +84,9 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
                 <Image
                   src={getSiteInfo(siteName).icon}
                   alt={`${getSiteInfo(siteName).label} ${t('image.siteIconAlt')}`}
-                  width={18}
-                  height={18}
+                  width={24}
+                  height={24}
+                  className="rounded-full"
                 />
               </div>
 
@@ -156,7 +157,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
               fill
               sizes="72px"
-              className="rounded-12 object-contain object-center p-10"
+              className="rounded-12 object-contain object-center"
               priority={priority}
               onError={() => setImgSrc(fallbackImage)}
             />

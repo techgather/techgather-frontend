@@ -37,7 +37,7 @@ const highlightKeyword = (text: string, keyword: string) => {
 const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const fallbackImage = `/thumbnails/${siteName}.png`;
-  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay'];
+  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay', 'stripe'];
 
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail && !fallbackImageList.includes(siteName)
@@ -48,12 +48,12 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
   return (
     <div
       className={cn(
-        'group hover:border-main_2 flex w-full cursor-pointer flex-col rounded-2xl border border-transparent p-12 transition-colors duration-200 hover:bg-[#E3FDF5] sm:w-257',
+        'group hover:border-main_2 flex w-full min-w-0 cursor-pointer flex-col rounded-2xl border border-transparent p-10 transition-colors duration-200 hover:bg-[#E3FDF5] xl:p-12',
         { 'border-main_2 bg-[#E3FDF5]': checked }
       )}
       onClick={() => handleCheck(post?.postId?.toString() ?? '')}
     >
-      <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
+      <div className="rounded-12 border-gray_5 relative aspect-video w-full border">
         <div className="absolute top-9 left-9 z-10">
           {checked ? (
             <Image
@@ -81,15 +81,15 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
           onError={() => setImgSrc(fallbackImage)}
         />
       </div>
-      <div className="flex flex-col gap-8 pt-12 pb-16">
+      <div className="flex min-w-0 flex-col gap-8 pt-12 pb-16">
         <h2 className="block h-22 w-full truncate text-[15px] font-bold md:h-44 md:text-wrap">
           {keyword ? highlightKeyword(post?.title ?? '', keyword) : post?.title}
         </h2>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-6">
+        <div className="flex min-w-0 items-center gap-8">
+          <div className="flex min-w-0 items-center gap-6">
             <div
               className={cn(
-                'border-gray_5 flex size-24 items-center justify-center rounded-full border',
+                'border-gray_5 relative flex size-24 shrink-0 items-center justify-center rounded-full border',
                 {
                   'bg-black':
                     post?.sourceSiteName === 'musinsa' ||
@@ -100,14 +100,16 @@ const AdminPostCard = ({ post, keyword, handleCheck, checked }: Props) => {
               <Image
                 src={getSiteInfo(siteName).icon}
                 alt={getSiteInfo(siteName).label}
-                width={18}
-                height={18}
+                fill
+                className="rounded-full"
               />
             </div>
 
-            <p className="text-[13px]">{getSiteInfo(siteName).label}</p>
+            <p className="truncate text-[13px]">
+              {getSiteInfo(siteName).label}
+            </p>
           </div>
-          <p className="text-gray_15 text-[11px]">
+          <p className="text-gray_15 shrink-0 text-[11px]">
             {formatDate(post?.pubDate?.toString() ?? '')}
           </p>
         </div>
