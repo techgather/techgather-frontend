@@ -35,8 +35,9 @@ const highlightKeyword = (text: string, keyword: string) => {
 };
 
 const PostCard = ({ post, keyword, priority = false }: Props) => {
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
+  const siteInfo = getSiteInfo(siteName, locale);
   const fallbackImage = `/thumbnails/${siteName}.png`;
   const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay', 'stripe'];
 
@@ -102,15 +103,15 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
                 )}
               >
                 <Image
-                  src={getSiteInfo(siteName).icon}
-                  alt={`${getSiteInfo(siteName).label} ${t('image.siteIconAlt')}`}
+                  src={siteInfo.icon}
+                  alt={`${siteInfo.label} ${t('image.siteIconAlt')}`}
                   width={24}
                   height={24}
                   className="rounded-full"
                 />
               </div>
 
-              <p className="text-[13px]">{getSiteInfo(siteName).label}</p>
+              <p className="text-[13px]">{siteInfo.label}</p>
             </div>
 
             <p className="text-gray_15 text-[11px]">
@@ -144,7 +145,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
             </h3>
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-6">
-                <p className="text-[13px]">{getSiteInfo(siteName).label}</p>
+                <p className="text-[13px]">{siteInfo.label}</p>
               </div>
               <p className="text-gray_15 text-[11px]">
                 {formatDate(post?.pubDate?.toString() ?? '')}
@@ -176,7 +177,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
             )}
             <Image
-              src={getSiteInfo(siteName).icon}
+              src={siteInfo.icon}
               alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
               fill
               sizes="72px"

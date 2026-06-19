@@ -69,7 +69,7 @@ const PostList = ({
   const totalCount = useMemo(() => data?.pages[0]?.totalCount, [data]);
 
   const SiteDropdownList = sourceSite.map((item) => ({
-    label: getSiteInfo(item).label,
+    label: getSiteInfo(item, locale).label,
     value: item as Site,
   }));
 
@@ -113,7 +113,7 @@ const PostList = ({
                   {sourceSite.length > 0 && site.length > 0
                     ? site
                         .filter((item) => sourceSite.includes(item ?? ''))
-                        .map((item) => getSiteInfo(item).label)
+                        .map((item) => getSiteInfo(item, locale).label)
                         .join(', ')
                     : t('postList.sitePlaceholder')}
                 </div>
