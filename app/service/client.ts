@@ -18,6 +18,8 @@ interface PostParams {
   language?: PostResponseLanguageEnum;
 }
 
+const STATIC_DATA_REVALIDATE = 60 * 60;
+
 export const getPosts = async ({
   lastPostId,
   limit = 20,
@@ -157,11 +159,16 @@ export const getSourceSite = async (language?: PostResponseLanguageEnum) => {
   const query = params.toString();
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/admin/posts/source-sites${query ? `?${query}` : ''}`,
-    { cache: 'no-store' }
+    {
+      next: {
+        revalidate: STATIC_DATA_REVALIDATE,
+        tags: [`source-sites:${language ?? 'all'}`],
+      },
+    }
   );
 
   if (!res.ok) {
-    throw new Error('Failed to fetch posts');
+    throw new Error('Failed to fetch source sites');
   }
 
   return res.json();
@@ -185,11 +192,16 @@ export const getCategory = async (
 ): Promise<CategoryResponse[]> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/admin/categories?categoryGroupId=${groupId}`,
-    { cache: 'no-store' }
+    {
+      next: {
+        revalidate: STATIC_DATA_REVALIDATE,
+        tags: [`categories:${groupId}`],
+      },
+    }
   );
 
   if (!res.ok) {
-    throw new Error('Failed to fetch posts');
+    throw new Error('Failed to fetch categories');
   }
 
   return res.json();

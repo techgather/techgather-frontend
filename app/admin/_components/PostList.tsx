@@ -58,7 +58,7 @@ const PostList = ({ tab }: Props) => {
     isFetching,
     isLoading,
     isFetchingNextPage,
-  } = useAdminPostList({ searchCondition, status: tab, language, limit: 20 });
+  } = useAdminPostList({ searchCondition, status: tab, language, limit: 18 });
   // const { data: categoryGroup } = useCategoryGroup();
   const [selectStatus, setSelectStats] =
     useState<UpdatePostsRequestStatusEnum>();
@@ -424,7 +424,7 @@ const PostList = ({ tab }: Props) => {
       <div className="grid w-full grid-cols-1 gap-x-8 gap-y-24 sm:grid-cols-2 md:grid-cols-3 md:gap-y-48 lg:grid-cols-6 2xl:grid-cols-6">
         {isLoading || isPending || (isFetching && !isFetchingNextPage) ? (
           <>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: 12 }).map((_, index) => (
               <PostCardSkeleton key={index} compact />
             ))}
           </>
