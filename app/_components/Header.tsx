@@ -40,6 +40,8 @@ const Header = ({ locale, postRegion }: Props) => {
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const { data } = useCategory(DEFAULT_GROUPID);
   const { setLocale, t } = useI18n();
+  const isMobilePanelOpen = isOpen || isLocaleOpen;
+  const hideMobileHeaderContent = isMobilePanelOpen;
 
   const currentSlug = pathname.includes('/category/')
     ? pathname.split('/category/')[1]
@@ -89,6 +91,16 @@ const Header = ({ locale, postRegion }: Props) => {
     setLocale(nextLocale);
     setIsLocaleOpen(false);
     router.push(query ? `${nextPath}?${query}` : nextPath);
+  };
+
+  const handleMobileMenuClick = () => {
+    if (isMobilePanelOpen) {
+      setIsOpen(false);
+      setIsLocaleOpen(false);
+      return;
+    }
+
+    setIsLocaleOpen(true);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -147,13 +159,13 @@ const Header = ({ locale, postRegion }: Props) => {
             onClick={() => router.push(mainPath(locale, postRegion))}
             className={cn(
               'cursor-pointer transition-opacity duration-150',
-              isLocaleOpen && 'invisible'
+              hideMobileHeaderContent && 'invisible'
             )}
           />
           <div
             className={cn(
               'absolute left-1/2 -translate-x-1/2 transition-opacity duration-150',
-              isLocaleOpen && 'invisible'
+              hideMobileHeaderContent && 'invisible'
             )}
           >
             <Tab
@@ -204,23 +216,20 @@ const Header = ({ locale, postRegion }: Props) => {
               <LanguageIcon />
               {t(locale === 'ko' ? 'locale.ko' : 'locale.en')}
             </Button>
-            {!isOpen && (
-              <button
-                type="button"
-                aria-label={t('header.changeLocale')}
-                onClick={() => {
-                  setIsOpen(false);
-                  setIsLocaleOpen((prev) => !prev);
-                }}
-                className="flex size-24 items-center justify-center md:hidden"
-              >
-                {isLocaleOpen ? (
-                  <XIcon className="size-24 stroke-white" />
-                ) : (
-                  <HamburgerIcon className="size-24 stroke-white" />
-                )}
-              </button>
-            )}
+            <button
+              type="button"
+              aria-label={
+                isMobilePanelOpen ? 'close' : t('header.changeLocale')
+              }
+              onClick={handleMobileMenuClick}
+              className="flex size-24 items-center justify-center md:hidden"
+            >
+              {isMobilePanelOpen ? (
+                <XIcon className="size-24 stroke-white" />
+              ) : (
+                <HamburgerIcon className="size-24 stroke-white" />
+              )}
+            </button>
           </div>
         </div>
         <div
