@@ -3,6 +3,7 @@
 import { getSiteInfo, Site } from '@/app/constans/site';
 import { useI18n } from '@/app/i18n/I18nProvider';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
 import Image from 'next/image';
@@ -44,6 +45,8 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
       ? post.thumbnail
       : fallbackImage
   );
+  const [isThumbnailLoading, setIsThumbnailLoading] = useState(true);
+  const [isMobileIconLoading, setIsMobileIconLoading] = useState(true);
 
   return (
     <>
@@ -53,14 +56,31 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
         className="group hover:bg-gray_2 hidden h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:block sm:w-257 md:h-277"
       >
         <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
+          {isThumbnailLoading && (
+            <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
+          )}
           <Image
             src={imgSrc}
             alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 257px"
-            className="rounded-12 object-cover object-center"
+            className={cn(
+              'rounded-12 object-cover object-center transition-opacity duration-200',
+              isThumbnailLoading ? 'opacity-0' : 'opacity-100'
+            )}
             priority={priority}
-            onError={() => setImgSrc(fallbackImage)}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            onLoad={() => setIsThumbnailLoading(false)}
+            onError={() => {
+              if (imgSrc === fallbackImage) {
+                setIsThumbnailLoading(false);
+                return;
+              }
+
+              setIsThumbnailLoading(true);
+              setImgSrc(fallbackImage);
+            }}
           />
         </div>
         <div className="flex flex-col gap-8 pt-12 pb-16">
@@ -152,14 +172,23 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               }
             )}
           >
+            {isMobileIconLoading && (
+              <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
+            )}
             <Image
               src={getSiteInfo(siteName).icon}
               alt={`'${post?.title ?? t('common.postThumbnailFallback')}' ${t('image.thumbnailAlt')}`}
               fill
               sizes="72px"
-              className="rounded-12 object-contain object-center"
+              className={cn(
+                'rounded-12 object-contain object-center transition-opacity duration-200',
+                isMobileIconLoading ? 'opacity-0' : 'opacity-100'
+              )}
               priority={priority}
-              onError={() => setImgSrc(fallbackImage)}
+              loading={priority ? 'eager' : 'lazy'}
+              fetchPriority={priority ? 'high' : undefined}
+              onLoad={() => setIsMobileIconLoading(false)}
+              onError={() => setIsMobileIconLoading(false)}
             />
           </div>
         </Link>
