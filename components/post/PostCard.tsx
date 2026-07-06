@@ -1,6 +1,6 @@
 'use client';
 
-import { getSiteInfo, Site } from '@/app/constans/site';
+import { getSiteInfo, Site, THUMBNAIL_SITE_LIST } from '@/app/constans/site';
 import { useI18n } from '@/app/i18n/I18nProvider';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -39,10 +39,9 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const siteInfo = getSiteInfo(siteName, locale);
   const fallbackImage = `/thumbnails/${siteName}.png`;
-  const fallbackImageList = ['woowahan', 'gccompany', 'kakao-pay', 'stripe'];
 
   const [imgSrc, setImgSrc] = useState(
-    post?.thumbnail && !fallbackImageList.includes(siteName)
+    post?.thumbnail && !THUMBNAIL_SITE_LIST.includes(siteName)
       ? post.thumbnail
       : fallbackImage
   );
@@ -66,7 +65,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 257px"
             className={cn(
-              'rounded-12 object-cover object-center transition-opacity duration-200',
+              'rounded-[11px] object-cover object-center transition-opacity duration-200',
               isThumbnailLoading ? 'opacity-0' : 'opacity-100'
             )}
             priority={priority}

@@ -146,7 +146,7 @@ export const SITE_MAP = {
       ko: '올리브영',
       en: 'Olive Young',
     },
-    icon: '/icons/site/olive.svg',
+    icon: '/icons/site/oliveyoung.png',
   },
   aws: {
     label: {
@@ -212,6 +212,14 @@ export const SITE_MAP = {
     icon: '/icons/site/stripe.png',
   },
 } as const;
+
+export const THUMBNAIL_SITE_LIST = [
+  'woowahan',
+  'gccompany',
+  'kakao-pay',
+  'stripe',
+  'hyperconnect',
+];
 
 export type Site = keyof typeof SITE_MAP;
 
