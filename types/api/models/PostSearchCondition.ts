@@ -31,13 +31,19 @@ export interface PostSearchCondition {
    * @type {Array<string>}
    * @memberof PostSearchCondition
    */
-  categorySlugs?: Array<string> | null;
+  categorySlugs?: Array<string>;
   /**
    *
    * @type {Array<string>}
    * @memberof PostSearchCondition
    */
   sourceSiteNames?: Array<string>;
+  /**
+   *
+   * @type {boolean}
+   * @memberof PostSearchCondition
+   */
+  unclassified?: boolean;
 }
 
 /**
@@ -66,6 +72,8 @@ export function PostSearchConditionFromJSONTyped(
       json['categorySlugs'] == null ? undefined : json['categorySlugs'],
     sourceSiteNames:
       json['sourceSiteNames'] == null ? undefined : json['sourceSiteNames'],
+    unclassified:
+      json['unclassified'] == null ? undefined : json['unclassified'],
   };
 }
 
@@ -85,5 +93,6 @@ export function PostSearchConditionToJSONTyped(
     keyword: value['keyword'],
     categorySlugs: value['categorySlugs'],
     sourceSiteNames: value['sourceSiteNames'],
+    unclassified: value['unclassified'],
   };
 }

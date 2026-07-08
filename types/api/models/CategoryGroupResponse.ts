@@ -25,7 +25,7 @@ export interface CategoryGroupResponse {
    * @type {number}
    * @memberof CategoryGroupResponse
    */
-  id?: string;
+  id?: number;
   /**
    *
    * @type {string}

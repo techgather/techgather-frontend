@@ -48,6 +48,7 @@ export const UpdatePostsRequestStatusEnum = {
   NotPublished: 'NOT_PUBLISHED',
   Published: 'PUBLISHED',
   OnHold: 'ON_HOLD',
+  Reserved: 'RESERVED',
 } as const;
 export type UpdatePostsRequestStatusEnum =
   (typeof UpdatePostsRequestStatusEnum)[keyof typeof UpdatePostsRequestStatusEnum];

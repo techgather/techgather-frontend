@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "generate": "npx @openapitools/openapi-generator-cli generate -i http://dev-pick.com/v3/api-docs -g typescript-fetch -o types/api --skip-validate-spec"
+    "generate": "npx @openapitools/openapi-generator-cli generate -i http://api.dev-pick.com/v3/api-docs -g typescript-fetch -o types/api --skip-validate-spec"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.3",
