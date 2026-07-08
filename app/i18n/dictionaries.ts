@@ -21,6 +21,16 @@ export const dictionaries = {
     'postLanguage.domestic': '국내',
     'postLanguage.global': '해외',
 
+    'banner.titlePrefix': '현직 개발자가 엄선한',
+    'banner.titleSuffix': '기술 아티클 모아보기',
+    'banner.description': '평균 주 3회 업로드',
+
+    'pwaInstall.title': '데브픽 앱으로 추가',
+    'pwaInstall.description': '홈 화면에서 앱처럼 이용',
+    'pwaInstall.install': '설치',
+    'pwaInstall.close': '설치 안내 닫기',
+    'pwaInstall.iconAlt': 'DevPick 앱 아이콘',
+
     'main.metadata.title': '최신 개발 아티클 모음',
     'main.metadata.description':
       '데브픽(DevPick)은 다양한 개발 블로그의 최신 글과 아티클을 한 곳에서 모아볼 수 있는 플랫폼입니다. 웹부터 AI까지 다양한 개발 콘텐츠를 빠르게 확인하세요.',
@@ -126,6 +136,16 @@ export const dictionaries = {
 
     'postLanguage.domestic': 'Korea',
     'postLanguage.global': 'Global',
+
+    'banner.titlePrefix': 'Curated Tech Articles',
+    'banner.titleSuffix': 'by Experienced Developers',
+    'banner.description': 'Updated 3 Times a Week on Average',
+
+    'pwaInstall.title': 'Add DevPick\nto Home Screen',
+    'pwaInstall.description': 'Use it like an app from your home screen',
+    'pwaInstall.install': 'Install',
+    'pwaInstall.close': 'Close install prompt',
+    'pwaInstall.iconAlt': 'DevPick app icon',
 
     'main.metadata.title': 'Latest Developer Articles',
     'main.metadata.description':
