@@ -55,6 +55,11 @@ export const ADMIN_TABS = [
     value: UpdatePostsRequestStatusEnum.OnHold,
   },
   {
+    label: '예약된 게시물',
+    labelKey: 'admin.tab.reserved',
+    value: UpdatePostsRequestStatusEnum.Reserved,
+  },
+  {
     label: '삭제된 게시물',
     labelKey: 'admin.tab.discarded',
     value: UpdatePostsRequestStatusEnum.Discarded,

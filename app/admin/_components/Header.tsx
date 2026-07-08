@@ -39,6 +39,10 @@ const Header = () => {
         router.push(`${pathname}?${params.toString()}`);
         break;
 
+      case UpdatePostsRequestStatusEnum.Reserved:
+        router.push(`${pathname}?${params.toString()}`);
+        break;
+
       // case AdminMenuType.Logout:
       //   // logout();
       //   break;

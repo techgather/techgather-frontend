@@ -40,6 +40,7 @@ const statusLabelMap: Record<UpdatePostsRequestStatusEnum, string> = {
   [UpdatePostsRequestStatusEnum.NotPublished]: '수집됨',
   [UpdatePostsRequestStatusEnum.Published]: '승인됨',
   [UpdatePostsRequestStatusEnum.OnHold]: '보류됨',
+  [UpdatePostsRequestStatusEnum.Reserved]: '예약됨',
   [UpdatePostsRequestStatusEnum.Discarded]: '삭제됨',
 };
 
@@ -83,7 +84,7 @@ const PostList = ({ tab }: Props) => {
   const categoryDropdown =
     category?.map((item) => ({
       label: item.name ?? '',
-      value: item.id ?? '',
+      value: item.id?.toString() ?? '',
       item: item,
     })) ?? [];
 
@@ -132,16 +133,17 @@ const PostList = ({ tab }: Props) => {
 
   const handleToggle = (value: boolean) => {
     setFilterNoCategory(value);
-    console.log(value);
     if (value) {
       setSearchCondition((prev) => ({
         ...prev,
-        categorySlugs: null,
+        categorySlugs: undefined,
+        unclassified: true,
       }));
     } else {
       setSearchCondition((prev) => ({
         ...prev,
         categorySlugs: [],
+        unclassified: false,
       }));
     }
   };
