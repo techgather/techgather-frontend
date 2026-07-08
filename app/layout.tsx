@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { getDictionary } from '@/app/i18n/dictionaries';
 import { getServerLocale } from '@/app/i18n/server';
@@ -33,11 +33,24 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL('https://dev-pick.com'),
+    applicationName: brand,
     title: {
       default: brand,
       template: `%s | ${brand}`,
     },
     description,
+    appleWebApp: {
+      capable: true,
+      title: brand,
+      statusBarStyle: 'default',
+    },
+    formatDetection: {
+      telephone: false,
+    },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/icons/pwa-192.png',
+    },
     openGraph: {
       title: brand,
       description,
@@ -87,6 +100,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: '#11FFB7',
+};
 
 export default async function RootLayout({
   children,

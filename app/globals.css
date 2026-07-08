@@ -1,6 +1,14 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@font-face {
+  font-family: 'HannaPro';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_seven@1.0/BMHANNAPro.woff')
+    format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -56,6 +64,7 @@
   --color-gray_2: var(--gray_2);
   --color-main: var(--main);
   --color-main_2: var(--main_2);
+  --font-hanna: 'HannaPro', sans-serif;
 }
 
 :root {

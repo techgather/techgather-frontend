@@ -1,3 +1,4 @@
+import Banner from '@/app/_components/Banner';
 import Header from '@/app/_components/Header';
 import { isLocale, Locale, resolveLocale } from '@/app/i18n/config';
 import { getDictionary } from '@/app/i18n/dictionaries';
@@ -55,9 +56,8 @@ export default async function Layout({ children, params }: Props) {
   return (
     <>
       <Header locale={locale} postRegion={postRegion} />
-      <div className="mt-52 flex w-full max-w-1440 flex-1 flex-col">
-        {children}
-      </div>
+      <Banner />
+      <div className="flex w-full max-w-1440 flex-1 flex-col">{children}</div>
     </>
   );
 }
