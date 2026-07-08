@@ -1,4 +1,15 @@
+'use client';
+
+import { useSelectedLayoutSegments } from 'next/navigation';
+
 const Banner = () => {
+  const segments = useSelectedLayoutSegments();
+  const isSearchPage = segments[0] === 'search';
+
+  if (isSearchPage) {
+    return null;
+  }
+
   return (
     <div className="mt-52 flex w-full items-center justify-center bg-[#CFF1F5]">
       <div className="flex w-full max-w-1440 items-center px-52 py-16 sm:py-24">

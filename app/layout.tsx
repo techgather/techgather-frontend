@@ -8,6 +8,7 @@ import localFont from 'next/font/local';
 import Script from 'next/script';
 import Footer from './_components/Footer';
 import Providers from './_components/Provider';
+import PwaInstallPrompt from './_components/PwaInstallPrompt';
 
 const Pretendard = localFont({
   src: [
@@ -138,6 +139,7 @@ export default async function RootLayout({
         <Providers initialLocale={locale}>
           {children}
           <FloatScrollButton />
+          <PwaInstallPrompt />
           <Footer />
         </Providers>
       </body>

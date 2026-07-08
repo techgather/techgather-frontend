@@ -225,7 +225,7 @@ const Header = ({ locale, postRegion }: Props) => {
               className="flex size-24 items-center justify-center md:hidden"
             >
               {isMobilePanelOpen ? (
-                <XIcon className="size-24 stroke-white" />
+                <XIcon className="size-24 text-white" />
               ) : (
                 <HamburgerIcon className="size-24 stroke-white" />
               )}
