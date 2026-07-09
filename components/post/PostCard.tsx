@@ -130,7 +130,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
           )}
         </div>
       </Link>
-      <div className="border-gray_5 border-b pb-20 sm:hidden">
+      <div className="border-gray_2 border-b pb-20 sm:hidden">
         <Link
           href={post?.url ?? ''}
           target="_blank"
