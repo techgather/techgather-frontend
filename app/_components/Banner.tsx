@@ -136,11 +136,11 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--desktop-left-floor {
-              top: 128px !important;
-              width: 318px;
-              height: 214px;
-              opacity: 0.54;
-              transform: rotate(-1.5deg) scale(0.9);
+              top: 174px !important;
+              width: 260px;
+              height: 112px;
+              opacity: 0.5;
+              transform: rotate(-1.5deg) scale(0.82);
             }
 
             .banner-ascii-stack--desktop-left-main .banner-ascii-sheet {
@@ -153,10 +153,14 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--desktop-left-floor .banner-ascii-sheet {
-              bottom: calc(var(--sheet-index) * 12px);
-              height: 17px;
+              bottom: calc(var(--sheet-index) * 7px);
+              height: 14px;
               width: calc(100% - 36px);
               opacity: 0.68;
+            }
+
+            .banner-ascii-stack--desktop-left-floor .banner-ascii-sheet:nth-child(n + 10) {
+              display: none;
             }
           }
 
@@ -185,17 +189,34 @@ const Banner = () => {
           }
 
           .banner-ascii-sheet::before {
-            right: -14px;
+            content: "////\\A////";
+            right: -18px;
             top: 0;
             bottom: 0;
-            width: 14px;
+            width: 19px;
             box-sizing: border-box;
             border-top: 1px dashed rgba(255, 255, 255, 0.68);
             border-right: 1px dashed rgba(255, 255, 255, 0.56);
             border-bottom: 1px dashed rgba(255, 255, 255, 0.48);
-            background: #18191b;
-            clip-path: polygon(0 0, 100% 18%, 100% 100%, 0 100%);
+            background:
+              repeating-linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.09) 0 1px,
+                transparent 1px 5px
+              ),
+              #18191b;
+            clip-path: polygon(0 0, 100% 24%, 100% 100%, 0 76%);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 7px;
+            font-weight: 600;
+            letter-spacing: -2.8px;
+            line-height: 0.9;
+            overflow: hidden;
+            padding-top: 1px;
+            text-indent: -1px;
             transform-origin: left top;
+            white-space: pre;
           }
 
           .banner-ascii-sheet::after {
