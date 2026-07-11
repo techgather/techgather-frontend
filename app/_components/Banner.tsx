@@ -228,8 +228,8 @@ const Banner = () => {
               opacity: 0;
               transform: translate3d(22px, -14px, 0);
             }
-            10%,
-            70% {
+            12%,
+            76% {
               opacity: 1;
               transform: translate3d(0, 0, 0);
             }
@@ -249,11 +249,11 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--large {
-              top: 58px !important;
+              top: 74px !important;
             }
 
             .banner-ascii-stack--mobile-extra {
-              display: block;
+              display: none;
             }
 
             .banner-ascii-stack--mobile-left-low {
@@ -288,8 +288,10 @@ const Banner = () => {
             }
 
             .banner-ascii-sheet {
-              bottom: calc(var(--sheet-index) * 6px);
+              bottom: calc(var(--sheet-index) * 7px);
               height: 13px;
+              animation-duration: 4.4s;
+              animation-timing-function: linear;
             }
           }
 
