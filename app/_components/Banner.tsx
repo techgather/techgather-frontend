@@ -123,21 +123,30 @@ const Banner = () => {
 
           @media (min-width: 1080px) {
             .banner-ascii-stack--desktop-left-main {
-              width: 318px;
-              height: 286px;
+              width: 342px;
+              height: 348px;
               opacity: 0.66;
             }
 
             .banner-ascii-stack--desktop-left-mid {
-              width: 266px;
-              height: 218px;
-              opacity: 0.58;
+              width: 286px;
+              height: 258px;
+              opacity: 0.6;
             }
 
             .banner-ascii-stack--desktop-left-floor {
-              width: 238px;
-              height: 136px;
-              opacity: 0.44;
+              width: 250px;
+              height: 98px;
+              opacity: 0.5;
+            }
+
+            .banner-ascii-stack--desktop-left-main .banner-ascii-sheet {
+              bottom: calc(var(--sheet-index) * 16px);
+              height: 20px;
+            }
+
+            .banner-ascii-stack--desktop-left-mid .banner-ascii-sheet {
+              bottom: calc(var(--sheet-index) * 13px);
             }
           }
 
