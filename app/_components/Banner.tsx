@@ -9,7 +9,7 @@ const bannerLightControls = {
   duration: '5.8s',
   easing: 'ease-in-out',
   overlayOpacity: 0.4,
-  columnContrast: 1,
+  columnContrast: 1.12,
   glowIntensity: 1,
 };
 
@@ -116,21 +116,21 @@ const Banner = () => {
               ),
               repeating-linear-gradient(
                 90deg,
-                rgba(0, 0, 0, 0.98) 0 10px,
-                rgba(0, 0, 0, 0.24) 10px 15px,
+                rgba(0, 0, 0, 1) 0 18px,
+                rgba(0, 0, 0, 0.1) 18px 25px,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(22% * var(--banner-column-contrast)),
+                  var(--banner-mint) calc(28% * var(--banner-column-contrast)),
                   transparent
-                ) 15px 18px,
-                rgba(0, 0, 0, 0.74) 18px 27px,
+                ) 25px 30px,
+                rgba(0, 0, 0, 0.9) 30px 44px,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(12% * var(--banner-column-contrast)),
+                  var(--banner-mint) calc(16% * var(--banner-column-contrast)),
                   transparent
-                ) 27px 31px
+                ) 44px 50px
               );
-            opacity: 0.88;
+            opacity: 0.92;
           }
 
           .banner-light-sweep,
@@ -252,19 +252,19 @@ const Banner = () => {
                 ),
                 repeating-linear-gradient(
                   90deg,
-                  rgba(0, 0, 0, 0.98) 0 7px,
-                  rgba(0, 0, 0, 0.22) 7px 10px,
+                  rgba(0, 0, 0, 1) 0 13px,
+                  rgba(0, 0, 0, 0.1) 13px 18px,
                   color-mix(
                     in srgb,
-                    var(--banner-mint) calc(20% * var(--banner-column-contrast)),
+                    var(--banner-mint) calc(26% * var(--banner-column-contrast)),
                     transparent
-                  ) 10px 12px,
-                  rgba(0, 0, 0, 0.74) 12px 19px,
+                  ) 18px 22px,
+                  rgba(0, 0, 0, 0.9) 22px 34px,
                   color-mix(
                     in srgb,
-                    var(--banner-mint) calc(11% * var(--banner-column-contrast)),
+                    var(--banner-mint) calc(15% * var(--banner-column-contrast)),
                     transparent
-                  ) 19px 21px
+                  ) 34px 38px
                 );
             }
 
