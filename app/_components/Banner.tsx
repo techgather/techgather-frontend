@@ -19,7 +19,7 @@ const Banner = () => {
         <div className="absolute inset-0" aria-hidden="true">
           <ShaderGradientCanvas
             className="h-full w-full"
-            fov={40}
+            fov={45}
             pixelDensity={1}
             pointerEvents="none"
             style={{
@@ -33,10 +33,10 @@ const Banner = () => {
               animate="on"
               brightness={1}
               cAzimuthAngle={180}
-              cDistance={2}
+              cDistance={2.8}
               cPolarAngle={80}
               cameraZoom={9.1}
-              color1="#00bd00"
+              color1="#3ca283"
               color2="#8d7dca"
               color3="#212121"
               envPreset="city"
@@ -55,15 +55,15 @@ const Banner = () => {
               shader="defaults"
               type="waterPlane"
               uAmplitude={0}
-              uDensity={0.9}
+              uDensity={1.5}
               uFrequency={0}
-              uSpeed={0.2}
-              uStrength={1.2}
-              uTime={0}
+              uSpeed={0.3}
+              uStrength={1.5}
+              uTime={8}
               wireframe={false}
             />
           </ShaderGradientCanvas>
-          <div className="absolute inset-0 bg-black/45" />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
