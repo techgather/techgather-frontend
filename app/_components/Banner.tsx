@@ -3,86 +3,281 @@
 import { useI18n } from '@/app/i18n/I18nProvider';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import type { CSSProperties } from 'react';
 
-const bannerLightControls = {
-  mint: '#11FFB7',
-  duration: '22s',
-  easing: 'ease-in-out',
-  overlayOpacity: 0.5,
-  glowIntensity: 1,
-  maxCursorOffset: 80,
+const vertexShaderSource = `
+  attribute vec2 a_position;
+
+  void main() {
+    gl_Position = vec4(a_position, 0.0, 1.0);
+  }
+`;
+
+const fragmentShaderSource = `
+  precision highp float;
+
+  uniform vec2 u_resolution;
+  uniform vec2 u_pointer;
+  uniform float u_time;
+  uniform float u_mobile;
+
+  const vec3 bg = vec3(0.094, 0.098, 0.106);
+  const vec3 mint = vec3(0.067, 1.0, 0.718);
+
+  float easeInOutSine(float x) {
+    return 0.5 - 0.5 * cos(3.14159265359 * x);
+  }
+
+  float radial(vec2 point, vec2 center, vec2 scale, float radius) {
+    vec2 diff = (point - center) / scale;
+    return 1.0 - smoothstep(0.0, radius, length(diff));
+  }
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    vec2 p = uv;
+    p.x = (p.x - 0.5) * (u_resolution.x / u_resolution.y) + 0.5;
+
+    float period = 14.5;
+    float phase = mod(u_time / period, 1.0);
+    float segment = floor(phase * 2.0);
+    float local = fract(phase * 2.0);
+    float eased = easeInOutSine(local);
+    float travel = mix(0.18, 0.82, segment < 0.5 ? eased : 1.0 - eased);
+
+    vec2 lightCenter = vec2(travel + u_pointer.x, 0.54 + u_pointer.y);
+    vec2 lightPoint = vec2(lightCenter.x, lightCenter.y);
+
+    float largeBloom = radial(p, lightPoint, vec2(1.08, 0.86), 0.72);
+    float innerBloom = radial(p, lightPoint, vec2(0.58, 0.7), 0.46);
+    float coreGlow = radial(p, lightPoint, vec2(0.3, 0.56), 0.26);
+
+    float stripCount = mix(28.0, 38.0, 1.0 - u_mobile);
+    float stripSpace = 1.0 / stripCount;
+    float stripIndex = floor(uv.x * stripCount);
+    float cell = fract(uv.x * stripCount);
+    float stripCenterX = (stripIndex + 0.5) * stripSpace;
+
+    float verticalNoise =
+      0.5
+      + 0.5 * sin(uv.y * 2.8 + stripIndex * 0.73 + u_time * 0.18);
+
+    float fieldDistance = distance(
+      vec2(stripCenterX, uv.y * 0.74),
+      vec2(lightCenter.x, lightCenter.y * 0.74)
+    );
+    float reaction = 1.0 - smoothstep(0.08, 0.34, fieldDistance);
+    reaction = smoothstep(0.0, 1.0, reaction);
+
+    float bend =
+      sin((uv.y * 6.8) + stripIndex * 0.74 + u_time * 0.42)
+      * reaction
+      * 0.055;
+    float bentCell = fract((uv.x + bend * stripSpace) * stripCount);
+
+    float baseSlatWidth = mix(0.58, 0.52, u_mobile);
+    float openedWidth = baseSlatWidth - reaction * 0.16;
+    float edgeSoftness = 0.08 + reaction * 0.12;
+    float slatShape =
+      smoothstep(0.5 - openedWidth * 0.5 - edgeSoftness, 0.5 - openedWidth * 0.5, bentCell)
+      * (1.0 - smoothstep(0.5 + openedWidth * 0.5, 0.5 + openedWidth * 0.5 + edgeSoftness, bentCell));
+
+    float gap = 1.0 - slatShape;
+    float compressedBeam =
+      exp(-pow((bentCell - 0.5) / (0.075 + reaction * 0.052), 2.0))
+      * reaction;
+    float glassRefraction =
+      exp(-pow((abs(bentCell - 0.5) - (0.28 + reaction * 0.05)) / 0.065, 2.0))
+      * (0.28 + reaction * 0.5);
+
+    float reveal = gap * (0.22 + reaction * 0.78);
+    float glowBehind =
+      largeBloom * 0.22
+      + innerBloom * 0.44
+      + coreGlow * 0.52;
+
+    float fabric =
+      0.009 * sin(stripIndex * 1.7 + uv.y * 9.0)
+      + 0.006 * sin(uv.y * 23.0 + u_time * 0.18);
+
+    vec3 color = bg;
+    color += mint * largeBloom * 0.04;
+    color += mint * glowBehind * reveal * 0.72;
+    color += mint * compressedBeam * (0.48 + coreGlow * 0.62);
+    color += vec3(0.78, 1.0, 0.93) * compressedBeam * coreGlow * 0.2;
+    color += mint * glassRefraction * glowBehind * 0.2;
+
+    float slatShadow = slatShape * (0.34 - reaction * 0.16);
+    float slatHighlight = slatShape * (0.05 + reaction * 0.08) * (0.4 + verticalNoise);
+    color = mix(color, vec3(0.015, 0.017, 0.018), slatShadow);
+    color += vec3(1.0) * slatHighlight;
+
+    float sideVignette =
+      smoothstep(0.46, 0.0, uv.x)
+      + smoothstep(0.54, 1.0, uv.x);
+    float verticalVignette =
+      smoothstep(0.18, 0.0, uv.y)
+      + smoothstep(0.82, 1.0, uv.y);
+    color = mix(color, bg * 0.2, clamp(sideVignette * 0.72 + verticalVignette * 0.28, 0.0, 0.86));
+
+    color += fabric;
+    color = max(color, vec3(0.0));
+    color = pow(color, vec3(0.92));
+
+    gl_FragColor = vec4(color, 1.0);
+  }
+`;
+
+const compileShader = (
+  gl: WebGLRenderingContext,
+  type: number,
+  source: string,
+) => {
+  const shader = gl.createShader(type);
+
+  if (!shader) {
+    return null;
+  }
+
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    gl.deleteShader(shader);
+    return null;
+  }
+
+  return shader;
 };
-
-const bannerLightStyle = {
-  '--banner-mint': bannerLightControls.mint,
-  '--banner-duration': bannerLightControls.duration,
-  '--banner-easing': bannerLightControls.easing,
-  '--banner-overlay-opacity': bannerLightControls.overlayOpacity,
-  '--banner-glow-intensity': bannerLightControls.glowIntensity,
-  '--cursor-x': '0px',
-  '--cursor-y': '0px',
-  '--cursor-rx': '0px',
-  '--cursor-ry': '0px',
-} as CSSProperties;
 
 const Banner = () => {
   const segments = useSelectedLayoutSegments();
   const { t } = useI18n();
   const isSearchPage = segments[0] === 'search';
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const background = backgroundRef.current;
+    const canvas = canvasRef.current;
 
-    if (!background) {
+    if (!canvas) {
       return;
     }
 
+    const gl = canvas.getContext('webgl', {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      powerPreference: 'high-performance',
+      stencil: false,
+    });
+
+    if (!gl) {
+      return;
+    }
+
+    const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+    const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+    if (!vertexShader || !fragmentShader) {
+      return;
+    }
+
+    const program = gl.createProgram();
+
+    if (!program) {
+      return;
+    }
+
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      return;
+    }
+
+    const positionLocation = gl.getAttribLocation(program, 'a_position');
+    const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+    const timeLocation = gl.getUniformLocation(program, 'u_time');
+    const pointerLocation = gl.getUniformLocation(program, 'u_pointer');
+    const mobileLocation = gl.getUniformLocation(program, 'u_mobile');
+    const buffer = gl.createBuffer();
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 3, -1, -1, 3]),
+      gl.STATIC_DRAW,
+    );
+    gl.useProgram(program);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
     let frame = 0;
+    let width = 1;
+    let height = 1;
     let currentX = 0;
     let currentY = 0;
     let targetX = 0;
     let targetY = 0;
+    const startedAt = performance.now();
 
-    const syncCursor = (event: PointerEvent) => {
-      const rect = background.getBoundingClientRect();
-      const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
-      const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, rect.width < 640 ? 1.25 : 2);
+      width = Math.max(1, Math.floor(rect.width * dpr));
+      height = Math.max(1, Math.floor(rect.height * dpr));
 
-      targetX = Math.max(
-        -bannerLightControls.maxCursorOffset,
-        Math.min(bannerLightControls.maxCursorOffset, offsetX * 160),
-      );
-      targetY = Math.max(
-        -bannerLightControls.maxCursorOffset * 0.45,
-        Math.min(bannerLightControls.maxCursorOffset * 0.45, offsetY * 72),
-      );
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      gl.viewport(0, 0, width, height);
     };
 
-    const resetCursor = () => {
+    const moveLight = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      targetX = Math.max(-0.08, Math.min(0.08, x * 0.16));
+      targetY = Math.max(-0.045, Math.min(0.045, -y * 0.09));
+    };
+
+    const resetLight = () => {
       targetX = 0;
       targetY = 0;
     };
 
-    const animateCursor = () => {
-      currentX += (targetX - currentX) * 0.075;
-      currentY += (targetY - currentY) * 0.075;
-      background.style.setProperty('--cursor-x', `${currentX.toFixed(2)}px`);
-      background.style.setProperty('--cursor-y', `${currentY.toFixed(2)}px`);
-      background.style.setProperty('--cursor-rx', `${(-currentX * 0.18).toFixed(2)}px`);
-      background.style.setProperty('--cursor-ry', `${(-currentY * 0.12).toFixed(2)}px`);
-      frame = requestAnimationFrame(animateCursor);
+    const render = () => {
+      resize();
+      currentX += (targetX - currentX) * 0.05;
+      currentY += (targetY - currentY) * 0.05;
+
+      gl.useProgram(program);
+      gl.uniform2f(resolutionLocation, width, height);
+      gl.uniform1f(timeLocation, (performance.now() - startedAt) / 1000);
+      gl.uniform2f(pointerLocation, currentX, currentY);
+      gl.uniform1f(mobileLocation, width < 760 ? 1 : 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      frame = requestAnimationFrame(render);
     };
 
-    frame = requestAnimationFrame(animateCursor);
-    window.addEventListener('pointermove', syncCursor);
-    window.addEventListener('pointerleave', resetCursor);
+    resize();
+    frame = requestAnimationFrame(render);
+    window.addEventListener('pointermove', moveLight, { passive: true });
+    window.addEventListener('pointerleave', resetLight);
+    window.addEventListener('resize', resize);
 
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('pointermove', syncCursor);
-      window.removeEventListener('pointerleave', resetCursor);
+      window.removeEventListener('pointermove', moveLight);
+      window.removeEventListener('pointerleave', resetLight);
+      window.removeEventListener('resize', resize);
+      gl.deleteBuffer(buffer);
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
     };
   }, []);
 
@@ -93,22 +288,9 @@ const Banner = () => {
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#18191B]">
       <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-372">
-        <div
-          ref={backgroundRef}
-          className="banner-optic-background"
-          style={bannerLightStyle}
-          aria-hidden="true"
-        >
-          <div className="banner-optic-ambient" />
-          <div className="banner-optic-light-track">
-            <div className="banner-optic-light" />
-          </div>
-          <div className="banner-optic-compressed-light" />
-          <div className="banner-optic-blinds banner-optic-blinds--back" />
-          <div className="banner-optic-blinds banner-optic-blinds--front" />
-          <div className="banner-optic-refraction" />
-          <div className="banner-optic-vignette" />
-          <div className="banner-optic-overlay" />
+        <div className="absolute inset-0 overflow-hidden bg-[#18191B]" aria-hidden="true">
+          <canvas ref={canvasRef} className="h-full w-full" />
+          <div className="absolute inset-0 bg-black/50" />
         </div>
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
@@ -120,348 +302,6 @@ const Banner = () => {
             {t('banner.description')}
           </p>
         </div>
-
-        <style>{`
-          .banner-optic-background {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            isolation: isolate;
-            background: #18191B;
-            transform: translateZ(0);
-          }
-
-          .banner-optic-background > * {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-          }
-
-          .banner-optic-ambient {
-            background:
-              radial-gradient(
-                ellipse at 50% 50%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(7% * var(--banner-glow-intensity)),
-                  transparent
-                ),
-                transparent 64%
-              ),
-              linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.64) 0%,
-                transparent 36%,
-                transparent 64%,
-                rgba(0, 0, 0, 0.64) 100%
-              );
-            filter: blur(24px);
-            opacity: 0.82;
-          }
-
-          .banner-optic-light-track {
-            inset: -46% -30%;
-            z-index: 1;
-            animation: banner-light-drift var(--banner-duration) var(--banner-easing) infinite;
-            transform: translate3d(-28%, 0, 0);
-            will-change: transform;
-          }
-
-          .banner-optic-light {
-            position: absolute;
-            inset: 0;
-            background:
-              radial-gradient(
-                ellipse at 50% 52%,
-                rgba(235, 255, 249, 0.32) 0%,
-                rgba(17, 255, 183, 0.34) 22%,
-                rgba(17, 255, 183, 0.18) 52%,
-                transparent 86%
-              );
-            filter: blur(62px);
-            opacity: 0.66;
-            transform:
-              translate3d(var(--cursor-x), var(--cursor-y), 0)
-              scaleX(1.4)
-              scaleY(1.62);
-            transform-origin: center;
-            will-change: transform;
-          }
-
-          .banner-optic-compressed-light {
-            inset: -18% -14%;
-            z-index: 2;
-            background:
-              repeating-linear-gradient(
-                90deg,
-                transparent 0 12px,
-                rgba(17, 255, 183, 0.18) 12px 16px,
-                rgba(17, 255, 183, 0.58) 16px 19px,
-                rgba(236, 255, 249, 0.42) 19px 21px,
-                rgba(17, 255, 183, 0.46) 21px 24px,
-                rgba(17, 255, 183, 0.14) 24px 30px,
-                transparent 30px 44px
-              ),
-              repeating-linear-gradient(
-                90deg,
-                transparent 0 19px,
-                rgba(235, 255, 249, 0.24) 19px 20px,
-                transparent 20px 44px
-              ),
-              radial-gradient(
-                ellipse at 50% 50%,
-                rgba(17, 255, 183, 0.58),
-                rgba(17, 255, 183, 0.34) 44%,
-                rgba(17, 255, 183, 0.1) 72%,
-                transparent 88%
-              );
-            background-blend-mode: screen;
-            filter: blur(9px);
-            mix-blend-mode: screen;
-            opacity: 0.9;
-            mask-image: radial-gradient(ellipse at center, #000 0%, #000 62%, transparent 88%);
-            transform:
-              translate3d(var(--cursor-x), var(--cursor-y), 0)
-              scaleY(1.42);
-            animation: banner-compressed-drift var(--banner-duration) var(--banner-easing) infinite;
-            will-change: transform, opacity;
-          }
-
-          .banner-optic-blinds {
-            z-index: 3;
-            inset: -4% -4%;
-            transform: translate3d(0, 0, 0);
-            will-change: transform, opacity;
-          }
-
-          .banner-optic-blinds--back {
-            background:
-              repeating-linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.045) 0 1px,
-                rgba(255, 255, 255, 0.018) 1px 14px,
-                rgba(0, 0, 0, 0.18) 14px 18px,
-                rgba(0, 0, 0, 0.5) 18px 26px,
-                rgba(255, 255, 255, 0.02) 26px 42px
-              );
-            opacity: 0.68;
-            filter: blur(0.8px);
-            animation: banner-blinds-breathe 16s ease-in-out infinite alternate;
-          }
-
-          .banner-optic-blinds--front {
-            background:
-              repeating-linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.64) 0 10px,
-                rgba(0, 0, 0, 0.38) 10px 15px,
-                rgba(0, 0, 0, 0.14) 15px 18px,
-                rgba(255, 255, 255, 0.05) 18px 19px,
-                rgba(17, 255, 183, 0.08) 19px 24px,
-                rgba(0, 0, 0, 0.42) 24px 44px
-              );
-            opacity: 0.9;
-            mix-blend-mode: multiply;
-            filter: blur(0.35px);
-            animation: banner-blinds-parallax 20s ease-in-out infinite alternate;
-          }
-
-          .banner-optic-refraction {
-            z-index: 4;
-            inset: -30% -8%;
-            background:
-              repeating-linear-gradient(
-                90deg,
-                transparent 0 14px,
-                rgba(17, 255, 183, 0.1) 14px 17px,
-                rgba(255, 255, 255, 0.14) 17px 19px,
-                rgba(17, 255, 183, 0.11) 19px 23px,
-                transparent 23px 44px
-              ),
-              linear-gradient(
-                180deg,
-                rgba(255, 255, 255, 0.08) 0%,
-                transparent 30%,
-                rgba(0, 0, 0, 0.18) 100%
-              );
-            filter: blur(4px);
-            mix-blend-mode: screen;
-            opacity: 0.48;
-            transform:
-              translate3d(var(--cursor-rx), var(--cursor-ry), 0)
-              scaleY(1.24);
-            animation: banner-refraction-flow 18s ease-in-out infinite alternate;
-            will-change: transform, opacity;
-          }
-
-          .banner-optic-vignette {
-            z-index: 5;
-            background:
-              radial-gradient(
-                ellipse at 50% 50%,
-                transparent 0%,
-                rgba(0, 0, 0, 0.08) 44%,
-                rgba(0, 0, 0, 0.76) 100%
-              ),
-              linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.96) 0%,
-                rgba(0, 0, 0, 0.34) 20%,
-                transparent 48%,
-                rgba(0, 0, 0, 0.34) 80%,
-                rgba(0, 0, 0, 0.96) 100%
-              );
-          }
-
-          .banner-optic-overlay {
-            z-index: 6;
-            background: rgba(0, 0, 0, var(--banner-overlay-opacity));
-          }
-
-          @keyframes banner-light-drift {
-            0% {
-              transform: translate3d(-30%, 1%, 0);
-            }
-            25% {
-              transform: translate3d(0%, -1%, 0);
-            }
-            50% {
-              transform: translate3d(30%, 1.5%, 0);
-            }
-            75% {
-              transform: translate3d(0%, -0.5%, 0);
-            }
-            100% {
-              transform: translate3d(-30%, 1%, 0);
-            }
-          }
-
-          @keyframes banner-compressed-drift {
-            0% {
-              opacity: 0.38;
-              transform: translate3d(calc(-86px + var(--cursor-x)), var(--cursor-y), 0) scaleY(1.32);
-            }
-            25% {
-              opacity: 0.86;
-              transform: translate3d(var(--cursor-x), calc(var(--cursor-y) - 4px), 0) scaleY(1.48);
-            }
-            50% {
-              opacity: 0.62;
-              transform: translate3d(calc(86px + var(--cursor-x)), calc(var(--cursor-y) + 4px), 0) scaleY(1.56);
-            }
-            75% {
-              opacity: 0.86;
-              transform: translate3d(var(--cursor-x), calc(var(--cursor-y) - 2px), 0) scaleY(1.46);
-            }
-            100% {
-              opacity: 0.38;
-              transform: translate3d(calc(-86px + var(--cursor-x)), var(--cursor-y), 0) scaleY(1.32);
-            }
-          }
-
-          @keyframes banner-blinds-breathe {
-            from {
-              transform: translate3d(-5px, 0, 0) scaleY(1.02);
-              opacity: 0.58;
-            }
-            to {
-              transform: translate3d(6px, 0, 0) scaleY(1.06);
-              opacity: 0.74;
-            }
-          }
-
-          @keyframes banner-blinds-parallax {
-            from {
-              transform: translate3d(4px, 0, 0);
-            }
-            to {
-              transform: translate3d(-7px, 0, 0);
-            }
-          }
-
-          @keyframes banner-refraction-flow {
-            from {
-              opacity: 0.48;
-              transform:
-                translate3d(calc(var(--cursor-rx) - 8px), var(--cursor-ry), 0)
-                scaleY(1.2);
-            }
-            to {
-              opacity: 0.7;
-              transform:
-                translate3d(calc(var(--cursor-rx) + 10px), var(--cursor-ry), 0)
-                scaleY(1.28);
-            }
-          }
-
-          @media (max-width: 549px) {
-            .banner-optic-light-track {
-              inset: -52% -72%;
-            }
-
-            .banner-optic-compressed-light {
-              inset: -18% -36%;
-              background:
-                repeating-linear-gradient(
-                  90deg,
-                  transparent 0 9px,
-                  rgba(17, 255, 183, 0.18) 9px 12px,
-                  rgba(17, 255, 183, 0.54) 12px 14px,
-                  rgba(235, 255, 249, 0.38) 14px 16px,
-                  rgba(17, 255, 183, 0.4) 16px 18px,
-                  rgba(17, 255, 183, 0.12) 18px 23px,
-                  transparent 23px 34px
-                ),
-                repeating-linear-gradient(
-                  90deg,
-                  transparent 0 14px,
-                  rgba(235, 255, 249, 0.22) 14px 15px,
-                  transparent 15px 34px
-                ),
-                radial-gradient(
-                  ellipse at 50% 50%,
-                  rgba(17, 255, 183, 0.54),
-                  rgba(17, 255, 183, 0.3) 44%,
-                  rgba(17, 255, 183, 0.1) 72%,
-                  transparent 88%
-                );
-            }
-
-            .banner-optic-blinds--back {
-              background:
-                repeating-linear-gradient(
-                  90deg,
-                  rgba(255, 255, 255, 0.04) 0 1px,
-                  rgba(255, 255, 255, 0.016) 1px 10px,
-                  rgba(0, 0, 0, 0.18) 10px 14px,
-                  rgba(0, 0, 0, 0.5) 14px 21px,
-                  rgba(255, 255, 255, 0.02) 21px 34px
-                );
-            }
-
-            .banner-optic-blinds--front {
-              background:
-                repeating-linear-gradient(
-                  90deg,
-                  rgba(0, 0, 0, 0.64) 0 8px,
-                  rgba(0, 0, 0, 0.38) 8px 11px,
-                  rgba(0, 0, 0, 0.14) 11px 14px,
-                  rgba(255, 255, 255, 0.05) 14px 15px,
-                  rgba(17, 255, 183, 0.08) 15px 18px,
-                  rgba(0, 0, 0, 0.42) 18px 34px
-                );
-            }
-          }
-
-          @media (prefers-reduced-motion: reduce) {
-            .banner-optic-light-track,
-            .banner-optic-compressed-light,
-            .banner-optic-blinds,
-            .banner-optic-refraction {
-              animation: none;
-            }
-          }
-        `}</style>
       </div>
     </section>
   );
