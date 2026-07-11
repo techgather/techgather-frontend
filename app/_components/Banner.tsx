@@ -23,6 +23,18 @@ const stackGroups = [
   },
   {
     className:
+      'banner-ascii-stack banner-ascii-stack--mobile-extra banner-ascii-stack--mobile-left-low',
+  },
+  {
+    className:
+      'banner-ascii-stack banner-ascii-stack--mobile-extra banner-ascii-stack--mobile-left-floor',
+  },
+  {
+    className:
+      'banner-ascii-stack banner-ascii-stack--mobile-extra banner-ascii-stack--mobile-right-floor banner-ascii-stack--right',
+  },
+  {
+    className:
       'banner-ascii-stack hidden lg:block lg:right-276 lg:top-198 banner-ascii-stack--medium banner-ascii-stack--right',
   },
 ];
@@ -66,11 +78,11 @@ const Banner = () => {
         </div>
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
-          <h3 className="font-hanna text-[34px]/[45px] text-white sm:text-[45px]/[62px]">
+          <h3 className="font-hanna text-[30px]/[41px] text-white sm:text-[45px]/[62px]">
             {t('banner.titlePrefix')} <br />
             {t('banner.titleSuffix')}
           </h3>
-          <p className="text-[15px]/[20px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
+          <p className="text-[11px]/[16px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
             {t('banner.description')}
           </p>
         </div>
@@ -104,6 +116,10 @@ const Banner = () => {
             height: 112px;
             opacity: 0.5;
             transform: rotate(0deg) scale(0.86);
+          }
+
+          .banner-ascii-stack--mobile-extra {
+            display: none;
           }
 
           .banner-text-clear {
@@ -199,8 +215,44 @@ const Banner = () => {
               transform: rotate(-2deg) scale(0.74);
             }
 
+            .banner-ascii-stack--mobile-extra {
+              display: block;
+            }
+
+            .banner-ascii-stack--mobile-left-low {
+              left: 66px;
+              top: 210px;
+              width: 176px;
+              height: 118px;
+              opacity: 0.58;
+              transform: rotate(0deg) scale(0.62);
+            }
+
+            .banner-ascii-stack--mobile-left-floor {
+              left: 142px;
+              top: 236px;
+              width: 160px;
+              height: 90px;
+              opacity: 0.52;
+              transform: rotate(1deg) scale(0.54);
+            }
+
             .banner-ascii-stack--right {
               transform: rotate(2deg) scale(0.74);
+            }
+
+            .banner-ascii-stack--mobile-right-floor {
+              right: 58px;
+              top: 230px;
+              width: 172px;
+              height: 100px;
+              opacity: 0.52;
+              transform: rotate(1deg) scale(0.58);
+            }
+
+            .banner-text-clear {
+              width: min(330px, 82vw);
+              height: 172px;
             }
 
             .banner-ascii-sheet {
