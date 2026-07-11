@@ -39,7 +39,8 @@ const stackGroups = [
   },
 ];
 
-const stackLayers = Array.from({ length: 14 }, (_, index) => index);
+const stackLayers = Array.from({ length: 16 }, (_, index) => index);
+const sheetOffsets = [-7, 5, -4, 8, -9, 4, -3, 7, -6, 6, -4, 5, -8, 4, -5, 7];
 
 const PaperStack = ({ className }: { className: string }) => (
   <div aria-hidden="true" className={className}>
@@ -51,6 +52,7 @@ const PaperStack = ({ className }: { className: string }) => (
           {
             '--sheet-index': layer,
             '--sheet-delay': `${layer * 0.12}s`,
+            '--sheet-offset': `${sheetOffsets[layer]}px`,
           } as CSSProperties
         }
       />
@@ -69,7 +71,7 @@ const Banner = () => {
 
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#18191B]">
-      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72">
+      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-340">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {stackGroups.map((stack) => (
             <PaperStack className={stack.className} key={stack.className} />
@@ -78,11 +80,11 @@ const Banner = () => {
         </div>
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
-          <h3 className="font-hanna text-[30px]/[41px] text-white sm:text-[45px]/[62px]">
+          <h3 className="font-hanna text-[30px]/[41px] text-white sm:text-[43px]/[60px]">
             {t('banner.titlePrefix')} <br />
             {t('banner.titleSuffix')}
           </h3>
-          <p className="text-[11px]/[16px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
+          <p className="text-[13px]/[18px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
             {t('banner.description')}
           </p>
         </div>
@@ -140,7 +142,7 @@ const Banner = () => {
 
           .banner-ascii-sheet {
             position: absolute;
-            left: calc(var(--sheet-index) * -2.5px);
+            left: calc(var(--sheet-offset) + var(--sheet-index) * -0.6px);
             bottom: calc(var(--sheet-index) * 11px);
             width: calc(100% - 28px);
             height: 18px;
