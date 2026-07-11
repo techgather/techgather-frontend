@@ -4,53 +4,44 @@ import { useI18n } from '@/app/i18n/I18nProvider';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import type { CSSProperties } from 'react';
 
-const paperShape = [
-  '  ______________________',
-  ' /:::::::::::::::::::::/|',
-  '/_____________________/ |',
-  '|  article.md          | |',
-  '|  const pick = true;  | |',
-  '|  <tech /> <blog />   | /',
-  '|______________________|/',
-];
-
 const stackGroups = [
-  { className: 'banner-ascii-stack left-[-18px] top-24 sm:left-40 sm:top-34' },
   {
     className:
-      'banner-ascii-stack hidden sm:block sm:left-244 sm:top-118 banner-ascii-stack--small',
+      'banner-ascii-stack left-[-154px] top-142 sm:left-[-112px] sm:top-132 lg:left-44 lg:top-42 banner-ascii-stack--large',
   },
   {
     className:
-      'banner-ascii-stack hidden lg:block lg:left-420 lg:top-190 banner-ascii-stack--wide',
+      'banner-ascii-stack hidden lg:block lg:left-250 lg:top-132 banner-ascii-stack--medium',
   },
   {
     className:
-      'banner-ascii-stack right-[-24px] top-76 sm:right-62 sm:top-70 banner-ascii-stack--tall',
+      'banner-ascii-stack hidden lg:block lg:left-430 lg:top-220 banner-ascii-stack--low',
   },
   {
     className:
-      'banner-ascii-stack hidden md:block md:right-282 md:top-170 banner-ascii-stack--small',
+      'banner-ascii-stack right-[-158px] top-150 sm:right-[-118px] sm:top-136 lg:right-62 lg:top-84 banner-ascii-stack--large banner-ascii-stack--right',
+  },
+  {
+    className:
+      'banner-ascii-stack hidden lg:block lg:right-276 lg:top-198 banner-ascii-stack--medium banner-ascii-stack--right',
   },
 ];
 
-const layers = Array.from({ length: 10 }, (_, index) => index);
+const stackLayers = Array.from({ length: 18 }, (_, index) => index);
 
 const PaperStack = ({ className }: { className: string }) => (
   <div aria-hidden="true" className={className}>
-    {layers.map((layer) => (
-      <pre
-        className="banner-ascii-paper"
+    {stackLayers.map((layer) => (
+      <div
+        className="banner-ascii-sheet"
         key={layer}
         style={
           {
-            '--paper-index': layer,
-            '--paper-delay': `${layer * 0.22}s`,
+            '--sheet-index': layer,
+            '--sheet-delay': `${layer * 0.12}s`,
           } as CSSProperties
         }
-      >
-        {paperShape.join('\n')}
-      </pre>
+      />
     ))}
   </div>
 );
@@ -66,19 +57,20 @@ const Banner = () => {
 
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#18191B]">
-      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-58 sm:min-h-302 sm:px-52 sm:py-72">
+      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {stackGroups.map((stack) => (
             <PaperStack className={stack.className} key={stack.className} />
           ))}
+          <div className="banner-text-clear" aria-hidden="true" />
         </div>
 
-        <div className="relative z-10 flex w-full max-w-560 flex-col items-center gap-18 text-center">
-          <h3 className="font-hanna text-[34px]/[44px] text-white sm:text-[44px]/[56px]">
+        <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
+          <h3 className="font-hanna text-[34px]/[45px] text-white sm:text-[45px]/[62px]">
             {t('banner.titlePrefix')} <br />
             {t('banner.titleSuffix')}
           </h3>
-          <p className="text-[15px]/[20px] font-semibold text-[#8F949C] sm:text-[19px]/[26px]">
+          <p className="text-[15px]/[20px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
             {t('banner.description')}
           </p>
         </div>
@@ -86,87 +78,128 @@ const Banner = () => {
         <style>{`
           .banner-ascii-stack {
             position: absolute;
-            width: 236px;
-            height: 190px;
-            opacity: 0.82;
-            transform: rotate(-2deg);
+            width: 246px;
+            height: 210px;
+            opacity: 0.58;
+            transform: rotate(-1.5deg);
           }
 
-          .banner-ascii-stack--small {
-            width: 204px;
-            height: 156px;
-            transform: rotate(1deg) scale(0.86);
-            opacity: 0.72;
+          .banner-ascii-stack--right {
+            transform: rotate(1.5deg);
           }
 
-          .banner-ascii-stack--wide {
-            width: 260px;
-            height: 128px;
-            transform: rotate(0deg) scale(0.72);
+          .banner-ascii-stack--large {
+            width: 270px;
+            height: 244px;
+          }
+
+          .banner-ascii-stack--medium {
+            width: 232px;
+            height: 176px;
             opacity: 0.64;
           }
 
-          .banner-ascii-stack--tall {
-            width: 252px;
-            height: 218px;
-            transform: rotate(2deg) scale(0.94);
+          .banner-ascii-stack--low {
+            width: 230px;
+            height: 112px;
+            opacity: 0.5;
+            transform: rotate(0deg) scale(0.86);
           }
 
-          .banner-ascii-paper {
+          .banner-text-clear {
             position: absolute;
-            left: calc(var(--paper-index) * -3px);
-            bottom: calc(var(--paper-index) * 13px);
-            margin: 0;
-            color: rgba(255, 255, 255, 0.9);
+            left: 50%;
+            top: 50%;
+            width: min(620px, 78vw);
+            height: 212px;
+            background: radial-gradient(
+              ellipse at center,
+              #18191b 0%,
+              #18191b 58%,
+              rgba(24, 25, 27, 0.86) 72%,
+              rgba(24, 25, 27, 0) 100%
+            );
+            transform: translate(-50%, -50%);
+          }
+
+          .banner-ascii-sheet {
+            position: absolute;
+            left: calc(var(--sheet-index) * -2.8px);
+            bottom: calc(var(--sheet-index) * 8.5px);
+            width: 100%;
+            height: 26px;
+            opacity: 0;
+            color: rgba(255, 255, 255, 0.82);
+            animation: banner-sheet-stack 4.4s var(--sheet-delay) infinite;
+          }
+
+          .banner-ascii-sheet::before,
+          .banner-ascii-sheet::after {
+            position: absolute;
             font-family:
               ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
               "Liberation Mono", "Courier New", monospace;
-            font-size: 10px;
+            font-size: 12px;
             line-height: 10px;
             letter-spacing: 0;
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
             white-space: pre;
-            opacity: 0;
-            animation: banner-paper-stack 4.8s var(--paper-delay) infinite;
           }
 
-          @keyframes banner-paper-stack {
+          .banner-ascii-sheet::before {
+            left: 18px;
+            top: 0;
+            content: ".-------------------------------------------.";
+          }
+
+          .banner-ascii-sheet::after {
+            left: 0;
+            top: 9px;
+            content: "/'------------------------------------------'\\\\";
+          }
+
+          @keyframes banner-sheet-stack {
             0% {
               opacity: 0;
-              transform: translate3d(18px, -26px, 0) rotate(2deg);
+              transform: translate3d(22px, -14px, 0);
             }
-            12%,
-            62% {
-              opacity: 0.88;
-              transform: translate3d(0, 0, 0) rotate(0deg);
+            10%,
+            70% {
+              opacity: 1;
+              transform: translate3d(0, 0, 0);
             }
-            80%,
+            88%,
             100% {
               opacity: 0;
-              transform: translate3d(-10px, 18px, 0) rotate(-1deg);
+              transform: translate3d(-10px, 10px, 0);
             }
           }
 
           @media (max-width: 549px) {
             .banner-ascii-stack {
-              width: 172px;
-              height: 138px;
-              opacity: 0.54;
-              transform: rotate(-3deg) scale(0.74);
+              width: 196px;
+              height: 156px;
+              opacity: 0.3;
+              transform: rotate(-2deg) scale(0.74);
             }
 
-            .banner-ascii-stack--tall {
-              transform: rotate(2deg) scale(0.7);
+            .banner-ascii-stack--right {
+              transform: rotate(2deg) scale(0.74);
             }
 
-            .banner-ascii-paper {
-              font-size: 8px;
+            .banner-ascii-sheet {
+              bottom: calc(var(--sheet-index) * 7px);
+              height: 22px;
+            }
+
+            .banner-ascii-sheet::before,
+            .banner-ascii-sheet::after {
+              font-size: 9px;
               line-height: 8px;
             }
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .banner-ascii-paper {
+            .banner-ascii-sheet {
               animation: none;
               opacity: 0.68;
             }
