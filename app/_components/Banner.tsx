@@ -7,7 +7,7 @@ import type { CSSProperties } from 'react';
 const stackGroups = [
   {
     className:
-      'banner-ascii-stack left-[-154px] top-142 sm:left-[-112px] sm:top-132 lg:left-44 lg:top-42 banner-ascii-stack--large',
+      'banner-ascii-stack left-[-94px] top-150 sm:left-[-112px] sm:top-132 lg:left-44 lg:top-42 banner-ascii-stack--large',
   },
   {
     className:
@@ -19,7 +19,7 @@ const stackGroups = [
   },
   {
     className:
-      'banner-ascii-stack right-[-158px] top-150 sm:right-[-118px] sm:top-136 lg:right-62 lg:top-84 banner-ascii-stack--large banner-ascii-stack--right',
+      'banner-ascii-stack right-[-96px] top-150 sm:right-[-118px] sm:top-136 lg:right-62 lg:top-84 banner-ascii-stack--large banner-ascii-stack--right',
   },
   {
     className:
@@ -27,7 +27,7 @@ const stackGroups = [
   },
 ];
 
-const stackLayers = Array.from({ length: 18 }, (_, index) => index);
+const stackLayers = Array.from({ length: 14 }, (_, index) => index);
 
 const PaperStack = ({ className }: { className: string }) => (
   <div aria-hidden="true" className={className}>
@@ -78,8 +78,8 @@ const Banner = () => {
         <style>{`
           .banner-ascii-stack {
             position: absolute;
-            width: 246px;
-            height: 210px;
+            width: 260px;
+            height: 214px;
             opacity: 0.58;
             transform: rotate(-1.5deg);
           }
@@ -89,13 +89,13 @@ const Banner = () => {
           }
 
           .banner-ascii-stack--large {
-            width: 270px;
-            height: 244px;
+            width: 286px;
+            height: 232px;
           }
 
           .banner-ascii-stack--medium {
-            width: 232px;
-            height: 176px;
+            width: 238px;
+            height: 178px;
             opacity: 0.64;
           }
 
@@ -124,37 +124,54 @@ const Banner = () => {
 
           .banner-ascii-sheet {
             position: absolute;
-            left: calc(var(--sheet-index) * -2.8px);
-            bottom: calc(var(--sheet-index) * 8.5px);
-            width: 100%;
-            height: 26px;
+            left: calc(var(--sheet-index) * -2.5px);
+            bottom: calc(var(--sheet-index) * 11px);
+            width: calc(100% - 28px);
+            height: 18px;
             opacity: 0;
-            color: rgba(255, 255, 255, 0.82);
+            border: 1px dashed rgba(255, 255, 255, 0.88);
+            background:
+              linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.08) 0 1px,
+                transparent 1px 100%
+              ),
+              rgba(24, 25, 27, 0.82);
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            transform: skewX(-8deg);
             animation: banner-sheet-stack 4.4s var(--sheet-delay) infinite;
           }
 
           .banner-ascii-sheet::before,
           .banner-ascii-sheet::after {
+            content: "";
             position: absolute;
-            font-family:
-              ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-              "Liberation Mono", "Courier New", monospace;
-            font-size: 12px;
-            line-height: 10px;
-            letter-spacing: 0;
-            white-space: pre;
           }
 
           .banner-ascii-sheet::before {
-            left: 18px;
-            top: 0;
-            content: ".-------------------------------------------.";
+            right: -21px;
+            top: 2px;
+            width: 20px;
+            height: 17px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.68);
+            border-right: 1px dashed rgba(255, 255, 255, 0.68);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.68);
+            background: rgba(24, 25, 27, 0.72);
+            transform: skewY(32deg);
+            transform-origin: left top;
           }
 
           .banner-ascii-sheet::after {
-            left: 0;
-            top: 9px;
-            content: "/'------------------------------------------'\\\\";
+            left: 9px;
+            bottom: -8px;
+            width: 100%;
+            height: 8px;
+            border-left: 1px dashed rgba(255, 255, 255, 0.52);
+            border-right: 1px dashed rgba(255, 255, 255, 0.52);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.52);
+            background: rgba(24, 25, 27, 0.54);
+            transform: skewX(18deg);
+            transform-origin: left top;
           }
 
           @keyframes banner-sheet-stack {
@@ -176,9 +193,9 @@ const Banner = () => {
 
           @media (max-width: 549px) {
             .banner-ascii-stack {
-              width: 196px;
+              width: 204px;
               height: 156px;
-              opacity: 0.3;
+              opacity: 0.46;
               transform: rotate(-2deg) scale(0.74);
             }
 
@@ -187,14 +204,8 @@ const Banner = () => {
             }
 
             .banner-ascii-sheet {
-              bottom: calc(var(--sheet-index) * 7px);
-              height: 22px;
-            }
-
-            .banner-ascii-sheet::before,
-            .banner-ascii-sheet::after {
-              font-size: 9px;
-              line-height: 8px;
+              bottom: calc(var(--sheet-index) * 9px);
+              height: 16px;
             }
           }
 
