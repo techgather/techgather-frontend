@@ -53,6 +53,7 @@ const PaperStack = ({ className }: { className: string }) => (
             '--sheet-index': layer,
             '--sheet-delay': `${layer * 0.12}s`,
             '--sheet-offset': `${sheetOffsets[layer]}px`,
+            zIndex: layer + 1,
           } as CSSProperties
         }
       />
@@ -174,7 +175,7 @@ const Banner = () => {
                 rgba(255, 255, 255, 0.08) 0 1px,
                 transparent 1px 100%
               ),
-              rgba(24, 25, 27, 0.82);
+              #18191b;
             box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
             transform: skewX(-8deg);
             animation: banner-sheet-stack 4.4s var(--sheet-delay) infinite;
@@ -194,7 +195,7 @@ const Banner = () => {
             border-top: 1px dashed rgba(255, 255, 255, 0.68);
             border-right: 1px dashed rgba(255, 255, 255, 0.68);
             border-bottom: 1px dashed rgba(255, 255, 255, 0.68);
-            background: rgba(24, 25, 27, 0.72);
+            background: #18191b;
             transform: skewY(32deg);
             transform-origin: left top;
           }
@@ -207,7 +208,7 @@ const Banner = () => {
             border-left: 1px dashed rgba(255, 255, 255, 0.52);
             border-right: 1px dashed rgba(255, 255, 255, 0.52);
             border-bottom: 1px dashed rgba(255, 255, 255, 0.52);
-            background: rgba(24, 25, 27, 0.54);
+            background: #18191b;
             transform: skewX(18deg);
             transform-origin: left top;
           }
