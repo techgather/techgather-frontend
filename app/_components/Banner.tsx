@@ -15,7 +15,7 @@ const stackGroups = [
   },
   {
     className:
-      'banner-ascii-stack hidden lg:block lg:left-430 lg:top-238 banner-ascii-stack--low banner-ascii-stack--desktop-left-floor',
+      'banner-ascii-stack hidden lg:block lg:left-404 lg:top-184 banner-ascii-stack--low banner-ascii-stack--desktop-left-floor',
   },
   {
     className:
@@ -135,9 +135,10 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--desktop-left-floor {
-              width: 250px;
-              height: 98px;
-              opacity: 0.5;
+              width: 318px;
+              height: 214px;
+              opacity: 0.54;
+              transform: rotate(0deg) scale(0.9);
             }
 
             .banner-ascii-stack--desktop-left-main .banner-ascii-sheet {
@@ -147,6 +148,14 @@ const Banner = () => {
 
             .banner-ascii-stack--desktop-left-mid .banner-ascii-sheet {
               bottom: calc(var(--sheet-index) * 13px);
+            }
+
+            .banner-ascii-stack--desktop-left-floor .banner-ascii-sheet {
+              bottom: calc(var(--sheet-index) * 12px);
+              height: 17px;
+              width: calc(100% - 36px);
+              animation: none;
+              opacity: 0.68;
             }
           }
 
@@ -186,7 +195,7 @@ const Banner = () => {
               ),
               #18191b;
             box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-            transform: skewX(-8deg);
+            transform: skewX(-6deg);
             animation: banner-sheet-stack 4.4s var(--sheet-delay) infinite;
           }
 
@@ -197,29 +206,25 @@ const Banner = () => {
           }
 
           .banner-ascii-sheet::before {
-            right: -21px;
-            top: 2px;
-            width: 20px;
-            height: 17px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.68);
-            border-right: 1px dashed rgba(255, 255, 255, 0.68);
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.68);
+            right: -18px;
+            top: 3px;
+            width: 18px;
+            height: 13px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.7);
+            border-right: 1px dashed rgba(255, 255, 255, 0.58);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
             background: #18191b;
-            transform: skewY(32deg);
+            transform: skewY(28deg);
             transform-origin: left top;
           }
 
           .banner-ascii-sheet::after {
-            left: 9px;
-            bottom: -8px;
-            width: 100%;
-            height: 8px;
-            border-left: 1px dashed rgba(255, 255, 255, 0.52);
-            border-right: 1px dashed rgba(255, 255, 255, 0.52);
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.52);
-            background: #18191b;
-            transform: skewX(18deg);
-            transform-origin: left top;
+            left: 8px;
+            right: 10px;
+            top: 5px;
+            height: 1px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.46);
+            opacity: 0.72;
           }
 
           @keyframes banner-sheet-stack {
