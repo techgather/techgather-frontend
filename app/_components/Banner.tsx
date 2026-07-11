@@ -72,20 +72,19 @@ const Banner = () => {
 
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#18191B]">
-      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-372">
+      <div className="relative flex min-h-[165px] w-full max-w-1440 items-center justify-center px-24 py-36 sm:min-h-[201px] sm:px-52 sm:py-48 lg:min-h-[248px]">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {stackGroups.map((stack) => (
             <PaperStack className={stack.className} key={stack.className} />
           ))}
-          <div className="banner-text-clear" aria-hidden="true" />
         </div>
 
-        <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-20 text-center">
+        <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-16 text-center">
           <h3 className="font-hanna text-[30px]/[41px] text-white sm:text-[43px]/[60px]">
             {t('banner.titlePrefix')} <br />
             {t('banner.titleSuffix')}
           </h3>
-          <p className="text-[13px]/[18px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
+          <p className="text-[11px]/[16px] font-semibold text-[#8A8F98] sm:text-[17px]/[24px]">
             {t('banner.description')}
           </p>
         </div>
@@ -123,18 +122,21 @@ const Banner = () => {
 
           @media (min-width: 1080px) {
             .banner-ascii-stack--desktop-left-main {
+              top: -48px !important;
               width: 342px;
               height: 348px;
               opacity: 0.66;
             }
 
             .banner-ascii-stack--desktop-left-mid {
+              top: 54px !important;
               width: 286px;
               height: 258px;
               opacity: 0.6;
             }
 
             .banner-ascii-stack--desktop-left-floor {
+              top: 128px !important;
               width: 318px;
               height: 214px;
               opacity: 0.54;
@@ -161,22 +163,6 @@ const Banner = () => {
 
           .banner-ascii-stack--mobile-extra {
             display: none;
-          }
-
-          .banner-text-clear {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: min(620px, 78vw);
-            height: 212px;
-            background: radial-gradient(
-              ellipse at center,
-              #18191b 0%,
-              #18191b 58%,
-              rgba(24, 25, 27, 0.86) 72%,
-              rgba(24, 25, 27, 0) 100%
-            );
-            transform: translate(-50%, -50%);
           }
 
           .banner-ascii-sheet {
@@ -252,13 +238,17 @@ const Banner = () => {
               transform: rotate(-2deg) scale(0.74);
             }
 
+            .banner-ascii-stack--large {
+              top: 58px !important;
+            }
+
             .banner-ascii-stack--mobile-extra {
               display: block;
             }
 
             .banner-ascii-stack--mobile-left-low {
-              left: 66px;
-              top: 210px;
+              left: 42px;
+              top: 124px;
               width: 176px;
               height: 118px;
               opacity: 0.58;
@@ -266,8 +256,8 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--mobile-left-floor {
-              left: 142px;
-              top: 236px;
+              left: 124px;
+              top: 144px;
               width: 160px;
               height: 90px;
               opacity: 0.52;
@@ -279,22 +269,17 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--mobile-right-floor {
-              right: 58px;
-              top: 230px;
+              right: 32px;
+              top: 140px;
               width: 172px;
               height: 100px;
               opacity: 0.52;
               transform: rotate(1deg) scale(0.58);
             }
 
-            .banner-text-clear {
-              width: min(330px, 82vw);
-              height: 172px;
-            }
-
             .banner-ascii-sheet {
-              bottom: calc(var(--sheet-index) * 9px);
-              height: 16px;
+              bottom: calc(var(--sheet-index) * 6px);
+              height: 13px;
             }
           }
 
