@@ -192,15 +192,16 @@ const Banner = () => {
           }
 
           .banner-ascii-sheet::before {
-            right: -18px;
-            top: 3px;
-            width: 18px;
-            height: 13px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.7);
-            border-right: 1px dashed rgba(255, 255, 255, 0.58);
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+            right: -14px;
+            top: 2px;
+            width: 14px;
+            height: 100%;
+            box-sizing: border-box;
+            border-top: 1px dashed rgba(255, 255, 255, 0.68);
+            border-right: 1px dashed rgba(255, 255, 255, 0.56);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.48);
             background: #18191b;
-            transform: skewY(28deg);
+            transform: skewY(24deg);
             transform-origin: left top;
           }
 
