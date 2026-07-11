@@ -8,6 +8,7 @@ const bannerLightControls = {
   mint: '#11FFB7',
   duration: '5.8s',
   easing: 'ease-in-out',
+  smallDelay: '1.35s',
   overlayOpacity: 0.4,
   columnContrast: 1.12,
   glowIntensity: 1,
@@ -17,6 +18,7 @@ const bannerLightStyle = {
   '--banner-mint': bannerLightControls.mint,
   '--banner-duration': bannerLightControls.duration,
   '--banner-easing': bannerLightControls.easing,
+  '--banner-small-delay': bannerLightControls.smallDelay,
   '--banner-overlay-opacity': bannerLightControls.overlayOpacity,
   '--banner-column-contrast': bannerLightControls.columnContrast,
   '--banner-glow-intensity': bannerLightControls.glowIntensity,
@@ -40,7 +42,8 @@ const Banner = () => {
           aria-hidden="true"
         >
           <div className="banner-light-columns" />
-          <div className="banner-light-sweep" />
+          <div className="banner-light-sweep banner-light-sweep--large" />
+          <div className="banner-light-sweep banner-light-sweep--small" />
           <div className="banner-light-focus" />
           <div className="banner-dark-overlay" />
         </div>
@@ -142,6 +145,11 @@ const Banner = () => {
           }
 
           .banner-light-sweep {
+            filter: blur(14px);
+            animation: banner-light-gather var(--banner-duration) var(--banner-easing) infinite alternate;
+          }
+
+          .banner-light-sweep--large {
             background:
               radial-gradient(
                 ellipse at 50% 74%,
@@ -163,8 +171,34 @@ const Banner = () => {
                 ) 56%,
                 transparent 74%
               );
-            filter: blur(14px);
-            animation: banner-light-gather var(--banner-duration) var(--banner-easing) infinite alternate;
+          }
+
+          .banner-light-sweep--small {
+            inset: -34% -36%;
+            background:
+              radial-gradient(
+                ellipse at 50% 42%,
+                rgba(226, 255, 247, calc(0.88 * var(--banner-glow-intensity))) 0%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(72% * var(--banner-glow-intensity)),
+                  transparent
+                ) 12%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(38% * var(--banner-glow-intensity)),
+                  transparent
+                ) 28%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(10% * var(--banner-glow-intensity)),
+                  transparent
+                ) 48%,
+                transparent 64%
+              );
+            filter: blur(10px);
+            animation-name: banner-light-gather-small;
+            animation-delay: var(--banner-small-delay);
           }
 
           .banner-light-focus {
@@ -236,6 +270,29 @@ const Banner = () => {
             }
           }
 
+          @keyframes banner-light-gather-small {
+            0% {
+              opacity: 0;
+              transform: translate3d(-46%, -4%, 0) scaleX(0.16) scaleY(0.58);
+            }
+            20% {
+              opacity: 0.46;
+              transform: translate3d(-22%, -2%, 0) scaleX(0.42) scaleY(0.68);
+            }
+            48% {
+              opacity: 0.76;
+              transform: translate3d(12%, 0, 0) scaleX(0.28) scaleY(0.76);
+            }
+            74% {
+              opacity: 0.44;
+              transform: translate3d(34%, 2%, 0) scaleX(0.2) scaleY(0.82);
+            }
+            100% {
+              opacity: 0;
+              transform: translate3d(50%, 4%, 0) scaleX(0.12) scaleY(0.88);
+            }
+          }
+
           @media (max-width: 549px) {
             .banner-light-columns {
               inset: -12px -44px;
@@ -268,8 +325,12 @@ const Banner = () => {
                 );
             }
 
-            .banner-light-sweep {
+            .banner-light-sweep--large {
               inset: -46% -72%;
+            }
+
+            .banner-light-sweep--small {
+              inset: -38% -78%;
             }
 
             .banner-light-focus {
