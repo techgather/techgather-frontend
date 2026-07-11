@@ -11,7 +11,7 @@ const bannerLightControls = {
   smallDelay: '1.35s',
   overlayOpacity: 0.4,
   columnContrast: 1.12,
-  glowIntensity: 1,
+  glowIntensity: 1.18,
 };
 
 const bannerLightStyle = {
@@ -65,75 +65,98 @@ const Banner = () => {
             overflow: hidden;
             background:
               radial-gradient(
-                ellipse at 18% 104%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(20% * var(--banner-glow-intensity)),
-                  transparent
-                ),
-                transparent 44%
-              ),
-              linear-gradient(90deg, #000000 0%, #050807 40%, #0a1713 100%);
-          }
-
-          .banner-light-background::before {
-            content: "";
-            position: absolute;
-            inset: -20%;
-            background:
-              radial-gradient(
-                ellipse at 72% 54%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(30% * var(--banner-glow-intensity)),
-                  transparent
-                ),
-                transparent 42%
-              ),
-              radial-gradient(
-                ellipse at 34% 76%,
+                ellipse at 88% 118%,
                 color-mix(
                   in srgb,
                   var(--banner-mint) calc(22% * var(--banner-glow-intensity)),
                   transparent
                 ),
-                transparent 34%
+                transparent 38%
+              ),
+              radial-gradient(
+                ellipse at 26% 18%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(10% * var(--banner-glow-intensity)),
+                  transparent
+                ),
+                transparent 30%
+              ),
+              linear-gradient(90deg, #000000 0%, #030504 30%, #07100d 54%, #000000 100%);
+          }
+
+          .banner-light-background > *,
+          .banner-light-background::before {
+            position: absolute;
+          }
+
+          .banner-light-background::before {
+            content: "";
+            inset: -20%;
+            background:
+              radial-gradient(
+                ellipse at 64% 48%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(26% * var(--banner-glow-intensity)),
+                  transparent
+                ),
+                transparent 52%
+              ),
+              radial-gradient(
+                ellipse at 76% 96%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(20% * var(--banner-glow-intensity)),
+                  transparent
+                ),
+                transparent 38%
               );
-            filter: blur(16px);
+            filter: blur(18px);
             opacity: 0.72;
           }
 
           .banner-light-columns {
-            position: absolute;
             inset: -20px -60px;
             background:
               linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.12) 0%,
+                rgba(255, 255, 255, 0.03) 28%,
+                rgba(0, 0, 0, 0.24) 100%
+              ),
+              linear-gradient(
                 90deg,
-                rgba(0, 0, 0, calc(0.94 * var(--banner-column-contrast))) 0%,
-                rgba(0, 0, 0, 0.54) 38%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(12% * var(--banner-column-contrast)),
-                  transparent
-                ) 100%
+                rgba(0, 0, 0, 0.98) 0%,
+                rgba(0, 0, 0, 0.42) 20%,
+                rgba(0, 0, 0, 0.04) 50%,
+                rgba(0, 0, 0, 0.5) 84%,
+                rgba(0, 0, 0, 0.98) 100%
               ),
               repeating-linear-gradient(
                 90deg,
-                rgba(0, 0, 0, 1) 0 18px,
-                rgba(0, 0, 0, 0.1) 18px 25px,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(28% * var(--banner-column-contrast)),
-                  transparent
-                ) 25px 30px,
-                rgba(0, 0, 0, 0.9) 30px 44px,
+                rgba(0, 0, 0, 0.88) 0 10px,
                 color-mix(
                   in srgb,
                   var(--banner-mint) calc(16% * var(--banner-column-contrast)),
                   transparent
-                ) 44px 50px
+                ) 10px 44px,
+                rgba(255, 255, 255, 0.13) 44px 48px,
+                rgba(0, 0, 0, 0.62) 48px 58px,
+                rgba(0, 0, 0, 0.96) 58px 68px
+              ),
+              repeating-linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.5) 0 2px,
+                transparent 2px 34px,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(8% * var(--banner-column-contrast)),
+                  transparent
+                ) 34px 37px,
+                transparent 37px 68px
               );
-            opacity: 0.92;
+            opacity: 0.76;
           }
 
           .banner-light-sweep,
@@ -150,53 +173,55 @@ const Banner = () => {
           }
 
           .banner-light-sweep--large {
+            inset: -42% -24%;
             background:
               radial-gradient(
-                ellipse at 50% 74%,
-                rgba(226, 255, 247, calc(0.96 * var(--banner-glow-intensity))) 0%,
+                ellipse at 48% 54%,
+                rgba(226, 255, 247, calc(1 * var(--banner-glow-intensity))) 0%,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(84% * var(--banner-glow-intensity)),
+                  var(--banner-mint) calc(96% * var(--banner-glow-intensity)),
                   transparent
-                ) 15%,
+                ) 18%,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(50% * var(--banner-glow-intensity)),
+                  var(--banner-mint) calc(74% * var(--banner-glow-intensity)),
+                  transparent
+                ) 42%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(30% * var(--banner-glow-intensity)),
+                  transparent
+                ) 68%,
+                transparent 84%
+              );
+            filter: blur(20px);
+          }
+
+          .banner-light-sweep--small {
+            inset: -42% -42%;
+            background:
+              radial-gradient(
+                ellipse at 50% 84%,
+                rgba(226, 255, 247, calc(0.8 * var(--banner-glow-intensity))) 0%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(70% * var(--banner-glow-intensity)),
+                  transparent
+                ) 14%,
+                color-mix(
+                  in srgb,
+                  var(--banner-mint) calc(42% * var(--banner-glow-intensity)),
                   transparent
                 ) 34%,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(16% * var(--banner-glow-intensity)),
+                  var(--banner-mint) calc(14% * var(--banner-glow-intensity)),
                   transparent
-                ) 56%,
-                transparent 74%
+                ) 54%,
+                transparent 72%
               );
-          }
-
-          .banner-light-sweep--small {
-            inset: -34% -36%;
-            background:
-              radial-gradient(
-                ellipse at 50% 42%,
-                rgba(226, 255, 247, calc(0.88 * var(--banner-glow-intensity))) 0%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(72% * var(--banner-glow-intensity)),
-                  transparent
-                ) 12%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(38% * var(--banner-glow-intensity)),
-                  transparent
-                ) 28%,
-                color-mix(
-                  in srgb,
-                  var(--banner-mint) calc(10% * var(--banner-glow-intensity)),
-                  transparent
-                ) 48%,
-                transparent 64%
-              );
-            filter: blur(10px);
+            filter: blur(16px);
             animation-name: banner-light-gather-small;
             animation-delay: var(--banner-small-delay);
           }
@@ -204,49 +229,68 @@ const Banner = () => {
           .banner-light-focus {
             background:
               radial-gradient(
-                ellipse at 50% 62%,
+                ellipse at 50% 58%,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(92% * var(--banner-glow-intensity)),
+                  var(--banner-mint) calc(86% * var(--banner-glow-intensity)),
                   transparent
                 ) 0%,
                 color-mix(
                   in srgb,
-                  var(--banner-mint) calc(50% * var(--banner-glow-intensity)),
+                  var(--banner-mint) calc(48% * var(--banner-glow-intensity)),
                   transparent
-                ) 22%,
-                transparent 58%
+                ) 30%,
+                transparent 68%
               );
-            filter: blur(28px);
+            filter: blur(38px);
             animation: banner-light-focus var(--banner-duration) var(--banner-easing) infinite alternate;
           }
 
           .banner-dark-overlay {
-            position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, var(--banner-overlay-opacity));
+            background:
+              linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.98) 0%,
+                rgba(0, 0, 0, 0.76) 13%,
+                rgba(0, 0, 0, 0.12) 34%,
+                rgba(0, 0, 0, 0.12) 63%,
+                rgba(0, 0, 0, 0.78) 88%,
+                rgba(0, 0, 0, 0.98) 100%
+              ),
+              radial-gradient(
+                ellipse at 10% 50%,
+                rgba(0, 0, 0, 0.9),
+                transparent 36%
+              ),
+              radial-gradient(
+                ellipse at 92% 42%,
+                rgba(0, 0, 0, 0.78),
+                transparent 34%
+              ),
+              rgba(0, 0, 0, var(--banner-overlay-opacity));
           }
 
           @keyframes banner-light-gather {
             0% {
-              opacity: 0.08;
-              transform: translate3d(-42%, 12%, 0) scaleX(0.42) scaleY(0.74);
+              opacity: 0.14;
+              transform: translate3d(-46%, -4%, 0) scaleX(0.34) scaleY(1.18);
             }
             22% {
-              opacity: 0.78;
-              transform: translate3d(-18%, 8%, 0) scaleX(0.82) scaleY(0.88);
+              opacity: 0.82;
+              transform: translate3d(-20%, -2%, 0) scaleX(0.82) scaleY(1.1);
             }
             48% {
               opacity: 0.98;
-              transform: translate3d(18%, 4%, 0) scaleX(0.55) scaleY(1);
+              transform: translate3d(14%, 0, 0) scaleX(1.08) scaleY(1.08);
             }
             72% {
-              opacity: 0.74;
-              transform: translate3d(34%, 2%, 0) scaleX(0.36) scaleY(1.05);
+              opacity: 0.72;
+              transform: translate3d(34%, 4%, 0) scaleX(0.78) scaleY(1.14);
             }
             100% {
-              opacity: 0.12;
-              transform: translate3d(48%, 0, 0) scaleX(0.18) scaleY(1.12);
+              opacity: 0.16;
+              transform: translate3d(50%, 8%, 0) scaleX(0.36) scaleY(1.24);
             }
           }
 
@@ -257,39 +301,39 @@ const Banner = () => {
               transform: translate3d(-34%, 16%, 0) scale(0.72);
             }
             38% {
-              opacity: 0.5;
-              transform: translate3d(4%, 4%, 0) scale(1.06);
+              opacity: 0.42;
+              transform: translate3d(0%, 2%, 0) scale(1.2);
             }
             58% {
-              opacity: 0.82;
-              transform: translate3d(32%, 0, 0) scale(0.7);
+              opacity: 0.68;
+              transform: translate3d(26%, 8%, 0) scale(1.04);
             }
             74% {
-              opacity: 0.28;
-              transform: translate3d(44%, -2%, 0) scale(0.46);
+              opacity: 0.34;
+              transform: translate3d(42%, 10%, 0) scale(0.82);
             }
           }
 
           @keyframes banner-light-gather-small {
             0% {
               opacity: 0;
-              transform: translate3d(-46%, -4%, 0) scaleX(0.16) scaleY(0.58);
+              transform: translate3d(-48%, 18%, 0) scaleX(0.18) scaleY(0.72);
             }
             20% {
-              opacity: 0.46;
-              transform: translate3d(-22%, -2%, 0) scaleX(0.42) scaleY(0.68);
+              opacity: 0.42;
+              transform: translate3d(-24%, 16%, 0) scaleX(0.46) scaleY(0.82);
             }
             48% {
-              opacity: 0.76;
-              transform: translate3d(12%, 0, 0) scaleX(0.28) scaleY(0.76);
+              opacity: 0.72;
+              transform: translate3d(10%, 14%, 0) scaleX(0.58) scaleY(0.9);
             }
             74% {
-              opacity: 0.44;
-              transform: translate3d(34%, 2%, 0) scaleX(0.2) scaleY(0.82);
+              opacity: 0.46;
+              transform: translate3d(34%, 12%, 0) scaleX(0.34) scaleY(0.98);
             }
             100% {
               opacity: 0;
-              transform: translate3d(50%, 4%, 0) scaleX(0.12) scaleY(0.88);
+              transform: translate3d(52%, 10%, 0) scaleX(0.16) scaleY(1.04);
             }
           }
 
