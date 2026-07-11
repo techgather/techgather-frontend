@@ -7,15 +7,15 @@ import type { CSSProperties } from 'react';
 const stackGroups = [
   {
     className:
-      'banner-ascii-stack left-[-94px] top-150 sm:left-[-112px] sm:top-132 lg:left-44 lg:top-42 banner-ascii-stack--large',
+      'banner-ascii-stack left-[-94px] top-150 sm:left-[-112px] sm:top-132 lg:left-44 lg:top-28 banner-ascii-stack--large banner-ascii-stack--desktop-left-main',
   },
   {
     className:
-      'banner-ascii-stack hidden lg:block lg:left-250 lg:top-132 banner-ascii-stack--medium',
+      'banner-ascii-stack hidden lg:block lg:left-250 lg:top-132 banner-ascii-stack--medium banner-ascii-stack--desktop-left-mid',
   },
   {
     className:
-      'banner-ascii-stack hidden lg:block lg:left-430 lg:top-220 banner-ascii-stack--low',
+      'banner-ascii-stack hidden lg:block lg:left-430 lg:top-238 banner-ascii-stack--low banner-ascii-stack--desktop-left-floor',
   },
   {
     className:
@@ -71,7 +71,7 @@ const Banner = () => {
 
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#18191B]">
-      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-340">
+      <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-372">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {stackGroups.map((stack) => (
             <PaperStack className={stack.className} key={stack.className} />
@@ -118,6 +118,26 @@ const Banner = () => {
             height: 112px;
             opacity: 0.5;
             transform: rotate(0deg) scale(0.86);
+          }
+
+          @media (min-width: 1080px) {
+            .banner-ascii-stack--desktop-left-main {
+              width: 318px;
+              height: 286px;
+              opacity: 0.66;
+            }
+
+            .banner-ascii-stack--desktop-left-mid {
+              width: 266px;
+              height: 218px;
+              opacity: 0.58;
+            }
+
+            .banner-ascii-stack--desktop-left-floor {
+              width: 238px;
+              height: 136px;
+              opacity: 0.44;
+            }
           }
 
           .banner-ascii-stack--mobile-extra {
