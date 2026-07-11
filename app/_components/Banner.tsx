@@ -16,9 +16,9 @@ const Banner = () => {
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#050706]">
       <div className="relative flex min-h-248 w-full max-w-1440 items-center justify-center px-24 py-54 sm:min-h-302 sm:px-52 sm:py-72 lg:min-h-372">
         <div className="banner-light-background" aria-hidden="true">
-          <div className="banner-light-columns" />
-          <div className="banner-light-sweep" />
-          <div className="banner-light-focus" />
+          <div className="banner-gradient-orb banner-gradient-orb--lime" />
+          <div className="banner-gradient-orb banner-gradient-orb--teal" />
+          <div className="banner-gradient-grain" />
           <div className="banner-dark-overlay" />
         </div>
 
@@ -39,167 +39,165 @@ const Banner = () => {
             overflow: hidden;
             background:
               radial-gradient(
-                ellipse at 18% 104%,
-                rgba(17, 255, 183, 0.18),
-                rgba(17, 255, 183, 0) 44%
+                ellipse at 12% 100%,
+                rgba(188, 255, 58, 0.26) 0%,
+                rgba(72, 201, 85, 0.18) 28%,
+                rgba(8, 42, 29, 0) 58%
               ),
-              linear-gradient(90deg, #010302 0%, #07100d 42%, #10221c 100%);
+              linear-gradient(135deg, #020403 0%, #07130d 44%, #020405 100%);
           }
 
           .banner-light-background::before {
             content: "";
             position: absolute;
-            inset: -20%;
+            inset: -28%;
             background:
               radial-gradient(
-                ellipse at 72% 54%,
-                rgba(17, 255, 183, 0.28),
-                rgba(17, 255, 183, 0) 42%
+                circle at 16% 78%,
+                rgba(202, 255, 68, 0.86) 0%,
+                rgba(95, 226, 94, 0.62) 17%,
+                rgba(18, 167, 112, 0.28) 38%,
+                rgba(0, 0, 0, 0) 62%
               ),
               radial-gradient(
-                ellipse at 34% 76%,
-                rgba(17, 255, 183, 0.2),
-                rgba(17, 255, 183, 0) 34%
+                ellipse at 36% 88%,
+                rgba(29, 196, 142, 0.34) 0%,
+                rgba(18, 111, 91, 0.22) 34%,
+                rgba(0, 0, 0, 0) 68%
               );
             filter: blur(18px);
-            opacity: 0.65;
+            opacity: 0.92;
+            animation: banner-gradient-drift 10s ease-in-out infinite;
           }
 
-          .banner-light-columns {
+          .banner-gradient-orb {
             position: absolute;
-            inset: -20px -60px;
-            background:
-              linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.82) 0%,
-                rgba(0, 0, 0, 0.28) 44%,
-                rgba(17, 255, 183, 0.06) 100%
-              ),
-              repeating-linear-gradient(
-                90deg,
-                rgba(17, 255, 183, 0.014) 0 15px,
-                rgba(0, 0, 0, 0.34) 15px 27px,
-                rgba(17, 255, 183, 0.026) 27px 31px
-              );
-            opacity: 0.9;
-          }
-
-          .banner-light-sweep,
-          .banner-light-focus {
-            position: absolute;
-            inset: -38% -32%;
+            border-radius: 9999px;
+            filter: blur(32px);
             mix-blend-mode: screen;
             will-change: opacity, transform;
           }
 
-          .banner-light-sweep {
+          .banner-gradient-orb--lime {
+            left: -24%;
+            bottom: -74%;
+            width: 72%;
+            height: 138%;
             background:
               radial-gradient(
-                ellipse at 50% 74%,
-                rgba(220, 255, 244, 0.92) 0%,
-                rgba(17, 255, 183, 0.72) 15%,
-                rgba(17, 255, 183, 0.42) 34%,
-                rgba(17, 255, 183, 0.12) 56%,
-                rgba(17, 255, 183, 0) 74%
+                circle at 50% 50%,
+                rgba(232, 255, 112, 0.96) 0%,
+                rgba(171, 255, 54, 0.72) 22%,
+                rgba(44, 209, 89, 0.36) 48%,
+                rgba(44, 209, 89, 0) 72%
               );
-            filter: blur(18px);
-            animation: banner-light-gather 5.8s ease-in-out infinite;
+            opacity: 0.78;
+            animation: banner-gradient-lime 8.4s ease-in-out infinite;
           }
 
-          .banner-light-focus {
+          .banner-gradient-orb--teal {
+            left: 16%;
+            bottom: -58%;
+            width: 70%;
+            height: 112%;
             background:
               radial-gradient(
-                ellipse at 50% 62%,
-                rgba(17, 255, 183, 0.82) 0%,
-                rgba(17, 255, 183, 0.42) 22%,
-                rgba(17, 255, 183, 0) 58%
+                circle at 42% 52%,
+                rgba(37, 255, 192, 0.46) 0%,
+                rgba(25, 173, 140, 0.28) 32%,
+                rgba(0, 44, 38, 0) 68%
               );
-            filter: blur(34px);
-            animation: banner-light-focus 5.8s ease-in-out infinite;
+            opacity: 0.72;
+            animation: banner-gradient-teal 11s ease-in-out infinite;
+          }
+
+          .banner-gradient-grain {
+            position: absolute;
+            inset: 0;
+            background-image:
+              radial-gradient(rgba(255, 255, 255, 0.08) 0.6px, transparent 0.8px),
+              radial-gradient(rgba(0, 0, 0, 0.32) 0.7px, transparent 1px);
+            background-position:
+              0 0,
+              7px 11px;
+            background-size:
+              13px 13px,
+              17px 17px;
+            opacity: 0.16;
+            mix-blend-mode: overlay;
           }
 
           .banner-dark-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background:
+              radial-gradient(
+                ellipse at center,
+                rgba(0, 0, 0, 0.18) 0%,
+                rgba(0, 0, 0, 0.32) 48%,
+                rgba(0, 0, 0, 0.52) 100%
+              ),
+              rgba(0, 0, 0, 0.24);
           }
 
-          @keyframes banner-light-gather {
-            0% {
-              opacity: 0;
-              transform: translate3d(-42%, 12%, 0) scaleX(0.42) scaleY(0.74);
-            }
-            22% {
-              opacity: 0.74;
-              transform: translate3d(-18%, 8%, 0) scaleX(0.82) scaleY(0.88);
-            }
-            48% {
-              opacity: 0.92;
-              transform: translate3d(18%, 4%, 0) scaleX(0.55) scaleY(1);
-            }
-            66% {
-              opacity: 0.46;
-              transform: translate3d(34%, 2%, 0) scaleX(0.28) scaleY(1.05);
-            }
-            100% {
-              opacity: 0;
-              transform: translate3d(48%, 0, 0) scaleX(0.16) scaleY(1.12);
-            }
-          }
-
-          @keyframes banner-light-focus {
+          @keyframes banner-gradient-drift {
             0%,
             100% {
-              opacity: 0;
-              transform: translate3d(-34%, 16%, 0) scale(0.72);
+              transform: translate3d(-3%, 1%, 0) scale(1);
             }
-            38% {
-              opacity: 0.44;
-              transform: translate3d(4%, 4%, 0) scale(1.06);
+            50% {
+              transform: translate3d(5%, -3%, 0) scale(1.08);
             }
-            58% {
-              opacity: 0.76;
-              transform: translate3d(32%, 0, 0) scale(0.7);
+          }
+
+          @keyframes banner-gradient-lime {
+            0%,
+            100% {
+              transform: translate3d(-2%, 4%, 0) scale(0.95);
+              opacity: 0.68;
             }
-            74% {
-              opacity: 0.2;
-              transform: translate3d(44%, -2%, 0) scale(0.46);
+            46% {
+              transform: translate3d(8%, -6%, 0) scale(1.1);
+              opacity: 0.88;
+            }
+          }
+
+          @keyframes banner-gradient-teal {
+            0%,
+            100% {
+              transform: translate3d(6%, 0, 0) scale(1);
+              opacity: 0.58;
+            }
+            52% {
+              transform: translate3d(-8%, -5%, 0) scale(1.08);
+              opacity: 0.78;
             }
           }
 
           @media (max-width: 549px) {
-            .banner-light-columns {
-              inset: -12px -44px;
-              background:
-                linear-gradient(
-                  90deg,
-                  rgba(0, 0, 0, 0.78) 0%,
-                  rgba(0, 0, 0, 0.36) 46%,
-                  rgba(17, 255, 183, 0.06) 100%
-                ),
-                repeating-linear-gradient(
-                  90deg,
-                  rgba(17, 255, 183, 0.012) 0 10px,
-                  rgba(0, 0, 0, 0.32) 10px 18px,
-                  rgba(17, 255, 183, 0.024) 18px 21px
-                );
+            .banner-light-background::before {
+              inset: -34% -42%;
             }
 
-            .banner-light-sweep {
-              inset: -46% -72%;
+            .banner-gradient-orb--lime {
+              left: -56%;
+              bottom: -52%;
+              width: 112%;
+              height: 102%;
             }
 
-            .banner-light-focus {
-              inset: -40% -68%;
+            .banner-gradient-orb--teal {
+              left: 5%;
+              bottom: -42%;
+              width: 110%;
+              height: 86%;
             }
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .banner-light-sweep,
-            .banner-light-focus {
+            .banner-light-background::before,
+            .banner-gradient-orb {
               animation: none;
-              opacity: 0.52;
-              transform: translate3d(18%, 4%, 0) scaleX(0.72);
             }
           }
         `}</style>
