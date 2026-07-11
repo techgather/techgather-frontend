@@ -77,11 +77,11 @@ const Banner = () => {
               ),
               repeating-linear-gradient(
                 90deg,
-                rgba(255, 255, 255, 0.055) 0 15px,
+                rgba(17, 255, 183, 0.014) 0 15px,
                 rgba(0, 0, 0, 0.34) 15px 27px,
-                rgba(17, 255, 183, 0.08) 27px 31px
+                rgba(17, 255, 183, 0.026) 27px 31px
               );
-            opacity: 0.74;
+            opacity: 0.9;
           }
 
           .banner-light-sweep,
@@ -179,9 +179,9 @@ const Banner = () => {
                 ),
                 repeating-linear-gradient(
                   90deg,
-                  rgba(255, 255, 255, 0.045) 0 10px,
+                  rgba(17, 255, 183, 0.012) 0 10px,
                   rgba(0, 0, 0, 0.32) 10px 18px,
-                  rgba(17, 255, 183, 0.08) 18px 21px
+                  rgba(17, 255, 183, 0.024) 18px 21px
                 );
             }
 
