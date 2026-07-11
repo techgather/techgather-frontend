@@ -19,7 +19,7 @@ const Banner = () => {
         <div className="absolute inset-0" aria-hidden="true">
           <ShaderGradientCanvas
             className="h-full w-full"
-            fov={45}
+            fov={20}
             pixelDensity={1}
             pointerEvents="none"
             style={{
@@ -35,7 +35,7 @@ const Banner = () => {
               cAzimuthAngle={270}
               cDistance={0.5}
               cPolarAngle={180}
-              cameraZoom={15.09}
+              cameraZoom={5}
               color1="#73bfc4"
               color2="#2fa876"
               color3="#8da0ce"
@@ -61,6 +61,7 @@ const Banner = () => {
               uStrength={0.3}
               uTime={0}
               wireframe={false}
+              zoomOut={true}
             />
           </ShaderGradientCanvas>
           <div className="absolute inset-0 bg-black/20" />
