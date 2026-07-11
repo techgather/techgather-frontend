@@ -99,7 +99,7 @@ const Banner = () => {
           }
 
           .banner-ascii-stack--right {
-            transform: rotate(1.5deg);
+            transform: rotate(-1.5deg);
           }
 
           .banner-ascii-stack--large {
@@ -117,7 +117,7 @@ const Banner = () => {
             width: 230px;
             height: 112px;
             opacity: 0.5;
-            transform: rotate(0deg) scale(0.86);
+            transform: rotate(-1.5deg) scale(0.86);
           }
 
           @media (min-width: 1080px) {
@@ -140,7 +140,7 @@ const Banner = () => {
               width: 318px;
               height: 214px;
               opacity: 0.54;
-              transform: rotate(0deg) scale(0.9);
+              transform: rotate(-1.5deg) scale(0.9);
             }
 
             .banner-ascii-stack--desktop-left-main .banner-ascii-sheet {
@@ -156,7 +156,6 @@ const Banner = () => {
               bottom: calc(var(--sheet-index) * 12px);
               height: 17px;
               width: calc(100% - 36px);
-              animation: none;
               opacity: 0.68;
             }
           }
@@ -173,15 +172,9 @@ const Banner = () => {
             height: 18px;
             opacity: 0;
             border: 1px dashed rgba(255, 255, 255, 0.88);
-            background:
-              linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.08) 0 1px,
-                transparent 1px 100%
-              ),
-              #18191b;
-            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-            transform: skewX(-6deg);
+            background: #18191b;
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+            transform: skewX(-4deg);
             animation: banner-sheet-stack 4.4s var(--sheet-delay) infinite;
           }
 
@@ -193,25 +186,20 @@ const Banner = () => {
 
           .banner-ascii-sheet::before {
             right: -14px;
-            top: 2px;
+            top: 0;
+            bottom: 0;
             width: 14px;
-            height: 100%;
             box-sizing: border-box;
             border-top: 1px dashed rgba(255, 255, 255, 0.68);
             border-right: 1px dashed rgba(255, 255, 255, 0.56);
             border-bottom: 1px dashed rgba(255, 255, 255, 0.48);
             background: #18191b;
-            transform: skewY(24deg);
+            clip-path: polygon(0 0, 100% 18%, 100% 100%, 0 100%);
             transform-origin: left top;
           }
 
           .banner-ascii-sheet::after {
-            left: 8px;
-            right: 10px;
-            top: 5px;
-            height: 1px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.46);
-            opacity: 0.72;
+            display: none;
           }
 
           @keyframes banner-sheet-stack {
@@ -253,7 +241,7 @@ const Banner = () => {
               width: 176px;
               height: 118px;
               opacity: 0.58;
-              transform: rotate(0deg) scale(0.62);
+              transform: rotate(-2deg) scale(0.62);
             }
 
             .banner-ascii-stack--mobile-left-floor {
@@ -262,11 +250,11 @@ const Banner = () => {
               width: 160px;
               height: 90px;
               opacity: 0.52;
-              transform: rotate(1deg) scale(0.54);
+              transform: rotate(-2deg) scale(0.54);
             }
 
             .banner-ascii-stack--right {
-              transform: rotate(2deg) scale(0.74);
+              transform: rotate(-2deg) scale(0.74);
             }
 
             .banner-ascii-stack--mobile-right-floor {
@@ -275,7 +263,7 @@ const Banner = () => {
               width: 172px;
               height: 100px;
               opacity: 0.52;
-              transform: rotate(1deg) scale(0.58);
+              transform: rotate(-2deg) scale(0.58);
             }
 
             .banner-ascii-sheet {
