@@ -129,10 +129,10 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--desktop-left-mid {
-              top: 54px !important;
-              width: 286px;
-              height: 258px;
-              opacity: 0.6;
+              top: 112px !important;
+              width: 264px;
+              height: 156px;
+              opacity: 0.56;
             }
 
             .banner-ascii-stack--desktop-left-floor {
@@ -149,7 +149,12 @@ const Banner = () => {
             }
 
             .banner-ascii-stack--desktop-left-mid .banner-ascii-sheet {
-              bottom: calc(var(--sheet-index) * 13px);
+              bottom: calc(var(--sheet-index) * 8px);
+              height: 15px;
+            }
+
+            .banner-ascii-stack--desktop-left-mid .banner-ascii-sheet:nth-child(n + 12) {
+              display: none;
             }
 
             .banner-ascii-stack--desktop-left-floor .banner-ascii-sheet {
