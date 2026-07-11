@@ -27,7 +27,7 @@ const Banner = () => {
             {t('banner.titlePrefix')} <br />
             {t('banner.titleSuffix')}
           </h3>
-          <p className="text-[13px]/[18px] font-semibold text-[#8A8F98] sm:text-[19px]/[26px]">
+          <p className="text-[14px]/[19px] font-semibold text-[#8A8F98] sm:text-[20px]/[27px]">
             {t('banner.description')}
           </p>
         </div>
