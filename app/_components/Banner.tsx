@@ -21,7 +21,7 @@ const Banner = () => {
         />
         <div aria-hidden="true" className="absolute inset-0 bg-black/50" />
 
-        <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-[8px] text-center lg:gap-[12px]">
+        <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-[8px] text-center lg:gap-[10px]">
           <h3 className="font-hanna text-[24px]/[34px] text-white lg:text-[28px]/[39px]">
             {t('banner.titlePrefix')} <br className="lg:hidden" />
             {t('banner.titleSuffix')}
