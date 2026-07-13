@@ -1,26 +1,22 @@
-'use client';
-
-import { useI18n } from '@/app/i18n/I18nProvider';
 import Image from 'next/image';
-import { useSelectedLayoutSegments } from 'next/navigation';
 
-const Banner = () => {
-  const segments = useSelectedLayoutSegments();
-  const { t } = useI18n();
-  const isSearchPage = segments[0] === 'search';
+interface Props {
+  description: string;
+  titlePrefix: string;
+  titleSuffix: string;
+}
 
-  if (isSearchPage) {
-    return null;
-  }
-
+const Banner = ({ description, titlePrefix, titleSuffix }: Props) => {
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#020605]">
       <div className="relative flex w-full max-w-1440 items-center justify-center overflow-hidden px-24 pt-32 pb-28 sm:px-52 lg:py-32">
         <Image
           src="/images/moon-banner.png"
-          alt=""
+          alt="배너 이미지"
           fill
-          sizes="100vw"
+          sizes="(min-width: 1440px) 1440px, 100vw"
+          quality={90}
+          preload
           aria-hidden="true"
           className="object-cover object-center"
         />
@@ -28,11 +24,11 @@ const Banner = () => {
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-8 text-center">
           <h3 className="font-hanna text-[24px]/[34px] text-white lg:text-[28px]/[39px]">
-            {t('banner.titlePrefix')} <br className="lg:hidden" />
-            {t('banner.titleSuffix')}
+            {titlePrefix} <br className="lg:hidden" />
+            {titleSuffix}
           </h3>
           <p className="text-[13px]/[18px] font-medium text-[#8A8F98] lg:text-[15px]/[21px]">
-            {t('banner.description')}
+            {description}
           </p>
         </div>
       </div>

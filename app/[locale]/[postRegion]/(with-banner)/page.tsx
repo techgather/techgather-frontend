@@ -3,10 +3,10 @@ import { getDictionary } from '@/app/i18n/dictionaries';
 import { resolvePostRegion } from '@/app/utils/postRegion';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import CategorySideMenu from './_components/CategorySideMenu';
-import PostListFallback from './_components/PostListFallback';
-import PostListSection from './_components/PostListSection';
-import SideMenuFallback from './_components/SideMenuFallback';
+import CategorySideMenu from '../_components/CategorySideMenu';
+import PostListFallback from '../_components/PostListFallback';
+import PostListSection from '../_components/PostListSection';
+import SideMenuFallback from '../_components/SideMenuFallback';
 
 interface Props {
   params: Promise<{
