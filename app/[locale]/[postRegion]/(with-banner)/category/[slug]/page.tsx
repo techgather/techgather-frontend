@@ -4,9 +4,9 @@ import { getCategory } from '@/app/service/client';
 import { resolvePostRegion } from '@/app/utils/postRegion';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import CategorySideMenu from '../../_components/CategorySideMenu';
-import PostListFallback from '../../_components/PostListFallback';
-import SideMenuFallback from '../../_components/SideMenuFallback';
+import CategorySideMenu from '../../../_components/CategorySideMenu';
+import PostListFallback from '../../../_components/PostListFallback';
+import SideMenuFallback from '../../../_components/SideMenuFallback';
 import CategoryPostListSection from './_components/CategoryPostListSection';
 
 const DEFAULT_GROUPID = '292680441089056769';
