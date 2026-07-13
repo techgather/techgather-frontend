@@ -162,16 +162,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               </div>
             </div>
           </div>
-          <div
-            className={cn(
-              'rounded-12 border-gray_5 relative aspect-square size-74 border',
-              {
-                'bg-black':
-                  post?.sourceSiteName === 'musinsa' ||
-                  post?.sourceSiteName === 'gaeraeblog',
-              }
-            )}
-          >
+          <div className="rounded-12 border-gray_5 relative aspect-square size-74 border">
             {isMobileIconLoading && (
               <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
             )}
@@ -181,7 +172,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               fill
               sizes="72px"
               className={cn(
-                'rounded-12 object-contain object-center transition-opacity duration-200',
+                'rounded-[11px] object-contain object-center transition-opacity duration-200',
                 isMobileIconLoading ? 'opacity-0' : 'opacity-100'
               )}
               priority={priority}
