@@ -34,7 +34,7 @@ export const SITE_MAP = {
       ko: '개발자스럽다',
       en: 'Gaerae Blog',
     },
-    icon: '/icons/site/gaeraeblog.png',
+    icon: '/icons/site/gaereablog.png',
   },
   hyperconnect: {
     label: {
