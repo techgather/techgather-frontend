@@ -1,6 +1,8 @@
 import {
   CategoryGroupResponse,
   CategoryResponse,
+  ClassifyPostsAcceptedResponse,
+  ClassifyPostsRequest,
   CreateCategoryGroupRequest,
   CreateCategoryRequest,
   PostResponseLanguageEnum,
@@ -147,6 +149,27 @@ export const updatePostStatus = async (body: UpdatePostsRequest) => {
   }
 
   return res.text();
+};
+
+export const classifyPosts = async (
+  body: ClassifyPostsRequest
+): Promise<ClassifyPostsAcceptedResponse> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/posts/classify`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to classify posts');
+  }
+
+  return res.json();
 };
 
 export const getSourceSite = async (language?: PostResponseLanguageEnum) => {

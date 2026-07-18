@@ -9,6 +9,8 @@ docs/Class11UserPostsApi.md
 docs/Class12UserCategoriesApi.md
 docs/Class21AdminPostsApi.md
 docs/Class22AdminCategoriesApi.md
+docs/ClassifyPostsAcceptedResponse.md
+docs/ClassifyPostsRequest.md
 docs/CreateCategoryGroupRequest.md
 docs/CreateCategoryRequest.md
 docs/PostCategoryResponse.md
@@ -21,6 +23,8 @@ docs/UpdatePostsRequest.md
 index.ts
 models/CategoryGroupResponse.ts
 models/CategoryResponse.ts
+models/ClassifyPostsAcceptedResponse.ts
+models/ClassifyPostsRequest.ts
 models/CreateCategoryGroupRequest.ts
 models/CreateCategoryRequest.ts
 models/PostCategoryResponse.ts

@@ -2,6 +2,8 @@
 /* eslint-disable */
 export * from './CategoryGroupResponse';
 export * from './CategoryResponse';
+export * from './ClassifyPostsAcceptedResponse';
+export * from './ClassifyPostsRequest';
 export * from './CreateCategoryGroupRequest';
 export * from './CreateCategoryRequest';
 export * from './PostCategoryResponse';

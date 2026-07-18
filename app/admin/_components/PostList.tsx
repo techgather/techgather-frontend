@@ -23,6 +23,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useAdminPostList from '../_hooks/useAdminPostList';
 import useCategory from '../_hooks/useCategory';
+import useClassify from '../_hooks/useClassify';
 import useDispatch from '../_hooks/useDispatch';
 import useUpdatePostStatus from '../_hooks/useUpdatePostStatus';
 import CreateCategoryDialog from './CreateCategoryDialog';
@@ -66,6 +67,7 @@ const PostList = ({ tab }: Props) => {
   const { data: category } = useCategory(DEFAULT_GROUPID);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const { mutate, isPending } = useUpdatePostStatus();
+  const { mutate: classifyPost, isPending: isClassifying } = useClassify();
   const [isOpen, setIsOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<CategoryResponse>();
   const [filterNoCategory, setFilterNoCategory] = useState(false);
@@ -154,6 +156,21 @@ const PostList = ({ tab }: Props) => {
         postIds: checkedList,
         status: selectStatus ?? tab,
         categoryIds: categoryList,
+      },
+      {
+        onSuccess: () => {
+          setCheckedList([]);
+          setSelectStats(undefined);
+          setCategoryList([]);
+        },
+      }
+    );
+  };
+
+  const handleClassify = () => {
+    classifyPost(
+      {
+        postIds: checkedList,
       },
       {
         onSuccess: () => {
@@ -410,6 +427,13 @@ const PostList = ({ tab }: Props) => {
                 onClick={() => setCheckedList([])}
               >
                 초기화
+              </Button>
+              <Button
+                className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
+                disabled={checkedList.length === 0}
+                onClick={handleClassify}
+              >
+                자동 분류
               </Button>
               <Button
                 className="border-gray_10 hover:bg-main_2 w-100 border bg-white px-16 py-8 text-sm leading-18 font-bold text-black hover:text-white"
