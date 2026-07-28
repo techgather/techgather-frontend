@@ -7,6 +7,8 @@ interface Props {
 }
 
 const Banner = ({ description, titlePrefix, titleSuffix }: Props) => {
+  const shouldAlwaysBreakTitle = titleSuffix.toLowerCase().startsWith('by ');
+
   return (
     <section className="mt-52 flex w-full items-center justify-center overflow-hidden bg-[#020605]">
       <div className="relative flex w-full max-w-1440 items-center justify-center overflow-hidden px-24 pt-32 pb-28 sm:px-52 lg:py-32">
@@ -24,7 +26,7 @@ const Banner = ({ description, titlePrefix, titleSuffix }: Props) => {
 
         <div className="relative z-10 flex w-full max-w-580 flex-col items-center gap-8 text-center">
           <h3 className="font-hanna text-[24px]/[34px] text-white lg:text-[28px]/[39px]">
-            {titlePrefix} <br className="lg:hidden" />
+            {titlePrefix} <br className={shouldAlwaysBreakTitle ? undefined : 'lg:hidden'} />
             {titleSuffix}
           </h3>
           <p className="text-[13px]/[18px] font-medium text-[#8A8F98] lg:text-[15px]/[21px]">
