@@ -20,6 +20,7 @@ export const dictionaries = {
 
     'postLanguage.domestic': '국내',
     'postLanguage.global': '해외',
+    'post.read': '읽음',
 
     'banner.titlePrefix': '현직 개발자가 엄선한',
     'banner.titleSuffix': '기술 아티클 모아보기',
@@ -136,6 +137,7 @@ export const dictionaries = {
 
     'postLanguage.domestic': 'Korea',
     'postLanguage.global': 'Global',
+    'post.read': 'Read',
 
     'banner.titlePrefix': 'Curated Tech Articles',
     'banner.titleSuffix': 'by Experienced Developers',

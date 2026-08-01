@@ -264,11 +264,13 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
 export default PostCard;
 
 const ReadBadge = () => {
+  const { t } = useI18n();
+
   return (
     <div className="bg-gray_2/50 rounded-12 absolute inset-0 z-20 flex items-center justify-center">
       <div className="bg-gray_40/80 rounded-8 flex items-center gap-2 py-6 pr-16 pl-12 text-sm text-white">
         <ReadIcon />
-        읽음
+        {t('post.read')}
       </div>
     </div>
   );
