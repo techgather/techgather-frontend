@@ -12,20 +12,28 @@ import { useEffect, useState } from 'react';
 import { formatDate } from '../../app/utils';
 import ReadIcon from '../../public/icons/read.svg';
 
-const READ_POST_IDS_STORAGE_KEY = 'readPostIds';
+const READ_POST_URLS_STORAGE_KEY = 'readPostUrls';
 const NEW_POST_PERIOD_MS = 7 * 24 * 60 * 60 * 1000;
 
-const getReadPostIds = (): number[] => {
+const getReadPostUrls = (): string[] => {
   try {
-    const storedPostIds = JSON.parse(
-      localStorage.getItem(READ_POST_IDS_STORAGE_KEY) ?? '[]'
+    const storedValue: unknown = JSON.parse(
+      localStorage.getItem(READ_POST_URLS_STORAGE_KEY) ?? '[]'
     );
+    const storedPostUrls = Array.isArray(storedValue)
+      ? storedValue
+      : [storedValue];
 
-    return Array.isArray(storedPostIds)
-      ? storedPostIds.filter((postId): postId is number =>
-          Number.isFinite(postId)
-        )
-      : [];
+    return [
+      ...new Set(
+        storedPostUrls
+          .filter(
+            (postUrl): postUrl is string =>
+              typeof postUrl === 'string' && postUrl.trim() !== ''
+          )
+          .map((postUrl) => postUrl.trim())
+      ),
+    ];
   } catch {
     return [];
   }
@@ -84,23 +92,23 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
   const [isRead, setIsRead] = useState(false);
 
   useEffect(() => {
-    if (post?.postId === undefined) return;
+    if (!post?.url) return;
 
-    setIsRead(getReadPostIds().includes(post.postId));
-  }, [post?.postId]);
+    setIsRead(getReadPostUrls().includes(post.url));
+  }, [post?.url]);
 
   const handlePostClick = () => {
-    if (post?.postId === undefined) return;
+    if (!post?.url) return;
 
     setIsRead(true);
 
     try {
-      const readPostIds = getReadPostIds();
+      const readPostUrls = getReadPostUrls();
 
-      if (!readPostIds.includes(post.postId)) {
+      if (!readPostUrls.includes(post.url)) {
         localStorage.setItem(
-          READ_POST_IDS_STORAGE_KEY,
-          JSON.stringify([...readPostIds, post.postId])
+          READ_POST_URLS_STORAGE_KEY,
+          JSON.stringify([...readPostUrls, post.url])
         );
       }
     } catch {
