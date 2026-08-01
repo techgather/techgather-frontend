@@ -8,8 +8,27 @@ import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatDate } from '../../app/utils';
+import ReadIcon from '../../public/icons/read.svg';
+
+const READ_POST_IDS_STORAGE_KEY = 'readPostIds';
+
+const getReadPostIds = (): number[] => {
+  try {
+    const storedPostIds = JSON.parse(
+      localStorage.getItem(READ_POST_IDS_STORAGE_KEY) ?? '[]'
+    );
+
+    return Array.isArray(storedPostIds)
+      ? storedPostIds.filter((postId): postId is number =>
+          Number.isFinite(postId)
+        )
+      : [];
+  } catch {
+    return [];
+  }
+};
 
 interface Props {
   post?: PostResponse;
@@ -47,14 +66,45 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
   );
   const [isThumbnailLoading, setIsThumbnailLoading] = useState(true);
   const [isMobileIconLoading, setIsMobileIconLoading] = useState(true);
+  const [isRead, setIsRead] = useState(false);
+
+  useEffect(() => {
+    if (post?.postId === undefined) return;
+
+    setIsRead(getReadPostIds().includes(post.postId));
+  }, [post?.postId]);
+
+  const handlePostClick = () => {
+    if (post?.postId === undefined) return;
+
+    setIsRead(true);
+
+    try {
+      const readPostIds = getReadPostIds();
+
+      if (!readPostIds.includes(post.postId)) {
+        localStorage.setItem(
+          READ_POST_IDS_STORAGE_KEY,
+          JSON.stringify([...readPostIds, post.postId])
+        );
+      }
+    } catch {
+      // The link should still open when browser storage is unavailable.
+    }
+  };
 
   return (
     <>
       <Link
         href={post?.url ?? ''}
         target="_blank"
-        className="group hover:bg-gray_2 hidden h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:block sm:w-257 md:h-277"
+        onClick={handlePostClick}
+        className={cn(
+          'group hover:bg-gray_2 relative hidden h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:block sm:w-257 md:h-277',
+          isRead && 'bg-gray_2'
+        )}
       >
+        {isRead && <ReadBadge />}
         <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
           {isThumbnailLoading && (
             <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
@@ -134,8 +184,13 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
         <Link
           href={post?.url ?? ''}
           target="_blank"
-          className="group flex h-fit w-full cursor-pointer justify-between rounded-2xl transition-all duration-200 hover:-translate-y-4"
+          onClick={handlePostClick}
+          className={cn(
+            'group relative flex h-fit w-full cursor-pointer justify-between rounded-2xl transition-all duration-200 hover:-translate-y-4',
+            isRead && 'bg-gray_2'
+          )}
         >
+          {isRead && <ReadBadge />}
           <div className="mr-9 flex min-w-0 flex-col gap-8">
             <h3 className="line-clamp-2 h-44 text-[15px] font-bold">
               {keyword
@@ -189,3 +244,12 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
 };
 
 export default PostCard;
+
+const ReadBadge = () => {
+  return (
+    <div className="bg-gray_40/80 rounded-8 absolute top-1/2 right-1/2 z-20 flex translate-x-1/2 -translate-y-1/2 items-center gap-2 py-6 pr-16 pl-12 text-sm text-white">
+      <ReadIcon />
+      읽음
+    </div>
+  );
+};
