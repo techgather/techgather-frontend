@@ -13,6 +13,7 @@ import { formatDate } from '../../app/utils';
 import ReadIcon from '../../public/icons/read.svg';
 
 const READ_POST_IDS_STORAGE_KEY = 'readPostIds';
+const NEW_POST_PERIOD_MS = 7 * 24 * 60 * 60 * 1000;
 
 const getReadPostIds = (): number[] => {
   try {
@@ -53,11 +54,25 @@ const highlightKeyword = (text: string, keyword: string) => {
   );
 };
 
+const isPublishedWithinSevenDays = (publishedAt?: Date) => {
+  if (!publishedAt) return false;
+
+  const publishedTime = new Date(publishedAt).getTime();
+  const elapsedTime = Date.now() - publishedTime;
+
+  return (
+    Number.isFinite(publishedTime) &&
+    elapsedTime >= 0 &&
+    elapsedTime <= NEW_POST_PERIOD_MS
+  );
+};
+
 const PostCard = ({ post, keyword, priority = false }: Props) => {
   const { locale, t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const siteInfo = getSiteInfo(siteName, locale);
   const fallbackImage = `/thumbnails/${siteName}.png`;
+  const isNew = isPublishedWithinSevenDays(post?.publishedAt);
 
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail && !THUMBNAIL_SITE_LIST.includes(siteName)
@@ -106,6 +121,8 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
       >
         {isRead && <ReadBadge />}
         <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
+          {isNew && <NewBadge />}
+
           {isThumbnailLoading && (
             <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
           )}
@@ -168,7 +185,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
             </p>
           </div>
         </div>
-        <div className="relative min-h-18">
+        <div className="relative flex min-h-18 gap-6 overflow-x-hidden">
           {post?.categories && post.categories.length > 0 ? (
             <div className="flex gap-6 overflow-x-hidden">
               {post?.categories?.map((item, index) => (
@@ -204,7 +221,8 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               <p className="text-gray_15 text-[11px]">
                 {formatDate(post?.pubDate?.toString() ?? '')}
               </p>
-              <div className="relative min-h-18">
+              <div className="relative flex min-h-18 gap-6 overflow-x-hidden">
+                {isNew && <NewBadge />}
                 {post?.categories && post.categories.length > 0 ? (
                   <div className="flex gap-6 overflow-x-hidden">
                     {post?.categories?.map((item, index) => (
@@ -247,9 +265,19 @@ export default PostCard;
 
 const ReadBadge = () => {
   return (
-    <div className="bg-gray_40/80 rounded-8 absolute top-1/2 right-1/2 z-20 flex translate-x-1/2 -translate-y-1/2 items-center gap-2 py-6 pr-16 pl-12 text-sm text-white">
-      <ReadIcon />
-      읽음
+    <div className="bg-gray_2/50 rounded-12 absolute inset-0 z-20 flex items-center justify-center">
+      <div className="bg-gray_40/80 rounded-8 flex items-center gap-2 py-6 pr-16 pl-12 text-sm text-white">
+        <ReadIcon />
+        읽음
+      </div>
     </div>
+  );
+};
+
+const NewBadge = () => {
+  return (
+    <Badge className="text-main bg-gray_90 absolute top-8 left-8 z-10 rounded-[5px] border-none px-6 py-4 text-[10px] leading-10 font-bold">
+      new
+    </Badge>
   );
 };
