@@ -211,7 +211,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
           target="_blank"
           onClick={handlePostClick}
           className={cn(
-            'group relative flex h-fit w-full cursor-pointer justify-between rounded-2xl transition-all duration-200 hover:-translate-y-4',
+            'group relative flex h-fit w-full cursor-pointer justify-between rounded-2xl p-8 transition-all duration-200 hover:-translate-y-4',
             isRead && 'bg-gray_2'
           )}
         >
@@ -230,7 +230,6 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
                 {formatDate(post?.pubDate?.toString() ?? '')}
               </p>
               <div className="relative flex min-h-18 gap-6 overflow-x-hidden">
-                {isNew && <NewBadge />}
                 {post?.categories && post.categories.length > 0 ? (
                   <div className="flex gap-6 overflow-x-hidden">
                     {post?.categories?.map((item, index) => (
@@ -262,6 +261,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               onLoad={() => setIsMobileIconLoading(false)}
               onError={() => setIsMobileIconLoading(false)}
             />
+            {isNew && <NewBadge />}
           </div>
         </Link>
       </div>
@@ -286,8 +286,9 @@ const ReadBadge = () => {
 
 const NewBadge = () => {
   return (
-    <Badge className="text-main bg-gray_90 absolute top-8 left-8 z-10 rounded-[5px] border-none px-6 py-4 text-[10px] leading-10 font-bold">
-      new
+    <Badge className="text-main bg-gray_90 absolute top-6 right-6 z-10 rounded-[5px] border-none px-6 py-4 text-[10px] leading-10 font-bold sm:top-8 sm:left-8">
+      <span className="hidden sm:block">new</span>
+      <span className="text-main block font-bold sm:hidden">N</span>
     </Badge>
   );
 };
