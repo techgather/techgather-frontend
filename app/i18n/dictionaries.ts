@@ -24,7 +24,7 @@ export const dictionaries = {
 
     'banner.titlePrefix': '현직 개발자가 엄선한',
     'banner.titleSuffix': '기술 아티클 모아보기',
-    'banner.description': '평균 주 3회 업로드',
+    'banner.description': '매주 월요일 업데이트',
 
     'pwaInstall.title': '데브픽 앱으로 추가',
     'pwaInstall.description': '홈 화면에서 앱처럼 이용',
