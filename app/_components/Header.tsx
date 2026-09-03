@@ -22,6 +22,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import Tab from '../(main)/_components/Tab';
 import useCategory from '../admin/_hooks/useCategory';
+import FeedbackDialog from './FeedbackDialog';
 
 const DEFAULT_GROUPID = '292680441089056769';
 
@@ -213,9 +214,10 @@ const Header = ({ locale, postRegion }: Props) => {
               onClick={handleUiLocaleChange}
               className="bg-gray_50 hover:bg-gray_60 hidden h-32 items-center gap-2 py-6 text-[13px] md:flex"
             >
-              <LanguageIcon />
+              <LanguageIcon className="size-16" />
               {t(locale === 'ko' ? 'locale.ko' : 'locale.en')}
             </Button>
+            <FeedbackDialog />
             <button
               type="button"
               aria-label={
@@ -269,16 +271,20 @@ const Header = ({ locale, postRegion }: Props) => {
           )}
         >
           <div className="flex flex-col gap-8 px-24 py-12">
-            <button
+            <FeedbackDialog
+              variant="mobile"
+              onOpen={() => setIsLocaleOpen(false)}
+            />
+            <Button
               type="button"
               onClick={() =>
                 handleUiLocaleSelect(locale === 'ko' ? 'en' : 'ko')
               }
-              className="text-gray_5 bg-gray_70 flex h-46 items-center gap-8 rounded-lg px-12 text-[16px] leading-22 transition-colors duration-150"
+              className="text-gray_5 bg-gray_70 flex h-46 w-full items-center justify-start gap-8 rounded-lg px-12 text-[16px] leading-22 transition-colors duration-150 md:hidden"
             >
-              <LanguageIcon className="size-18" />
+              <LanguageIcon className="size-20" />
               {t(locale === 'ko' ? 'locale.en' : 'locale.ko')}
-            </button>
+            </Button>
           </div>
         </div>
         <div

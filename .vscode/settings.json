@@ -1,0 +1,11 @@
+{
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "off",
+    "strings": "off"
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.suggest.showKeywords": true,
+  "typescript.suggest.enabled": true,
+  "javascript.suggest.enabled": true
+}
