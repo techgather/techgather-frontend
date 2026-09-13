@@ -8,8 +8,36 @@ import { cn } from '@/lib/utils';
 import { PostResponse } from '@/types/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatDate } from '../../app/utils';
+import ReadIcon from '../../public/icons/read.svg';
+
+const READ_POST_URLS_STORAGE_KEY = 'readPostUrls';
+const NEW_POST_PERIOD_MS = 7 * 24 * 60 * 60 * 1000;
+
+const getReadPostUrls = (): string[] => {
+  try {
+    const storedValue: unknown = JSON.parse(
+      localStorage.getItem(READ_POST_URLS_STORAGE_KEY) ?? '[]'
+    );
+    const storedPostUrls = Array.isArray(storedValue)
+      ? storedValue
+      : [storedValue];
+
+    return [
+      ...new Set(
+        storedPostUrls
+          .filter(
+            (postUrl): postUrl is string =>
+              typeof postUrl === 'string' && postUrl.trim() !== ''
+          )
+          .map((postUrl) => postUrl.trim())
+      ),
+    ];
+  } catch {
+    return [];
+  }
+};
 
 interface Props {
   post?: PostResponse;
@@ -34,11 +62,25 @@ const highlightKeyword = (text: string, keyword: string) => {
   );
 };
 
+const isPublishedWithinSevenDays = (publishedAt?: Date) => {
+  if (!publishedAt) return false;
+
+  const publishedTime = new Date(publishedAt).getTime();
+  const elapsedTime = Date.now() - publishedTime;
+
+  return (
+    Number.isFinite(publishedTime) &&
+    elapsedTime >= 0 &&
+    elapsedTime <= NEW_POST_PERIOD_MS
+  );
+};
+
 const PostCard = ({ post, keyword, priority = false }: Props) => {
   const { locale, t } = useI18n();
   const siteName = (post?.sourceSiteName ?? '') as Site;
   const siteInfo = getSiteInfo(siteName, locale);
   const fallbackImage = `/thumbnails/${siteName}.png`;
+  const isNew = isPublishedWithinSevenDays(post?.publishedAt);
 
   const [imgSrc, setImgSrc] = useState(
     post?.thumbnail && !THUMBNAIL_SITE_LIST.includes(siteName)
@@ -47,15 +89,48 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
   );
   const [isThumbnailLoading, setIsThumbnailLoading] = useState(true);
   const [isMobileIconLoading, setIsMobileIconLoading] = useState(true);
+  const [isRead, setIsRead] = useState(false);
+
+  useEffect(() => {
+    if (!post?.url) return;
+
+    setIsRead(getReadPostUrls().includes(post.url));
+  }, [post?.url]);
+
+  const handlePostClick = () => {
+    if (!post?.url) return;
+
+    setIsRead(true);
+
+    try {
+      const readPostUrls = getReadPostUrls();
+
+      if (!readPostUrls.includes(post.url)) {
+        localStorage.setItem(
+          READ_POST_URLS_STORAGE_KEY,
+          JSON.stringify([...readPostUrls, post.url])
+        );
+      }
+    } catch {
+      // The link should still open when browser storage is unavailable.
+    }
+  };
 
   return (
     <>
       <Link
         href={post?.url ?? ''}
         target="_blank"
-        className="group hover:bg-gray_2 hidden h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:block sm:w-257 md:h-277"
+        onClick={handlePostClick}
+        className={cn(
+          'group hover:bg-gray_2 relative hidden h-fit w-full cursor-pointer flex-col rounded-2xl p-12 transition-all duration-200 hover:-translate-y-4 sm:block sm:w-257 md:h-277',
+          isRead && 'bg-gray_2'
+        )}
       >
+        {isRead && <ReadBadge />}
         <div className="rounded-12 border-gray_5 relative aspect-video w-full border sm:max-w-233">
+          {isNew && <NewBadge />}
+
           {isThumbnailLoading && (
             <Skeleton className="rounded-12 absolute inset-0 h-full w-full" />
           )}
@@ -118,7 +193,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
             </p>
           </div>
         </div>
-        <div className="relative min-h-18">
+        <div className="relative flex min-h-18 gap-6 overflow-x-hidden">
           {post?.categories && post.categories.length > 0 ? (
             <div className="flex gap-6 overflow-x-hidden">
               {post?.categories?.map((item, index) => (
@@ -134,8 +209,13 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
         <Link
           href={post?.url ?? ''}
           target="_blank"
-          className="group flex h-fit w-full cursor-pointer justify-between rounded-2xl transition-all duration-200 hover:-translate-y-4"
+          onClick={handlePostClick}
+          className={cn(
+            'group relative flex h-fit w-full cursor-pointer justify-between rounded-2xl p-8 transition-all duration-200 hover:-translate-y-4',
+            isRead && 'bg-gray_2'
+          )}
         >
+          {isRead && <ReadBadge />}
           <div className="mr-9 flex min-w-0 flex-col gap-8">
             <h3 className="line-clamp-2 h-44 text-[15px] font-bold">
               {keyword
@@ -149,7 +229,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               <p className="text-gray_15 text-[11px]">
                 {formatDate(post?.pubDate?.toString() ?? '')}
               </p>
-              <div className="relative min-h-18">
+              <div className="relative flex min-h-18 gap-6 overflow-x-hidden">
                 {post?.categories && post.categories.length > 0 ? (
                   <div className="flex gap-6 overflow-x-hidden">
                     {post?.categories?.map((item, index) => (
@@ -181,6 +261,7 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
               onLoad={() => setIsMobileIconLoading(false)}
               onError={() => setIsMobileIconLoading(false)}
             />
+            {isNew && <NewBadge />}
           </div>
         </Link>
       </div>
@@ -189,3 +270,25 @@ const PostCard = ({ post, keyword, priority = false }: Props) => {
 };
 
 export default PostCard;
+
+const ReadBadge = () => {
+  const { t } = useI18n();
+
+  return (
+    <div className="bg-gray_2/50 rounded-12 absolute inset-0 z-20 flex items-center justify-center">
+      <div className="bg-gray_40/80 rounded-8 flex items-center gap-2 py-6 pr-16 pl-12 text-sm text-white">
+        <ReadIcon />
+        {t('post.read')}
+      </div>
+    </div>
+  );
+};
+
+const NewBadge = () => {
+  return (
+    <Badge className="text-main bg-gray_90 absolute top-6 right-6 z-10 rounded-[5px] border-none px-6 py-4 text-[10px] leading-10 font-bold sm:top-8 sm:left-8">
+      <span className="hidden sm:block">new</span>
+      <span className="text-main block font-bold sm:hidden">N</span>
+    </Badge>
+  );
+};

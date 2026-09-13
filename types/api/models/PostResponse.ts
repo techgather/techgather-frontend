@@ -47,6 +47,12 @@ export interface PostResponse {
   pubDate?: Date;
   /**
    *
+   * @type {Date}
+   * @memberof PostResponse
+   */
+  publishedAt?: Date;
+  /**
+   *
    * @type {string}
    * @memberof PostResponse
    */
@@ -115,6 +121,8 @@ export function PostResponseFromJSONTyped(
     postId: json['postId'] == null ? undefined : json['postId'],
     title: json['title'] == null ? undefined : json['title'],
     pubDate: json['pubDate'] == null ? undefined : new Date(json['pubDate']),
+    publishedAt:
+      json['publishedAt'] == null ? undefined : new Date(json['publishedAt']),
     thumbnail: json['thumbnail'] == null ? undefined : json['thumbnail'],
     url: json['url'] == null ? undefined : json['url'],
     tags: json['tags'] == null ? undefined : json['tags'],
@@ -147,6 +155,10 @@ export function PostResponseToJSONTyped(
       value['pubDate'] == null
         ? value['pubDate']
         : value['pubDate'].toISOString(),
+    publishedAt:
+      value['publishedAt'] == null
+        ? value['publishedAt']
+        : value['publishedAt'].toISOString(),
     thumbnail: value['thumbnail'],
     url: value['url'],
     tags: value['tags'],

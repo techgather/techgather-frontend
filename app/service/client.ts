@@ -12,6 +12,7 @@ import {
   UpdatePostsRequest,
   UpdatePostsRequestStatusEnum,
 } from '@/types/api';
+import { CreateFeedbackRequest } from './../../types/api/models/CreateFeedbackRequest';
 
 interface PostParams {
   searchCondition: PostSearchCondition;
@@ -293,4 +294,35 @@ export const createCategory = async (
   }
 
   return res.json();
+};
+
+export const getFeedbackCategoryGroup = async (): Promise<
+  CategoryGroupResponse[]
+> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/feedback/categories`,
+    { cache: 'no-store' }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch feedback category groups');
+  }
+
+  return res.json();
+};
+
+export const createFeedback = async (
+  body: CreateFeedbackRequest
+): Promise<void> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/feedbacks`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to create feedback');
+  }
 };
