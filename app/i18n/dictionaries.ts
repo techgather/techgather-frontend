@@ -173,7 +173,7 @@ export const dictionaries = {
 
     'banner.titlePrefix': 'Curated Tech Articles',
     'banner.titleSuffix': 'by Experienced Developers',
-    'banner.description': 'Updated 3 Times a Week on Average',
+    'banner.description': 'Updated every Monday',
 
     'pwaInstall.title': 'Add DevPick\nto Home Screen',
     'pwaInstall.description': 'Use it like an app from your home screen',
