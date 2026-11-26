@@ -120,7 +120,7 @@ export default async function RootLayout({
       {isProd && <GoogleTagManager gtmId="GTM-TQWKW95W" />}
       {isProd && (
         <Script
-          id="clarity"
+          id="microsoft-clarity"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
