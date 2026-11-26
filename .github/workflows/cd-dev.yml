@@ -4,18 +4,31 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy fe via SSH
-        uses: appleboy/ssh-action@v1.2.1
-        with:
-          host: ${{ secrets.JM_DEV_SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.JM_DEV_SERVER_SSH_KEY }}
-          fingerprint: ${{ secrets.JM_DEV_SERVER_FINGERPRINT }}
-          script: |
-            cd /home/ubuntu/app/scripts/
-            ./fe-deploy.sh
+      - name: Deploy frontend via SSH
+        env:
+          DEPLOY_HOST: ${{ secrets.JM_DEV_SERVER_IP }}
+          DEPLOY_KEY: ${{ secrets.JM_DEV_SERVER_SSH_KEY }}
+          DEPLOY_FINGERPRINT: ${{ secrets.JM_DEV_SERVER_FINGERPRINT }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          umask 077
+          ssh_dir=$(mktemp -d "$RUNNER_TEMP/devpick-ssh.XXXXXX")
+          trap 'rm -rf -- "$ssh_dir"' EXIT
+          printf '%s\n' "$DEPLOY_KEY" > "$ssh_dir/identity"
+          ssh-keyscan -T 5 -t ecdsa "$DEPLOY_HOST" > "$ssh_dir/known_hosts" 2>/dev/null
+          fingerprint=$(ssh-keygen -E sha256 -lf "$ssh_dir/known_hosts" | awk '{print $2}' | sort -u)
+          test "$fingerprint" = "$DEPLOY_FINGERPRINT"
+          printf '%s\n' "$GITHUB_ACTOR" "$GHCR_TOKEN" |
+            ssh -T -i "$ssh_dir/identity" -o IdentitiesOnly=yes -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$ssh_dir/known_hosts" \
+              "ubuntu@$DEPLOY_HOST" devpick-deploy-ghcr

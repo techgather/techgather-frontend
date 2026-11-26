@@ -19,11 +19,12 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      packages: write
 
     env:
-      ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
-      ECR_REPOSITORY: tg-dev
-      SERVICE_NAME: tg-fe-dev
+      IMAGE: ghcr.io/techgather/tg-fe-dev
       CONTEXT: .
 
     steps:
@@ -43,22 +44,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ap-northeast-2
-      
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ env.SERVICE_NAME }}
+          images: ${{ env.IMAGE }}
           tags: |
             type=sha
             type=raw,value=${{ github.sha }}
@@ -80,5 +77,8 @@ jobs:
   deploy:
     needs: [build]
     if: needs.build.result == 'success'
+    permissions:
+      contents: read
+      packages: read
     uses: ./.github/workflows/cd-dev.yml
     secrets: inherit
